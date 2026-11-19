@@ -1,91 +1,108 @@
-// Live behaviour for Fig 1. Runs inside the page with the kit and the model in scope.
+// Live behaviour for Fig 1: a real forward pass, run every frame, drawn onto the machine.
+// In scope: the kit (iso, lineOnTop, ring, cylinder, translateAlong, pathOf…), the model
+// (forward, project2, steerFor, rmsnorm, NEURONS, PROJECTS, CONTEXTS, LAYERS, TABLE, toTable) and P.
 const root = document.querySelector(".mind-stage");
 const svg = root.querySelector("svg");
-const plateEl = root.closest(".iso-plate");
-const readout = plateEl.querySelector("[data-readout]");
+const readout = root.closest(".iso-plate").querySelector("[data-readout]");
 const still = matchMedia("(prefers-reduced-motion: reduce)");
-const N = NEURONS.length;
 const q = (s) => [...svg.querySelectorAll(s)];
-const glow = []; q("[data-g]").forEach((e) => (glow[+e.dataset.g] = e));
-const trace = []; q("[data-t]").forEach((e) => (trace[+e.dataset.t] = e));
+const NN = NEURONS.length, NL = LAYERS.length;
+const byData = (sel, key) => { const out = []; q(sel).forEach((e) => (out[e.dataset[key]] = e)); return out; };
+const glow = byData("[data-g]", "g"), trace = byData("[data-t]", "t");
 const lampEls = q(".mind-lamp"), pinEls = q(".mind-pin");
-const bus = q("[data-bus]"), links = LAYERS.map((_, i) => q(`[data-link="${i}"] .mind-flow`));
+const bus = byData("[data-bus]", "bus");
+const links = LAYERS.map((_, i) => q(`[data-link="${i}"] .mind-flow`));
+const attFlow = [0, 1, 2].map((j) => q(`[data-link="att${j}"] .mind-flow`)), tokGlow = byData("[data-tokglow]", "tokglow");
+const sliders = {}; q("[data-slider]").forEach((e) => (sliders[e.dataset.slider] = e));
+const logitEls = byData("[data-logit]", "logit"), fills = byData("[data-fill]", "fill");
+const trajEl = svg.querySelector("[data-traj]"), trajDots = byData("[data-td]", "td");
 const bridgeEl = svg.querySelector('[data-part="bridge"]'), carriageEl = svg.querySelector('[data-part="carriage"]');
 const cardEl = svg.querySelector('[data-part="card"]'), cardNo = svg.querySelector("[data-cardno]");
-const dragEl = svg.querySelector("[data-drag]");
-const CARD_RISE = 22;
-const needles = q("[data-needle]"), layerMean = LAYERS.map(() => 0);
-const inFlow = q('[data-link="in"] .mind-flow'), decLed = svg.querySelector("[data-decled]");
+const ctxWord = svg.querySelector("[data-ctxword]"), knob = svg.querySelector("[data-knob]"), knobPtr = svg.querySelector("[data-knobptr]");
+const dragEl = svg.querySelector("[data-drag]"), decLed = svg.querySelector("[data-decled]");
+const CARD_RISE = 22, SLIDE = 4.2, BANK_X = (l) => l * 94 + 40, KNOB = [-14, 33, 10 + 1 + 4.5 + 0.1];
 
-// state
-const act = new Array(N).fill(0);            // what each lamp shows
-const target = new Array(N).fill(0);         // what each lamp is asked to show
-const layerAt = LAYERS.map(() => 0);         // when each layer starts following (the cascade)
-let pending = null;                          // a pattern waiting to fall down the layers
-let z = [0, 0], zDrag = null, selected = 0, near = -1, card = 0, hoverLamp = -1;
-let clock = 0, mode = "tour", idleUntil = 0, frame = 0, last = 0, visible = true;
+// ---- state ----
+let ctx = 0, off = new Set(), steer = null; // steer: [du, dv] on the map
+let target = forward(CONTEXTS[ctx]);
+// what is shown: eased copies of the forward pass, one block at a time (the cascade)
+const shown = { attn: target.attn.slice(), act: target.act.slice(), states: target.states.map((s) => s.slice()), probs: target.probs.slice(), card: 0, best: 0 };
+const stageAt = new Array(NL + 2).fill(0); // stage 0 = attention, 1..NL = blocks, NL+1 = output
+let clock = 0, mode = "tour", idleUntil = 0, nextTour = 4.5, frame = 0, last = 0, visible = true, hoverLamp = -1;
 
-const nearest = (p) => { let best = -1, bd = Infinity; PROJECTS.forEach((pr, i) => { const d = Math.hypot(pr.z[0] - p[0], pr.z[1] - p[1]); if (d < bd) { bd = d; best = i; } }); return [best, bd]; };
-const fmt = (v) => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(2);
-const emit = (id, extra) => document.dispatchEvent(new CustomEvent("mind:open", { detail: { id, ...extra } }));
-
-// a pattern enters at the top and falls one layer every 0.32 s
-function feed(pattern, cascade = true) {
-  pending = pattern.slice();
-  LAYERS.forEach((_, l) => (layerAt[l] = clock + (cascade && !still.matches ? l * 0.32 : 0)));
+function recompute(cascade) {
+  const base = forward(CONTEXTS[ctx], off);
+  const sv = steer ? steerFor(base.final, steer[0], steer[1]) : null;
+  target = sv ? forward(CONTEXTS[ctx], off, sv) : base;
+  target.view = sv ? project2(target.final) : null;
+  for (let s = 0; s < stageAt.length; s++) stageAt[s] = clock + (cascade && !still.matches ? s * 0.34 : 0);
 }
-function choose(i, why) { selected = (i + PROJECTS.length) % PROJECTS.length; zDrag = null; feed(PROJECTS[selected].pattern); if (why !== "tour") pause(); }
-function pause(ms = 7000) { mode = "manual"; idleUntil = performance.now() + ms; }
+function setCtx(i, why) { ctx = (i + CONTEXTS.length) % CONTEXTS.length; steer = null; recompute(true); if (why !== "tour") pause(); }
+function pause(ms = 8000) { mode = "manual"; idleUntil = performance.now() + ms; }
 
 function step(dt) {
   clock += dt;
-  if (mode === "tour" && clock > (step.next || 0)) { step.next = clock + 4.4; choose(step.i === undefined ? (step.i = 0) : ++step.i, "tour"); }
-  if (mode === "manual" && performance.now() > idleUntil && !zDrag && !still.matches) { mode = "tour"; step.next = clock + 1.5; step.i = selected; }
-  if (pending) NEURONS.forEach((n, i) => { if (clock >= layerAt[n.layer]) target[i] = pending[i]; });
-  if (zDrag) {
-    // decode: a point on the map lights a blend of the projects around it
-    const wts = PROJECTS.map((p) => Math.exp(-((p.z[0] - zDrag[0]) ** 2 + (p.z[1] - zDrag[1]) ** 2) / 0.09));
-    const sum = wts.reduce((a, b) => a + b, 0) || 1;
-    for (let i = 0; i < N; i++) target[i] = PROJECTS.reduce((s, p, j) => s + (p.pattern[i] * wts[j]) / sum, 0);
-  }
-  const k1 = still.matches ? 1 : 1 - Math.exp(-dt / 0.22);
-  for (let i = 0; i < N; i++) act[i] += (target[i] - act[i]) * k1;
-  const want = zDrag || encode(act);
-  const k2 = still.matches ? 1 : 1 - Math.exp(-dt / 0.38);
-  z = [z[0] + (want[0] - z[0]) * k2, z[1] + (want[1] - z[1]) * k2];
-  const [ni, nd] = nearest(z); near = nd < 0.2 ? ni : -1;
-  const kc = still.matches ? 1 : 1 - Math.exp(-dt / 0.3);
-  card += ((near >= 0 ? 1 : 0) - card) * kc;
+  if (mode === "tour" && clock > nextTour) { nextTour = clock + 5; setCtx(ctx + 1, "tour"); }
+  if (mode === "manual" && performance.now() > idleUntil && !still.matches && !dragging) { mode = "tour"; nextTour = clock + 2; }
+  const f = (tau) => (still.matches ? 1 : 1 - Math.exp(-dt / tau));
+  const ready = (s) => clock >= stageAt[s];
+  if (ready(0)) shown.attn = shown.attn.map((v, j) => v + (target.attn[j] - v) * f(0.2));
+  for (let s = 0; s <= NL; s++) if (ready(s)) shown.states[s] = shown.states[s].map((v, d) => v + (target.states[s][d] - v) * f(0.25));
+  NEURONS.forEach((n, i) => { if (ready(n.layer + 1)) shown.act[i] += (target.act[i] - shown.act[i]) * f(0.2); });
+  if (ready(NL + 1)) shown.probs = shown.probs.map((v, p) => v + (target.probs[p] - v) * f(0.3));
+  const best = shown.probs.indexOf(Math.max(...shown.probs));
+  shown.best = best;
+  shown.card += ((shown.probs[best] > 0.45 ? 1 : 0) - shown.card) * f(0.3);
 }
 
 function draw() {
-  for (let i = 0; i < N; i++) {
-    const a = act[i];
+  // attention: cables and card rims
+  shown.attn.forEach((w, j) => { attFlow[j].forEach((e) => (e.style.opacity = Math.min(1, w * 1.6).toFixed(3))); tokGlow[j].style.opacity = w.toFixed(3); });
+  // neurons and their traces; ablated lamps are marked
+  for (let i = 0; i < NN; i++) {
+    const a = Math.max(0, Math.min(1, shown.act[i] / 1.4));
     glow[i].style.opacity = (a * 0.95).toFixed(3);
     trace[i].style.opacity = (0.25 + a * 0.75).toFixed(3);
-    trace[i].classList.toggle("on", a > 0.5);
-    lampEls[i] && lampEls[i].classList.toggle("hover", +lampEls[i].dataset.n === hoverLamp);
+    trace[i].classList.toggle("on", a > 0.3);
   }
+  lampEls.forEach((e) => { const n = +e.dataset.n; e.classList.toggle("off", off.has(n)); e.classList.toggle("hover", n === hoverLamp); });
+  // the block's writes into the stream, and the stream itself after each block
   LAYERS.forEach((_, l) => {
-    let s = 0, n = 0; NEURONS.forEach((ne, i) => { if (ne.layer === l) { s += act[i]; n++; } });
-    const m = s / n; layerMean[l] = m;
-    bus[l].style.opacity = Math.min(1, m * 2.2).toFixed(3);
-    links[l].forEach((e) => (e.style.opacity = Math.min(1, m * 2.4).toFixed(3)));
+    let s = 0, c = 0; NEURONS.forEach((n, i) => { if (n.layer === l) { s += Math.min(1, shown.act[i] / 1.4); c++; } });
+    const m = Math.min(1, (s / c) * 2.4);
+    bus[l].style.opacity = m.toFixed(3);
+    links[l].forEach((e) => (e.style.opacity = m.toFixed(3)));
+    const x = rmsnorm(shown.states[l + 1]);
+    x.forEach((v, d) => { const e = sliders[`${l}:${d}`]; if (e) e.setAttribute("transform", translateAlong(P, [Math.max(-1, Math.min(1, v / 2)) * SLIDE, 0, 0])); });
   });
-  needles.forEach((e, l) => { const m = layerMean[l], ang = -0.75 * Math.PI + m * 1.5 * Math.PI, [gx, gy, gr, gz] = e.dataset.g0.split(",").map(Number);
-    e.setAttribute("d", lineOnTop([gx - Math.sin(ang) * 1.6, gy + Math.cos(ang) * 1.6], [gx + Math.sin(ang) * gr, gy - Math.cos(ang) * gr], gz + 0.1, P)); });
-  inFlow.forEach((e) => (e.style.opacity = Math.min(1, layerMean[0] * 2.4).toFixed(3)));
-  if (decLed) decLed.style.opacity = (0.25 + 0.75 * card).toFixed(3);
-  const [tx, ty] = toTable(z[0], z[1]);
+  // latent space: where the vector is after each stage, and where it ends
+  const pts = shown.states.map((s) => project2(s));
+  const end = target.view && clock >= stageAt[NL + 1] ? target.view : pts[NL];
+  const tablePts = [...pts.slice(0, NL), end].map(([u, v]) => toTable(Math.max(-1, Math.min(1, u)), Math.max(-1, Math.min(1, v))));
+  trajEl.setAttribute("d", onTop(tablePts, TABLE.top + 0.6, P));
+  tablePts.forEach(([x, y], i) => { const [sx, sy] = iso([x, y, TABLE.top + 0.6], P); trajDots[i].setAttribute("cx", sx.toFixed(1)); trajDots[i].setAttribute("cy", sy.toFixed(1)); });
+  const [tx, ty] = tablePts[NL];
   bridgeEl.setAttribute("transform", translateAlong(P, [tx - TABLE.mx, 0, 0]));
   carriageEl.setAttribute("transform", translateAlong(P, [tx - TABLE.mx, ty, 0]));
-  cardEl.setAttribute("transform", translateAlong(P, [0, 0, card * CARD_RISE]));
-  pinEls.forEach((e) => e.classList.toggle("on", +e.dataset.p === near));
-  if (near >= 0) cardNo.textContent = String(near + 1).padStart(2, "0");
-  const lit = act.filter((a) => a > 0.5).length;
+  // output: logits, probabilities, the chosen token
+  shown.probs.forEach((p, i) => {
+    logitEls[i].style.opacity = (0.15 + 0.85 * p).toFixed(3);
+    const [x, y, r, z0, hmax] = fills[i].dataset.f0.split(",").map(Number);
+    fills[i].setAttribute("d", p > 0.01 ? cylinder(x, y, r, z0, Math.max(0.4, p * hmax), P, 20).fill : "");
+    pinEls[i] && 0;
+  });
+  pinEls.forEach((e) => e.classList.toggle("on", +e.dataset.p === shown.best));
+  cardEl.setAttribute("transform", translateAlong(P, [0, 0, shown.card * CARD_RISE]));
+  cardNo.textContent = String(shown.best + 1).padStart(2, "0");
+  if (decLed) decLed.style.opacity = (0.25 + 0.75 * shown.card).toFixed(3);
+  // the prompt
+  if (ctxWord.textContent !== CONTEXTS[ctx]) ctxWord.textContent = CONTEXTS[ctx];
+  const ang = -0.6 * Math.PI + (ctx / (CONTEXTS.length - 1)) * 1.2 * Math.PI;
+  knobPtr.setAttribute("d", lineOnTop([KNOB[0], KNOB[1]], [KNOB[0] + Math.sin(ang) * 3.6, KNOB[1] - Math.cos(ang) * 3.6], KNOB[2], P));
+  // readout
   let text;
-  if (hoverLamp >= 0) { const n = NEURONS[hoverLamp]; text = `L${n.layer + 1} · ${n.name} · ${act[hoverLamp] > 0.5 ? "firing" : "quiet"}`; }
-  else text = `${near >= 0 ? PROJECTS[near].name : "between projects"} · z = (${fmt(z[0])}, ${fmt(z[1])}) · ${lit} of ${N} lit`;
+  if (hoverLamp >= 0) { const n = NEURONS[hoverLamp]; text = `Block ${n.layer + 1} · ${n.name} · ${off.has(hoverLamp) ? "ablated" : "activation " + Math.max(0, shown.act[hoverLamp]).toFixed(2)}`; }
+  else text = `"I ${CONTEXTS[ctx]} build" → ${PROJECTS[shown.best].name} · p ${shown.probs[shown.best].toFixed(2)}${off.size ? " · " + off.size + " off" : ""}${steer ? " · steered" : ""}`;
   if (readout.textContent !== text) readout.textContent = text;
   root.setAttribute("aria-valuetext", text);
 }
@@ -100,18 +117,25 @@ new IntersectionObserver((es) => { visible = es[es.length - 1].isIntersecting &&
 document.addEventListener("visibilitychange", () => { visible = !document.hidden; run(); });
 
 /* ---------- input ---------- */
+const emit = (id, extra) => document.dispatchEvent(new CustomEvent("mind:open", { detail: { id, ...extra } }));
 const lampOf = (e) => e.target.closest(".mind-lamp");
 svg.addEventListener("pointerover", (e) => { const l = lampOf(e); hoverLamp = l ? +l.dataset.n : -1; });
 svg.addEventListener("pointerout", (e) => { if (lampOf(e)) hoverLamp = -1; });
 svg.addEventListener("click", (e) => {
   const lamp = lampOf(e), pin = e.target.closest(".mind-pin"), label = e.target.closest("[data-open]");
-  if (lamp) { const i = +lamp.dataset.n; zDrag = null; const pat = act.map((a) => (a > 0.5 ? 1 : 0)); pat[i] = pat[i] ? 0 : 1; pending = pat; LAYERS.forEach((_, l) => (layerAt[l] = clock)); pause(); return; }
-  if (pin) { const i = +pin.dataset.p; if (i === near) emit("built", { project: i }); else choose(i); return; }
-  if (e.target.closest('[data-part="card"]') && near >= 0) { emit("built", { project: near }); return; }
+  if (lamp) { const i = +lamp.dataset.n; off.has(i) ? off.delete(i) : off.add(i); recompute(true); pause(); return; }
+  if (e.target.closest("[data-knob]")) { setCtx(ctx + 1); return; }
+  if (pin) { const i = +pin.dataset.p; emit("built", { project: i, ctx: CONTEXTS[ctx] }); return; }
+  if (e.target.closest('[data-part="card"]')) { emit("built", { project: shown.best, ctx: CONTEXTS[ctx] }); return; }
   if (label) emit(label.dataset.open);
 });
-svg.addEventListener("keydown", (e) => { const label = e.target.closest("[data-open]"); if (label && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); emit(label.dataset.open); } });
-// drag across the map: pick a point in latent space and decode it
+svg.addEventListener("keydown", (e) => {
+  if (!(e.key === "Enter" || e.key === " ")) return;
+  if (e.target.closest("[data-knob]")) { e.preventDefault(); setCtx(ctx + 1); return; }
+  const label = e.target.closest("[data-open]"); if (label) { e.preventDefault(); emit(label.dataset.open); }
+});
+// drag on the map: a steering vector that moves the final state there
+let dragging = false;
 function toLatent(e) {
   const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
   const s = pt.matrixTransform(svg.getScreenCTM().inverse());
@@ -120,16 +144,22 @@ function toLatent(e) {
   const det = a[0] * b[1] - a[1] * b[0], x = (d[0] * b[1] - d[1] * b[0]) / det, y = (a[0] * d[1] - a[1] * d[0]) / det;
   return [Math.max(-1, Math.min(1, (x - TABLE.mx) / TABLE.sx)), Math.max(-1, Math.min(1, y / TABLE.sy))];
 }
-dragEl.addEventListener("pointerdown", (e) => { dragEl.setPointerCapture(e.pointerId); zDrag = toLatent(e); pending = null; mode = "manual"; idleUntil = Infinity; });
-dragEl.addEventListener("pointermove", (e) => { if (dragEl.hasPointerCapture(e.pointerId)) zDrag = toLatent(e); });
-const release = (e) => { if (dragEl.hasPointerCapture(e.pointerId)) dragEl.releasePointerCapture(e.pointerId); idleUntil = performance.now() + 7000; };
+function steerTo(e) {
+  const want = toLatent(e), base = forward(CONTEXTS[ctx], off), at0 = project2(base.final);
+  steer = [want[0] - at0[0], want[1] - at0[1]];
+  recompute(false);
+}
+dragEl.addEventListener("pointerdown", (e) => { dragEl.setPointerCapture(e.pointerId); dragging = true; mode = "manual"; idleUntil = Infinity; steerTo(e); });
+dragEl.addEventListener("pointermove", (e) => { if (dragging) steerTo(e); });
+const release = (e) => { if (!dragging) return; dragging = false; if (dragEl.hasPointerCapture(e.pointerId)) dragEl.releasePointerCapture(e.pointerId); idleUntil = performance.now() + 8000; };
 dragEl.addEventListener("pointerup", release); dragEl.addEventListener("pointercancel", release);
 root.addEventListener("keydown", (e) => {
   if (e.target !== root) return;
-  if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); choose(selected + 1); }
-  if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); choose(selected - 1); }
-  if (e.key === "Enter" && near >= 0) emit("built", { project: near });
+  if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); setCtx(ctx + 1); }
+  if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); setCtx(ctx - 1); }
+  if (e.key === "Escape") { off.clear(); steer = null; recompute(true); }
+  if (e.key === "Enter") emit("built", { project: shown.best, ctx: CONTEXTS[ctx] });
 });
-window.MIND = { PROJECTS, NEURONS, LAYERS, select: (i) => choose(i) };
-if (still.matches) { mode = "manual"; idleUntil = Infinity; choose(0); }
-draw(); run();
+window.MIND = { PROJECTS, NEURONS, LAYERS, CONTEXTS, attribution, forward, setCtx: (i) => setCtx(i) };
+if (still.matches) { mode = "manual"; idleUntil = Infinity; }
+recompute(false); draw(); run();

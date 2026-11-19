@@ -63,8 +63,8 @@ teach → Project One, connect → Five, fix → Two, explore → Three, trade �
 - [x] Anatomy skill installed at `~/.claude/skills/anatomy` (container only; reinstall: `npx skills add wheresryan22/anatomy -g -a claude-code`)
 - [x] v4 detail pass (braces, clamps, socket screws, decoder vents/LED)
 - [x] **v5 model**: `mind/model.mjs` rewritten as a real forward pass (tested, numbers above)
-- [ ] **v5 geometry** (in progress in `mind/build.mjs`): token reader + knob + attention cables, slider banks, unembed block, trajectory path, probability tubes. Edits applied; **not yet built or checked**.
-- [ ] **v5 live** (`mind/live.js`): rewrite for the new model:
+- [x] **v5 geometry** (`mind/build.mjs`): token reader + knob + attention cables, slider banks, unembed block, trajectory path, probability tubes. Edits applied; **not yet built or checked**.
+- [x] **v5 live** (`mind/live.js`): rewritten for the new model (builds, runs without errors; not yet visually checked):
   - state: `ctx` index, `off` (ablated set), `steer` (du, dv) from map drag
   - each frame: `forward(ctx, off, steerVec)`; displayed values follow targets with a cascade (block l starts 0.35·l s after a change)
   - write: lamp glow = clamp(act/1.5); sliders `[data-slider="l:d"]` translate x by clamp(rmsnorm(states[l+1])[d]/2, ±1)·SLIDE; attention flows `[data-link="att{j}"]` and `[data-tokglow]` by attn[j]; knob pointer `[data-knobptr]`; context word `[data-ctxword]`; trajectory `[data-traj]` and `[data-td]` from `project2(states[i])`; stylus/bridge at final projection; logit posts `[data-logit]` and tubes `[data-fill]` (rebuild with `cylinder(...).fill`) by probs; card number = argmax
