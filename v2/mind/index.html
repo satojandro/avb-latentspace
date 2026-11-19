@@ -1,0 +1,2412 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Personal Latent Space — The Nonlinear Mind</title><style>
+.iso{
+  --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
+  --anatomy-paper:#131313;--anatomy-face:#1b1b1b;--anatomy-top:#1c1c1c;
+  --anatomy-shade-0:#0f0f0f;--anatomy-shade-1:#121212;--anatomy-shade-2:#151515;--anatomy-shade-3:#181818;
+  --anatomy-lit-top:#262626;--anatomy-lit-shade:#1d1d1d;
+  --anatomy-hi:#d4d4d4;--anatomy-mid:#6a6a6a;--anatomy-lo:#3e3e3e;--anatomy-faint:#2a2a2a;--anatomy-lit:#ffffff;
+  --anatomy-halo:#050505;--anatomy-halo-opacity:.9;--anatomy-dot:#e6e6e6;
+  --anatomy-red:#ff6b6b;--anatomy-green:#6be0a0;--anatomy-blue:#6b9bff;
+  --anatomy-weight:.6px;--anatomy-ease:cubic-bezier(.32,.72,0,1);
+  --anatomy-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --anatomy-lift:inset 0 1px 0 0 #ffffff0a,inset 0 0 0 1px #ffffff06,0 0 0 1px #00000026,0 1px 1px -.5px #00000014,0 3px 3px -1.5px #00000014,0 6px 6px -3px #00000014,0 12px 12px -6px #00000014;
+}
+.iso[data-theme="light"]{
+  --anatomy-page:#f2f2ef;--anatomy-card:#fbfbfa;--anatomy-text:#57575a;--anatomy-strong:#18181a;--anatomy-muted:#8c8c90;
+  --anatomy-paper:#fbfbfa;--anatomy-face:#ffffff;--anatomy-top:#ffffff;
+  --anatomy-shade-0:#dcdcd9;--anatomy-shade-1:#e5e5e2;--anatomy-shade-2:#ededea;--anatomy-shade-3:#f4f4f1;
+  --anatomy-lit-top:#ffffff;--anatomy-lit-shade:#eeeeeb;
+  --anatomy-hi:#26262a;--anatomy-mid:#8a8a8f;--anatomy-lo:#b4b4b8;--anatomy-faint:#d4d4d6;--anatomy-lit:#000000;
+  --anatomy-halo:#8a8a80;--anatomy-halo-opacity:.32;--anatomy-dot:#3a3a3e;
+  --anatomy-red:#e5484d;--anatomy-green:#30a46c;--anatomy-blue:#3e63dd;
+  --anatomy-lift:inset 0 1px 0 0 #ffffff,0 0 0 1px #0000000f,0 1px 1px -.5px #0000000a,0 3px 3px -1.5px #0000000a,0 6px 6px -3px #0000000a,0 12px 12px -6px #0000000a;
+}
+.iso-svg{display:block;width:100%;height:auto;overflow:visible}
+.iso-svg path,.iso-svg circle{vector-effect:non-scaling-stroke}
+.iso-fill{fill:var(--anatomy-paper);stroke:none}
+.iso-solid[data-lit]>.iso-fill{fill:var(--anatomy-face)}
+.iso-shade,.iso-top{stroke:none}
+.iso-shade[data-shade="0"]{fill:var(--anatomy-shade-0)}
+.iso-shade[data-shade="1"]{fill:var(--anatomy-shade-1)}
+.iso-shade[data-shade="2"]{fill:var(--anatomy-shade-2)}
+.iso-shade[data-shade="3"]{fill:var(--anatomy-shade-3)}
+.iso-top{fill:var(--anatomy-top)}
+.iso-solid[data-lit]>.iso-top{fill:var(--anatomy-lit-top)}
+.iso-solid[data-lit]>.iso-shade{fill:var(--anatomy-lit-shade)}
+.iso-solid[data-seamless]>.iso-shade,.iso-solid[data-seamless]>.iso-top{stroke-width:.4;stroke-linejoin:round}
+.iso-solid[data-seamless]>.iso-shade[data-shade="0"]{stroke:var(--anatomy-shade-0)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="1"]{stroke:var(--anatomy-shade-1)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="2"]{stroke:var(--anatomy-shade-2)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="3"]{stroke:var(--anatomy-shade-3)}
+.iso-solid[data-seamless]>.iso-top{stroke:var(--anatomy-top)}
+.iso-solid[data-seamless][data-lit]>.iso-top{stroke:var(--anatomy-lit-top)}
+.iso-solid[data-seamless][data-lit]>.iso-shade{stroke:var(--anatomy-lit-shade)}
+.iso-solid[data-lit]>.iso-edge{stroke:var(--anatomy-lit)}
+.iso-halo{fill:var(--anatomy-halo);stroke:none;filter:blur(9px);opacity:var(--anatomy-halo-opacity);transform:translateY(3px)}
+.iso-line{fill:none;stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight);stroke-linecap:round;stroke-linejoin:round}
+.iso-line[data-tone="hi"]{stroke:var(--anatomy-hi)}
+.iso-line[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.iso-line[data-tone="lo"]{stroke:var(--anatomy-lo)}
+.iso-line[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.iso-line[data-tone="lit"]{stroke:var(--anatomy-lit)}
+.iso-line[data-tone="red"]{stroke:var(--anatomy-red)}
+.iso-line[data-tone="green"]{stroke:var(--anatomy-green)}
+.iso-line[data-tone="blue"]{stroke:var(--anatomy-blue)}
+.iso-line[data-dotted]{stroke-dasharray:.01 3.5;stroke-width:1}
+.iso-line[data-dashed]{stroke-dasharray:3 3}
+.iso-line[data-flow]{stroke-dasharray:2 6}
+.iso-wire-end{fill:var(--anatomy-paper);stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight)}
+.iso-wire[data-tone="hi"] .iso-wire-end{stroke:var(--anatomy-hi)}
+.iso-wire[data-tone="mid"] .iso-wire-end{stroke:var(--anatomy-mid)}
+.iso-wire[data-tone="faint"] .iso-wire-end{stroke:var(--anatomy-faint)}
+.iso-wire[data-tone="lit"] .iso-wire-end{stroke:var(--anatomy-lit)}
+.iso-dots circle{fill:var(--anatomy-dot);stroke:none;opacity:.32}
+.iso-dots[data-tone="hi"] circle{opacity:.85}
+.iso-dots[data-tone="mid"] circle{opacity:.45}
+.iso-dots[data-tone="lo"] circle{opacity:.22}
+.iso-dots[data-tone="faint"] circle{opacity:.12}
+.iso-face-text{fill:var(--anatomy-mid);font-family:var(--anatomy-mono);letter-spacing:.04em}
+.iso-face-text[data-tone="hi"]{fill:var(--anatomy-hi)}
+.iso-face-text[data-tone="lo"]{fill:var(--anatomy-lo)}
+.iso-face-text[data-tone="faint"]{fill:var(--anatomy-faint)}
+.tb-body{fill:var(--anatomy-shade-2);stroke:none}
+.tb-shine{fill:var(--anatomy-top);stroke:none}
+.tb-shade{fill:var(--anatomy-shade-0);stroke:none}
+.tb-ring{fill:none;stroke:var(--anatomy-lo);stroke-width:.45;stroke-linecap:butt;stroke-linejoin:round}
+.tb-ring[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.tb-ring[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.tb-ring[data-tone="hi"]{stroke:var(--anatomy-hi)}
+@keyframes iso-flow{to{stroke-dashoffset:-32}}
+@keyframes iso-pulse{0%,100%{opacity:.18}12%{opacity:1}40%{opacity:.18}}
+.iso-line[data-flow]{animation:iso-flow 1600ms linear infinite}
+.iso-dots circle[data-pulse]{animation:iso-pulse 1600ms steps(1,end) infinite;animation-delay:var(--pulse-at,0ms)}
+.iso-figure{margin:32px 0 36px}
+.iso-plate{position:relative;padding:52px 24px;border-radius:0;background:var(--anatomy-card);box-shadow:0 0 0 1px var(--anatomy-mid);--anatomy-paper:var(--anatomy-card)}
+.iso-plate-corners{position:absolute;inset:18px 20px;pointer-events:none}
+.iso-plate-corner{position:absolute;color:var(--anatomy-muted);font-family:var(--anatomy-mono);font-size:10.5px;line-height:1;letter-spacing:.04em;white-space:nowrap}
+.iso-plate-corner[data-corner="fig"]{top:0;left:0;color:var(--anatomy-text)}
+.iso-plate-corner[data-corner="title"]{top:0;right:0;text-transform:uppercase;letter-spacing:.1em}
+.iso-plate-corner[data-corner="hint"]{bottom:0;left:0;text-transform:uppercase;letter-spacing:.1em}
+.iso-plate-corner[data-corner="readout"]{right:0;bottom:0;color:var(--anatomy-text);font-variant-numeric:tabular-nums}
+.iso-plate .iso-svg{margin:0 auto}
+.iso-legend{display:grid;gap:8px;margin-top:12px;color:var(--anatomy-muted);font-size:13px;line-height:1.55}
+.iso-keys{display:flex;flex-wrap:wrap;gap:6px 18px}
+.iso-key{display:inline-flex;align-items:center;gap:7px}
+.iso-swatch{width:16px;height:10px;flex:none;overflow:visible}
+.iso-swatch path{fill:none;stroke:var(--anatomy-hi);stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.iso-swatch[data-mark="raised"] path,.iso-swatch[data-mark="flat"] path{stroke:var(--anatomy-mid)}
+.iso-swatch[data-mark="lit"] path{stroke:var(--anatomy-lit)}
+.iso-swatch[data-mark="dim"] path{stroke:var(--anatomy-lo)}
+.iso-swatch[data-mark="dotted"] path{stroke-dasharray:.01 3;stroke-width:1.4}
+.iso-swatch[data-mark="dashed"] path{stroke-dasharray:3 2.5}
+.iso-swatch[data-mark="red"] path{stroke:var(--anatomy-red)}
+.iso-swatch[data-mark="green"] path{stroke:var(--anatomy-green)}
+.iso-swatch[data-mark="blue"] path{stroke:var(--anatomy-blue)}
+.iso-swatch-crease{stroke:var(--anatomy-lo)!important}
+@media (max-width:560px){.iso-plate{padding:48px 12px 70px}.iso-plate-corner[data-corner="hint"]{bottom:18px}}
+@media (prefers-reduced-motion:reduce){.iso-line[data-flow],.iso-dots circle[data-pulse]{animation:none}}
+
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body[data-theme="light"]{color-scheme:light}
+body{margin:0;background:var(--anatomy-page);color:var(--anatomy-text);font:14px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.iso-page{width:min(650px,100% - 32px);margin:64px auto 96px}
+</style></head><body class="iso" data-theme="dark"><main class="iso-page">
+<style>
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+body.iso {
+  background: radial-gradient(circle at 46% 50%, #101624 0%, #090c12 68%, #06080d 100%) !important;
+  color: #e8eef7;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+}
+body.iso[data-theme="light"] {
+  background: radial-gradient(circle at 46% 50%, #ffffff 0%, #f3f6fa 70%, #e9eef5 100%) !important;
+  color: #161b24 !important;
+}
+.iso-page, main.iso-page {
+  max-width: none !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.app-shell {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+.viewport-main {
+  position: relative;
+  flex: 1 1 auto;
+  height: 100vh;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Full-bleed edge-to-edge 3D galaxy cube */
+.lc-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+.lc-stage:active { cursor: grabbing; }
+.lc-stage > .lc-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.lc-svg-overlay { pointer-events: none; overflow: visible; }
+.lc-gl { pointer-events: none; }
+
+/* 3D Optical Cube Frame */
+.lc-face-floor { fill: rgba(20, 32, 54, 0.22); stroke: none; }
+.lc-face-wall { fill: rgba(14, 24, 42, 0.12); stroke: none; }
+.iso[data-theme="light"] .lc-face-floor { fill: rgba(190, 208, 228, 0.22); }
+.iso[data-theme="light"] .lc-face-wall { fill: rgba(205, 220, 236, 0.13); }
+
+.lc-cube-grid { fill: none; stroke: rgba(130, 170, 220, 0.09); stroke-width: 0.65; }
+.iso[data-theme="light"] .lc-cube-grid { stroke: rgba(30, 55, 90, 0.09); }
+.lc-cube-edge-back { fill: none; stroke: rgba(140, 178, 226, 0.18); stroke-width: 0.75; stroke-dasharray: 3 3; }
+.lc-cube-edge-front { fill: none; stroke: rgba(175, 208, 248, 0.38); stroke-width: 0.9; }
+.lc-cube-corners { fill: none; stroke: rgba(215, 234, 255, 0.82); stroke-width: 1.4; stroke-linecap: square; }
+.iso[data-theme="light"] .lc-cube-edge-back { stroke: rgba(25, 48, 82, 0.20); }
+.iso[data-theme="light"] .lc-cube-edge-front { stroke: rgba(20, 42, 74, 0.44); }
+.iso[data-theme="light"] .lc-cube-corners { stroke: rgba(16, 34, 62, 0.82); }
+
+/* Projected 3D labels */
+.lc-labels text {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.01em;
+  paint-order: stroke;
+  stroke: rgba(7, 10, 16, 0.90);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.iso[data-theme="light"] .lc-labels text { stroke: rgba(246, 248, 252, 0.95); }
+.lc-node-tag.is-sel text { font-size: 10.5px; font-weight: 700; }
+.lc-node-tag.is-hov text { font-size: 10.5px; font-weight: 700; }
+
+/* Top-left floating editorial header */
+.top-badge {
+  position: absolute;
+  top: 18px;
+  left: 22px;
+  z-index: 10;
+  pointer-events: none;
+}
+.top-badge .kicker {
+  font: 9.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.54;
+}
+.top-badge .title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-top: 4px;
+}
+.top-badge .sub {
+  font-size: 11px;
+  opacity: 0.60;
+  margin-top: 3px;
+}
+
+/* Bottom-left floating camera controls */
+.cam-bar {
+  position: absolute;
+  bottom: 16px;
+  left: 22px;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cam-group {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(14, 18, 28, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+.iso[data-theme="light"] .cam-group {
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(15, 25, 40, 0.14);
+}
+.cam-btn {
+  background: transparent;
+  color: inherit;
+  border: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 10px;
+  font: 10px/1 ui-monospace, monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.78;
+}
+.cam-btn:last-child { border-right: none; }
+.cam-btn:hover { background: rgba(255, 255, 255, 0.08); opacity: 1; }
+.cam-btn.active { background: rgba(255, 214, 112, 0.2); color: #ffe08a; opacity: 1; font-weight: 700; }
+.iso[data-theme="light"] .cam-btn { border-right-color: rgba(15, 25, 40, 0.08); }
+.iso[data-theme="light"] .cam-btn:hover { background: rgba(15, 25, 40, 0.06); }
+.iso[data-theme="light"] .cam-btn.active { background: rgba(184, 58, 20, 0.12); color: #9c2e0e; }
+.cam-val {
+  padding: 0 8px;
+  font: 10px/1 ui-monospace, monospace;
+  opacity: 0.72;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+.iso[data-theme="light"] .cam-val { border-right-color: rgba(15, 25, 40, 0.08); }
+.cam-hint {
+  font: 9.5px/1 ui-monospace, monospace;
+  letter-spacing: 0.05em;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Right-side Story Inspector */
+.hud-panel {
+  position: relative;
+  flex: 0 0 364px;
+  height: 100vh;
+  background: rgba(12, 15, 22, 0.88);
+  border-left: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(14px);
+  padding: 15px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  z-index: 20;
+  transition: flex-basis 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
+}
+.iso[data-theme="light"] .hud-panel {
+  background: rgba(248, 250, 253, 0.92);
+  border-left-color: rgba(15, 25, 40, 0.12);
+}
+.hud-panel.collapsed {
+  flex-basis: 0;
+  padding: 0;
+  border-left: none;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.panel-toggle-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 30;
+  background: rgba(18, 24, 36, 0.76);
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 5px;
+  padding: 5px 10px;
+  font: 10px/1 ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+.iso[data-theme="light"] .panel-toggle-btn {
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(15, 25, 40, 0.16);
+}
+.hud-panel:not(.collapsed) ~ .panel-toggle-btn { right: 378px; }
+
+/* Mode Tabs (Timeline | Lenses) */
+.mode-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 6px;
+  padding: 3px;
+  gap: 3px;
+}
+.iso[data-theme="light"] .mode-tabs {
+  background: rgba(15, 25, 40, 0.05);
+  border-color: rgba(15, 25, 40, 0.10);
+}
+.mode-tab {
+  background: transparent;
+  color: inherit;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font: 10.5px/1 ui-monospace, monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.68;
+}
+.mode-tab.active {
+  background: rgba(255, 214, 112, 0.18);
+  color: #ffe08a;
+  font-weight: 700;
+  opacity: 1;
+}
+.iso[data-theme="light"] .mode-tab.active {
+  background: #ffffff;
+  color: #161b24;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.hud-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 10px;
+}
+.hud-section:first-child { border-top: none; padding-top: 0; }
+.iso[data-theme="light"] .hud-section { border-top-color: rgba(15, 25, 40, 0.10); }
+
+.hud-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: 9.5px/1 ui-monospace, monospace;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  opacity: 0.56;
+  margin-bottom: 7px;
+}
+
+.chap-list { display: flex; flex-direction: column; gap: 4px; }
+.chap-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.035);
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 5px;
+  padding: 6px 9px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.14s, border-color 0.14s;
+}
+.chap-btn:hover { background: rgba(255, 255, 255, 0.08); }
+.chap-btn.active {
+  background: rgba(255, 214, 112, 0.13);
+  border-color: rgba(255, 214, 112, 0.45);
+  font-weight: 600;
+}
+.chap-yr {
+  font: 9.5px/1 ui-monospace, monospace;
+  opacity: 0.58;
+}
+.iso[data-theme="light"] .chap-btn {
+  background: rgba(15, 25, 40, 0.03);
+  border-color: rgba(15, 25, 40, 0.09);
+}
+.iso[data-theme="light"] .chap-btn.active {
+  background: rgba(184, 58, 20, 0.09);
+  border-color: rgba(184, 58, 20, 0.38);
+}
+
+input[type="range"].hud-slider {
+  width: 100%;
+  margin: 8px 0 6px;
+  accent-color: #ffd875;
+  cursor: pointer;
+}
+.iso[data-theme="light"] input[type="range"].hud-slider { accent-color: #b83a14; }
+
+.hud-controls { display: flex; gap: 6px; }
+.hud-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 5.5px 6px;
+  font: 10px/1 ui-monospace, monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.hud-btn.active { background: rgba(96, 178, 255, 0.18); border-color: rgba(130, 200, 255, 0.45); }
+.iso[data-theme="light"] .hud-btn { background: rgba(15, 25, 40, 0.05); border-color: rgba(15, 25, 40, 0.14); }
+
+/* Chapter Narrative + Echo Box */
+.story-title { font-size: 13.5px; font-weight: 700; margin-bottom: 5px; }
+.story-text { font-size: 12px; line-height: 1.5; opacity: 0.86; }
+.echo-box {
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.42;
+  padding: 7px 9px;
+  border-radius: 5px;
+  background: rgba(255, 214, 112, 0.09);
+  border-left: 2px solid #ffd875;
+  color: #ffe8ad;
+}
+.iso[data-theme="light"] .echo-box {
+  background: rgba(184, 58, 20, 0.07);
+  border-left-color: #b83a14;
+  color: #7d250b;
+}
+
+/* Selected Node Story Card */
+.node-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 7px;
+  padding: 10px 11px;
+}
+.iso[data-theme="light"] .node-card {
+  background: #ffffff;
+  border-color: rgba(15, 25, 40, 0.12);
+}
+.node-card-empty { font-size: 11.5px; opacity: 0.55; line-height: 1.45; }
+.nc-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.nc-meta {
+  display: flex; align-items: center; gap: 5px;
+  font: 9.5px/1 ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.65;
+}
+.nc-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.nc-title { font-size: 13px; font-weight: 700; margin-top: 4px; }
+.nc-story { font-size: 11.8px; line-height: 1.48; opacity: 0.88; margin-top: 6px; }
+.nc-mute-btn {
+  background: transparent;
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  padding: 3px 7px;
+  font: 9px/1 ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  opacity: 0.72;
+  flex-shrink: 0;
+}
+.nc-mute-btn:hover { opacity: 1; }
+.nc-mute-btn.is-muted { border-color: #ff6472; color: #ff6472; opacity: 1; }
+.iso[data-theme="light"] .nc-mute-btn { border-color: rgba(15, 25, 40, 0.20); }
+
+.nc-links-block { margin-top: 8px; }
+.nc-links-hdr {
+  font: 9px/1 ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.52;
+  margin-bottom: 4px;
+}
+.nc-links-row { display: flex; flex-wrap: wrap; gap: 4px; }
+.nc-chip {
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 4px;
+  padding: 3.5px 6px;
+  font-size: 10.5px;
+  cursor: pointer;
+  text-align: left;
+}
+.nc-chip:hover { background: rgba(255, 255, 255, 0.12); }
+.nc-chip.is-bridge {
+  border-color: rgba(255, 214, 112, 0.42);
+  background: rgba(255, 214, 112, 0.10);
+}
+.nc-chip-yr { font: 9px/1 ui-monospace, monospace; opacity: 0.58; margin-left: 3px; }
+.iso[data-theme="light"] .nc-chip { background: rgba(15, 25, 40, 0.04); border-color: rgba(15, 25, 40, 0.12); }
+.iso[data-theme="light"] .nc-chip.is-bridge { background: rgba(184, 58, 20, 0.08); border-color: rgba(184, 58, 20, 0.32); }
+
+/* Resonating Now list */
+.act-list { display: flex; flex-direction: column; gap: 3px; }
+.act-row {
+  display: grid;
+  grid-template-columns: 7px 1fr auto;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  color: inherit;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 4px 5px;
+  font-size: 11.5px;
+  text-align: left;
+  cursor: pointer;
+}
+.act-row:hover { background: rgba(255, 255, 255, 0.06); }
+.act-row.is-sel { background: rgba(255, 214, 112, 0.12); border-color: rgba(255, 214, 112, 0.35); }
+.iso[data-theme="light"] .act-row:hover { background: rgba(15, 25, 40, 0.05); }
+.hud-dot { width: 6px; height: 6px; border-radius: 50%; }
+.act-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.act-tag { font: 9.5px/1 ui-monospace, monospace; opacity: 0.58; }
+
+/* Emergent Clusters legend */
+.cl-list { display: flex; flex-direction: column; gap: 5px; }
+.cl-row {
+  display: grid;
+  grid-template-columns: 132px 1fr 30px;
+  align-items: center;
+  gap: 7px;
+  font-size: 10.5px;
+}
+.cl-track { height: 5px; background: rgba(255, 255, 255, 0.08); border-radius: 3px; overflow: hidden; }
+.iso[data-theme="light"] .cl-track { background: rgba(15, 25, 40, 0.09); }
+.cl-fill { height: 100%; border-radius: 3px; transition: width 0.15s ease; }
+.cl-val { text-align: right; font: 9.5px/1 ui-monospace, monospace; opacity: 0.65; }
+
+.ml-link {
+  display: inline-block;
+  margin-top: 2px;
+  font: 9.5px/1 ui-monospace, monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: inherit;
+  opacity: 0.45;
+  text-decoration: none;
+}
+.ml-link:hover { opacity: 0.9; text-decoration: underline; }
+
+@media (max-width: 900px) {
+  .app-shell { flex-direction: column; height: auto; overflow-y: auto; }
+  html, body { overflow: auto; }
+  .viewport-main { width: 100%; height: 66vh; }
+  .hud-panel { width: 100%; flex: none; height: auto; border-left: none; border-top: 1px solid rgba(255,255,255,0.1); }
+  .panel-toggle-btn { display: none; }
+}
+</style>
+<div class="app-shell">
+  <main class="viewport-main">
+    <div class="top-badge">
+      <div class="kicker">Personal Latent Space · 1989 → Today</div>
+      <div class="title">The Nonlinear Mind</div>
+      <div class="sub">5 Chapters · 42 Deconstructed Priors · 4 Emergent Facets · Retroactive Cross-Era Bridges</div>
+    </div>
+
+    <div class="lc-stage" tabindex="0">
+      <svg xmlns="http://www.w3.org/2000/svg" class="lc-layer lc-svg-overlay" aria-label="Interactive 3D latent space of a nonlinear career and lived experience">
+        <g data-cube-back></g>
+      </svg>
+      <canvas class="lc-layer lc-gl" aria-hidden="true"></canvas>
+      <svg xmlns="http://www.w3.org/2000/svg" class="lc-layer lc-svg-overlay" aria-hidden="true">
+        <g data-cube-front></g>
+        <g data-labels class="lc-labels"></g>
+      </svg>
+    </div>
+
+    <div class="cam-bar">
+      <div class="cam-group">
+        <button class="cam-btn" data-zoom-out title="Zoom out (−)">−</button>
+        <span class="cam-val" data-zoom-val>0.9×</span>
+        <button class="cam-btn" data-zoom-in title="Zoom into cluster (+)">+</button>
+      </div>
+      <div class="cam-group">
+        <button class="cam-btn" data-cam-spin title="Toggle slow cosmic orbit">Spin</button>
+        <button class="cam-btn" data-cam-reset title="Reset camera & counterfactuals (R)">Reset</button>
+      </div>
+      <span class="cam-hint">DRAG ORBIT · SCROLL ZOOM · CLICK ANY STAR TO READ ITS STORY & BRIDGES</span>
+    </div>
+  </main>
+
+  <aside class="hud-panel">
+    <div class="mode-tabs">
+      <button class="mode-tab active" data-tab-timeline>Timeline</button>
+      <button class="mode-tab" data-tab-lens>Synthesis Lenses</button>
+    </div>
+
+    <div class="hud-section" data-pane-timeline>
+      <div class="hud-label"><span>Life Chapters (4th Dim)</span><span data-time-val>Ch.5 · 2023 – Today</span></div>
+      <div class="chap-list"><button class="chap-btn" data-chapter-btn="0"><span>1. Venezuela</span><span class="chap-yr">1989 – 2008</span></button>
+<button class="chap-btn" data-chapter-btn="1"><span>2. Australia · Arts & Law</span><span class="chap-yr">2008 – 2014</span></button>
+<button class="chap-btn" data-chapter-btn="2"><span>3. Crypto Law · The Pivot</span><span class="chap-yr">2015 – 2017</span></button>
+<button class="chap-btn" data-chapter-btn="3"><span>4. Crypto & NEAR Ecosystem</span><span class="chap-yr">2013 – 2023</span></button>
+<button class="chap-btn active" data-chapter-btn="4"><span>5. AI Builder Mode</span><span class="chap-yr">2023 – Today</span></button></div>
+      <input type="range" class="hud-slider" data-time-slider min="0.1" max="5" step="0.02" value="4.95"/>
+      <div class="hud-controls">
+        <button class="hud-btn" data-play-btn>Play Arc</button>
+        <button class="hud-btn active" data-labels-btn>Labels</button>
+        <button class="hud-btn" data-theme-btn>Light</button>
+      </div>
+    </div>
+
+    <div class="hud-section" data-pane-lens style="display:none">
+      <div class="hud-label"><span>Ask the Constellation</span><span>4 Lenses</span></div>
+      <div class="chap-list"><button class="chap-btn active" data-lens-btn="0"><span>Why did crypto click instantly?</span></button>
+<button class="chap-btn" data-lens-btn="1"><span>How did a lawyer become an AI builder?</span></button>
+<button class="chap-btn" data-lens-btn="2"><span>What drives the refusal to settle?</span></button>
+<button class="chap-btn" data-lens-btn="3"><span>How do all 5 chapters connect today?</span></button></div>
+    </div>
+
+    <div class="hud-section">
+      <div class="story-title" data-story-title>5. AI Builder Mode</div>
+      <div class="story-text" data-story-text></div>
+      <div class="echo-box" data-echo-note></div>
+    </div>
+
+    <div class="hud-section">
+      <div class="hud-label"><span>Selected Memory / Prior</span><span>Click any star</span></div>
+      <div class="node-card" data-node-card></div>
+    </div>
+
+    <div class="hud-section">
+      <div class="hud-label"><span>Resonating Now</span><span>Gold = Earlier Echo</span></div>
+      <div class="act-list" data-active-list></div>
+    </div>
+
+    <div class="hud-section">
+      <div class="hud-label"><span>Emergent Facets</span><span>Organic Clusters</span></div>
+      <div class="cl-list"><div class="cl-row" title="Institutional fragility, rule of law, sound money, and trustless code."><span>Systems & Sovereignty</span><span class="cl-track"><div class="cl-fill" data-cluster-bar="0" style="width:40%"></div></span><span class="cl-val" data-cluster-val="0">40%</span></div>
+<div class="cl-row" title="Self-reliance, bypassing gatekeepers, anti-complacency, and contrarian conviction."><span>Agency & Exit</span><span class="cl-track"><div class="cl-fill" data-cluster-bar="1" style="width:40%"></div></span><span class="cl-val" data-cluster-val="1">40%</span></div>
+<div class="cl-row" title="Engineering proximity, UX taste, signal over hype, and AI-powered building."><span>Frontier Tech & Craft</span><span class="cl-track"><div class="cl-fill" data-cluster-bar="2" style="width:40%"></div></span><span class="cl-val" data-cluster-val="2">40%</span></div>
+<div class="cl-row" title="Bicultural fluency, history & politics, community building, and translating worlds."><span>Narrative & Bridges</span><span class="cl-track"><div class="cl-fill" data-cluster-bar="3" style="width:40%"></div></span><span class="cl-val" data-cluster-val="3">40%</span></div></div>
+      <a class="ml-link" href="../index.html">↗ View Technical LLM Latent Space (Phase 1)</a>
+    </div>
+  </aside>
+
+  <button class="panel-toggle-btn" data-panel-toggle>Hide</button>
+</div>
+</main><script type="module">// Personal Latent Space Model — Nonlinear Career & Lived Experience
+// 5 Chronological Chapters (1989 -> Today) deconstructed into 42 atomic events & mental models
+// organized organically across 4 emergent latent clusters in R^8 -> PCA 3D,
+// with cross-era retroactive bridges, 4 synthesis lenses, and 1,600 time-accumulating background stars.
+
+const D_MODEL = 8;
+const N_CHAPTERS = 5;
+
+function dot(a, b) {
+  let s = 0;
+  for (let i = 0; i < a.length; i++) s += a[i] * b[i];
+  return s;
+}
+function norm(a) {
+  return Math.sqrt(dot(a, a)) || 1e-8;
+}
+function unit(a) {
+  const n = norm(a);
+  return a.map((v) => v / n);
+}
+function add(a, b, scale = 1) {
+  return a.map((v, i) => v + b[i] * scale);
+}
+
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// 4 Emergent Latent Clusters (conceptual dimensions, NOT chronological silos)
+const CLUSTERS = [
+  {
+    id: "systems",
+    name: "Systems & Sovereignty",
+    desc: "Institutional fragility, rule of law, sound money, and trustless code.",
+    center: unit([1.0, 0.12, 0.2, -0.1, 0.35, 0.0, -0.1, 0.0]),
+  },
+  {
+    id: "agency",
+    name: "Agency & Exit",
+    desc: "Self-reliance, bypassing gatekeepers, anti-complacency, and contrarian conviction.",
+    center: unit([0.1, 1.0, -0.12, 0.18, 0.0, 0.38, 0.0, -0.1]),
+  },
+  {
+    id: "craft",
+    name: "Frontier Tech & Craft",
+    desc: "Engineering proximity, UX taste, signal over hype, and AI-powered building.",
+    center: unit([-0.15, 0.1, 1.0, 0.15, 0.0, 0.0, 0.4, 0.12]),
+  },
+  {
+    id: "narrative",
+    name: "Narrative & Bridges",
+    desc: "Bicultural fluency, history & politics, community building, and translating worlds.",
+    center: unit([0.18, -0.12, 0.12, 1.0, -0.15, 0.0, 0.0, 0.42]),
+  },
+];
+
+// 5 Chronological Chapters (Timeline 4th Dimension: 0.0 -> 5.0)
+const CHAPTERS = [
+  {
+    id: "venezuela",
+    num: 1,
+    years: "1989 – 2008",
+    title: "Venezuela",
+    subtitle: "Prosperity, institutional collapse & the instinct to exit",
+    summary:
+      "Born the year the Berlin Wall fell into a prosperous, oil-rich middle-class home. Bilingual early at an American school with an engineer father — then watching socialism, street protests, and institutional decay unfold in slow motion until leaving solo in 2008.",
+    echoNote: "Origin layer: plants the foundational priors — institutional skepticism, bicultural fluency, and engineering proximity.",
+    anchorIds: [0, 1, 2, 3, 4, 5, 6, 7],
+  },
+  {
+    id: "australia",
+    num: 2,
+    years: "2008 – 2014",
+    title: "Australia · Arts & Law",
+    subtitle: "Solo arrival, systems that work & friction with complacency",
+    summary:
+      "Landed in Australia alone and studied Politics, International Studies, History, and Law at Monash. Studying a functional legal system sharpened a structural worldview — while debating comfortable idealists hardened a freedom-first, high-ambition stance.",
+    echoNote: "Echoes Ch. 1: lived collapse in Venezuela collides directly with Monash legal theory and campus ideology.",
+    anchorIds: [8, 9, 10, 11, 12, 13, 14, 15],
+  },
+  {
+    id: "law",
+    num: 3,
+    years: "2015 – 2017",
+    title: "Crypto Law · The Pivot",
+    subtitle: "Skipping the script, cold-emailing the #1 partner & pragmatic exit",
+    summary:
+      "Bypassed every graduate recruitment pipeline and emailed Australia's top crypto law partner directly. Earned admission as a lawyer in Sydney — and stepped out the moment the credential was complete to move straight into technology.",
+    echoNote: "Echoes Ch. 1 & 2: the same exit instinct that left Venezuela now refuses a conventional legal track.",
+    anchorIds: [16, 17, 18, 19, 20, 21],
+  },
+  {
+    id: "crypto",
+    num: 4,
+    years: "2013 – 2023",
+    title: "Crypto & NEAR Ecosystem",
+    subtitle: "Cypherpunk conviction, non-technical leadership & latent builder tension",
+    summary:
+      "Bitcoin clicked instantly in 2013 through the lens of Venezuelan hyperinflation. From Melbourne Blockchain Centre to becoming a recognized voice in the early NEAR ecosystem across BD, governance, content, and community — surrounded by engineers, full of ideas, always one step from shipping them solo.",
+    echoNote: "Strong retroactive echoes: Ch. 1 hyperinflation + Ch. 2 rule-of-law fuse into cypherpunk trustless code.",
+    anchorIds: [22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+  },
+  {
+    id: "ai",
+    num: 5,
+    years: "2023 – Today",
+    title: "AI Builder Mode",
+    subtitle: "Removing the last middleman — vibe coding, hackathons & sovereign shipping",
+    summary:
+      "The moment AI arrived, taught himself to code among the earliest wave of vibe coders. Peak curiosity testing every new model and tool, winning hackathons, and shipping increasingly ambitious projects — finally turning a decade of latent product ideas into real software.",
+    echoNote: "Full-cube synthesis: Ch. 1 engineering proximity + Ch. 3 high agency + Ch. 4 coiled ideas ignite into sovereign execution.",
+    anchorIds: [32, 33, 34, 35, 36, 37, 38, 39, 40, 41],
+  },
+];
+
+// 42 Deconstructed Nodes (events + underlying atomic features/mental models)
+// Each node has a primary cluster + optional secondary cluster pull in R^8 so bridges sit naturally in space.
+const RAW_NODES = [
+  // --- Chapter 1: Venezuela (0..7) ---
+  {
+    name: "Born 1989 · Berlin Wall",
+    chapter: 0, year: "1989", cluster: 3, mix: [0, 0.3], kind: "anchor",
+    story: "Born the year the Berlin Wall fell — an early fascination with geopolitical inflection points and how regimes rise and collapse.",
+  },
+  {
+    name: "Oil-rich prosperity",
+    chapter: 0, year: "1990s", cluster: 0, mix: [3, 0.2], kind: "feature",
+    story: "Grew up in a solid middle-class Venezuela before the decline — knowing firsthand that abundance is never guaranteed.",
+  },
+  {
+    name: "Engineer dad · multinationals",
+    chapter: 0, year: "1990s", cluster: 2, mix: [1, 0.25], kind: "feature",
+    story: "A father working as an engineer for multinational companies and a mother at a private hospital normalized technical competence and global horizons.",
+  },
+  {
+    name: "American school · bilingual",
+    chapter: 0, year: "1995", cluster: 3, mix: [1, 0.3], kind: "anchor",
+    story: "Attending an American private school and becoming bilingual early wired in cross-cultural fluency and an affinity for freedom-oriented values.",
+  },
+  {
+    name: "Rise of Chávez · opposition",
+    chapter: 0, year: "1999", cluster: 0, mix: [1, 0.2], kind: "anchor",
+    story: "Family and circles were opposition from day one — building an early radar for ideological capture and broken incentives.",
+  },
+  {
+    name: "Slow-motion warning signs",
+    chapter: 0, year: "2002–07", cluster: 0, mix: [3, 0.25], kind: "feature",
+    story: "The visceral frustration of watching every warning come true in slow motion — sharpening pattern recognition for systemic decay.",
+  },
+  {
+    name: "Street protests & collapse",
+    chapter: 0, year: "2006–08", cluster: 0, mix: [1, 0.3], kind: "feature",
+    story: "Violence, rising crime, and eroding living standards proved that legal rights mean nothing when institutions fail.",
+  },
+  {
+    name: "Leaving Venezuela (2008)",
+    chapter: 0, year: "2008", cluster: 1, mix: [0, 0.3], kind: "anchor",
+    story: "Right after high school, made the defining call of a generation: exit a broken system to build a future elsewhere.",
+  },
+
+  // --- Chapter 2: Australia + BA/LLM (8..15) ---
+  {
+    name: "Solo arrival in Australia",
+    chapter: 1, year: "2008", cluster: 1, mix: [3, 0.25], kind: "anchor",
+    story: "Arriving in a new country completely alone forged deep self-reliance and comfort operating without a safety net.",
+  },
+  {
+    name: "Politics, History & IR",
+    chapter: 1, year: "2009–12", cluster: 3, mix: [0, 0.35], kind: "feature",
+    story: "Studying Politics, International Studies, and History at Monash gave formal language to the geopolitical forces lived firsthand.",
+  },
+  {
+    name: "Monash Law · working systems",
+    chapter: 1, year: "2009–14", cluster: 0, mix: [3, 0.2], kind: "anchor",
+    story: "Genuine fascination with studying a legal and institutional system that actually works — contrasting sharply with Venezuela.",
+  },
+  {
+    name: "Lived reality vs. ideology",
+    chapter: 1, year: "2010–13", cluster: 1, mix: [0, 0.35], kind: "feature",
+    story: "Confronted on campus by comfortable idealists romanticizing the exact regime just escaped — cementing intellectual independence.",
+  },
+  {
+    name: "American freedom ethos",
+    chapter: 1, year: "2011", cluster: 1, mix: [3, 0.3], kind: "feature",
+    story: "Clear cultural alignment with individual liberty, merit, and building without asking permission.",
+  },
+  {
+    name: "Anti-tall-poppy ambition",
+    chapter: 1, year: "2012", cluster: 1, mix: [2, 0.25], kind: "feature",
+    story: "Pushing back against 'comfortable' complacency and tall poppy syndrome — refusing to shrink ambition to fit in.",
+  },
+  {
+    name: "Structural literacy",
+    chapter: 1, year: "2013", cluster: 0, mix: [2, 0.2], kind: "feature",
+    story: "Learning to read contracts, incentives, and governance rules as executable architectures rather than mere words.",
+  },
+  {
+    name: "Contrarian conviction",
+    chapter: 1, year: "2014", cluster: 1, mix: [0, 0.25], kind: "feature",
+    story: "Willingness to hold an unpopular view early when first-principles reality disagrees with the consensus crowd.",
+  },
+
+  // --- Chapter 3: Law Stint -> Tech Transition (16..21) ---
+  {
+    name: "Bypassing grad programs",
+    chapter: 2, year: "2015", cluster: 1, mix: [2, 0.2], kind: "feature",
+    story: "Never applied to a single traditional graduate recruitment track — rejecting bureaucratic funnels from the start.",
+  },
+  {
+    name: "Cold-emailing #1 crypto partner",
+    chapter: 2, year: "2015", cluster: 1, mix: [0, 0.3], kind: "anchor",
+    story: "Emailed directly the one partner in Australia who was the best in crypto law — and won a seat through genuine early conviction.",
+  },
+  {
+    name: "Sydney law grad stint",
+    chapter: 2, year: "2016", cluster: 0, mix: [3, 0.25], kind: "anchor",
+    story: "Brief, focused stint at a Sydney firm seeing legal practice from the inside while mapping where code would outpace courts.",
+  },
+  {
+    name: "Admitted as a lawyer",
+    chapter: 2, year: "2017", cluster: 0, mix: [1, 0.2], kind: "anchor",
+    story: "Crossed the finish line to legal admission — proving mastery of the traditional system before choosing to step beyond it.",
+  },
+  {
+    name: "Pragmatic exit to tech",
+    chapter: 2, year: "2017", cluster: 1, mix: [2, 0.35], kind: "anchor",
+    story: "Left legal practice the moment the experience was banked — treating credentials as launchpads, never cages.",
+  },
+  {
+    name: "Direct access instinct",
+    chapter: 2, year: "2016", cluster: 3, mix: [1, 0.35], kind: "feature",
+    story: "Reaching straight to the most interesting builders and decision-makers — a habit that later powered ecosystem BD.",
+  },
+
+  // --- Chapter 4: Crypto & NEAR Ecosystem (22..31) ---
+  {
+    name: "Bitcoin clicks instantly (2013)",
+    chapter: 3, year: "2013", cluster: 0, mix: [2, 0.35], kind: "anchor",
+    story: "First heard of Bitcoin in 2013 and understood it immediately — hyperinflation in Venezuela made sound, borderless money self-evident.",
+  },
+  {
+    name: "Melbourne Blockchain Centre",
+    chapter: 3, year: "2015–16", cluster: 3, mix: [2, 0.3], kind: "anchor",
+    story: "Immersed in Melbourne's early crypto meetups, finding a tribe of builders and cypherpunks before the mainstream arrived.",
+  },
+  {
+    name: "Cypherpunk · remove middlemen",
+    chapter: 3, year: "2016", cluster: 0, mix: [1, 0.25], kind: "feature",
+    story: "Core ethos: replace brittle intermediaries and failed legal systems with immutable code that lets strangers trust each other.",
+  },
+  {
+    name: "Cycle immunity · ICO/NFT/Memes",
+    chapter: 3, year: "2017–22", cluster: 0, mix: [2, 0.25], kind: "feature",
+    story: "Watched every speculative wave rise and crash without losing sight of real technology — filtering signal from hype.",
+  },
+  {
+    name: "Early NEAR Protocol",
+    chapter: 3, year: "2020", cluster: 2, mix: [0, 0.25], kind: "anchor",
+    story: "Drawn to NEAR for real engineering ('Ethereum 2.0 delivered') and a rare obsession with consumer-grade UI/UX.",
+  },
+  {
+    name: "UI/UX & tech taste",
+    chapter: 3, year: "2020–22", cluster: 2, mix: [3, 0.3], kind: "feature",
+    story: "Sharpened an instinct for why great infrastructure still fails without intuitive, human-centered interfaces.",
+  },
+  {
+    name: "BD, Content & Governance",
+    chapter: 3, year: "2020–23", cluster: 3, mix: [0, 0.3], kind: "anchor",
+    story: "Wore every non-technical hat — business development, marketing content, protocol governance, and community architecture.",
+  },
+  {
+    name: "Recognized ecosystem voice",
+    chapter: 3, year: "2021–23", cluster: 3, mix: [1, 0.25], kind: "feature",
+    story: "Became widely known across the NEAR ecosystem by bridging technical teams, governance, and narrative.",
+  },
+  {
+    name: "Surrounded by engineers",
+    chapter: 3, year: "2020–23", cluster: 2, mix: [3, 0.25], kind: "feature",
+    story: "Absorbed systems thinking, architecture tradeoffs, and product intuition by working side-by-side with top engineers for years.",
+  },
+  {
+    name: "Latent builder tension",
+    chapter: 3, year: "2022–23", cluster: 2, mix: [1, 0.35], kind: "feature",
+    story: "Overflowing with product ideas yet always one step short of building them solo — a coiled spring waiting for leverage.",
+  },
+
+  // --- Chapter 5: AI Builder Mode (32..41) ---
+  {
+    name: "Self-taught coding with AI",
+    chapter: 4, year: "2023", cluster: 2, mix: [1, 0.3], kind: "anchor",
+    story: "The moment AI arrived, jumped straight in and taught himself to code — closing the final gap between idea and execution.",
+  },
+  {
+    name: "First-gen 'vibe coder'",
+    chapter: 4, year: "2023–24", cluster: 2, mix: [1, 0.25], kind: "anchor",
+    story: "Among the earliest generation building software fluidly in partnership with LLMs — turning taste and clarity into working code.",
+  },
+  {
+    name: "Removing the last middleman",
+    chapter: 4, year: "2024", cluster: 0, mix: [2, 0.45], kind: "feature",
+    story: "The cypherpunk arc completed: first code removed institutional middlemen, now AI removes the execution middleman.",
+  },
+  {
+    name: "Peak frontier curiosity",
+    chapter: 4, year: "2024–25", cluster: 2, mix: [3, 0.2], kind: "feature",
+    story: "Proactively testing every new model, agent, and developer tool the day it drops — staying right at the leading edge.",
+  },
+  {
+    name: "Hackathon wins",
+    chapter: 4, year: "2024–25", cluster: 1, mix: [2, 0.45], kind: "anchor",
+    story: "Turning rapid prototypes into winning hackathon submissions — validating builder instincts under real time pressure.",
+  },
+  {
+    name: "Ambitious side projects",
+    chapter: 4, year: "2025–26", cluster: 2, mix: [3, 0.25], kind: "anchor",
+    story: "A growing portfolio of increasingly deep, technically ambitious projects — including visualizing the very mind behind them.",
+  },
+  {
+    name: "Full-stack synthesis",
+    chapter: 4, year: "2025–26", cluster: 3, mix: [2, 0.4], kind: "feature",
+    story: "Law, geopolitics, crypto governance, UX taste, and AI engineering finally converging into a single sovereign builder stack.",
+  },
+  {
+    name: "Rapid taste-to-ship loop",
+    chapter: 4, year: "2025", cluster: 2, mix: [1, 0.3], kind: "feature",
+    story: "Years of non-technical product judgment now pay compounding dividends when paired with instant AI implementation.",
+  },
+  {
+    name: "Sovereign builder identity",
+    chapter: 4, year: "Today", cluster: 1, mix: [2, 0.35], kind: "anchor",
+    story: "No longer waiting on institutions, grad tracks, or someone else to build — full agency from raw insight to shipped artifact.",
+  },
+  {
+    name: "Nonlinear edge",
+    chapter: 4, year: "Today", cluster: 3, mix: [0, 0.35], kind: "feature",
+    story: "What looked like disconnected chapters on paper turned out to be a rare, uncopyable latent space of connected priors.",
+  },
+];
+
+// Generate deterministic R^8 coordinates anchored to each node's primary + secondary cluster
+const rng = mulberry32(198908);
+const NODES = RAW_NODES.map((n, i) => {
+  const base = CLUSTERS[n.cluster].center;
+  const sec = n.mix ? CLUSTERS[n.mix[0]].center : base;
+  const mixW = n.mix ? n.mix[1] : 0;
+  let v = add(base, sec, mixW);
+  const jitter = Array.from({ length: D_MODEL }, () => (rng() - 0.5) * 0.54);
+  v = unit(add(v, jitter, 1));
+  // Spread bornAt smoothly within each chapter [chapter + 0.08, chapter + 0.92]
+  const chapNodes = RAW_NODES.filter((x) => x.chapter === n.chapter);
+  const idxInChap = chapNodes.indexOf(n);
+  const bornAt = n.chapter + 0.08 + (idxInChap / Math.max(1, chapNodes.length - 1)) * 0.84;
+  return { id: i, ...n, bornAt, dir: v };
+});
+
+const N_NODES = NODES.length;
+
+// Meaningful Connections: [fromId, toId, strength, isCrossEraBridge, note]
+const EDGES = [
+  // Intra-chapter & immediate narrative links
+  [0, 4, 0.8, false, "Geopolitical awareness meets Chávez's rise"],
+  [1, 5, 0.85, false, "Knowing prosperity makes decay unmistakable"],
+  [4, 5, 0.95, false, "Opposition clarity watching warnings come true"],
+  [5, 6, 0.95, false, "Slow warnings erupt into street collapse"],
+  [6, 7, 1.0, false, "Institutional breakdown forces the 2008 exit"],
+  [7, 8, 1.0, true, "Leaving Venezuela → arriving solo in Australia"],
+  [8, 13, 0.85, false, "Solo self-reliance rejects comfortable complacency"],
+  [9, 10, 0.9, false, "Politics & History paired with Monash Law"],
+  [10, 14, 0.95, false, "Studying working law builds structural literacy"],
+  [11, 15, 0.9, false, "Campus ideology friction forges contrarian conviction"],
+  [12, 13, 0.9, false, "American freedom ethos rejects tall poppy syndrome"],
+  [16, 17, 0.98, false, "Skipping grad tracks → cold-emailing the #1 partner"],
+  [17, 18, 0.95, false, "Direct outreach lands the Sydney crypto law seat"],
+  [18, 19, 0.9, false, "Practice completed → admitted as a lawyer"],
+  [19, 20, 0.95, false, "Credential earned → pragmatic exit into tech"],
+  [22, 23, 0.92, false, "Early Bitcoin conviction → Melbourne Blockchain Centre"],
+  [23, 24, 0.95, false, "Community meetups deepen cypherpunk ethos"],
+  [24, 25, 0.85, false, "Cypherpunk principles filter out hype cycles"],
+  [25, 26, 0.9, false, "Tech-first filter leads straight to early NEAR"],
+  [26, 27, 0.95, false, "NEAR's consumer focus sharpens UI/UX taste"],
+  [26, 28, 0.95, false, "Leading BD, content, governance & community"],
+  [28, 29, 0.92, false, "Cross-functional work builds ecosystem recognition"],
+  [26, 30, 0.88, false, "Working closely alongside protocol engineers"],
+  [30, 31, 0.98, false, "Engineering proximity + ideas = coiled builder tension"],
+  [32, 33, 0.98, false, "Self-taught AI coding → first-gen vibe coder"],
+  [33, 35, 0.92, false, "Vibe coding fueled by testing every new model"],
+  [35, 36, 0.95, false, "Frontier tool fluency powers hackathon wins"],
+  [36, 37, 0.98, false, "Hackathon momentum → ambitious side projects"],
+  [37, 40, 0.96, false, "Shipping real products → sovereign builder identity"],
+  [38, 41, 0.95, false, "All worlds converging into a nonlinear edge"],
+
+  // *** NON-OBVIOUS LONG-RANGE CROSS-ERA BRIDGES (The Heart of the Latent Space!) ***
+  [5, 22, 1.0, true, "Venezuelan hyperinflation made Bitcoin click immediately in 2013"],
+  [6, 24, 1.0, true, "Failed legal systems in Venezuela → immutable code replacing middlemen"],
+  [10, 24, 0.92, true, "Monash rule-of-law study → understanding code as enforceable trust"],
+  [14, 28, 0.88, true, "Legal structural literacy → crypto protocol governance design"],
+  [3, 12, 0.92, true, "American school in Venezuela → cultural alignment with freedom & ambition"],
+  [3, 29, 0.85, true, "Early bicultural fluency → translating across global crypto communities"],
+  [7, 20, 0.9, true, "Exiting Venezuela in 2008 → exiting traditional law once admitted"],
+  [11, 25, 0.86, true, "Resisting campus dogma → resisting ICO/NFT/memecoin hype cycles"],
+  [13, 16, 0.92, true, "Rejecting complacency → bypassing every traditional grad program"],
+  [17, 21, 0.9, true, "Cold-emailing the #1 partner → direct-access habit in crypto BD"],
+  [21, 28, 0.86, true, "Direct-access instinct → high-leverage ecosystem business development"],
+  [2, 30, 0.85, true, "Engineer dad at multinationals → effortless rapport with engineers"],
+  [2, 32, 0.88, true, "Childhood engineering proximity → finally stepping into code with AI"],
+  [31, 32, 1.0, true, "Years of coiled product ideas → explosive AI self-teaching in 2023"],
+  [24, 34, 1.0, true, "Cypherpunk 'remove middlemen' → AI removes the last execution middleman"],
+  [27, 39, 0.95, true, "NEAR UI/UX taste → rapid taste-to-ship loop in AI builder mode"],
+  [13, 36, 0.9, true, "High-agency ambition → competing and winning in AI hackathons"],
+  [15, 33, 0.86, true, "Contrarian early adoption → first-generation vibe coder"],
+  [9, 38, 0.84, true, "History & Politics lens → synthesizing culture, law, and technology"],
+  [20, 40, 0.92, true, "Pragmatic exit from law → sovereign builder identity today"],
+  [29, 41, 0.88, true, "Cross-functional ecosystem voice → compounding nonlinear edge"],
+];
+
+// 4 Synthesis Lenses (Prompt Mode — cross-era constellations firing all at once)
+const LENSES = [
+  {
+    id: "crypto-click",
+    title: "Why did crypto click instantly?",
+    subtitle: "From Venezuelan hyperinflation to trustless code",
+    summary:
+      "Bitcoin didn't arrive as an abstract whitepaper — it landed on top of lived hyperinflation, institutional collapse, and a Monash law degree. Immutable code became the logical answer to systems that fail their citizens.",
+    nodes: [4, 5, 6, 10, 14, 17, 22, 23, 24, 25, 26, 34],
+    path: [5, 6, 10, 22, 24, 26, 34],
+  },
+  {
+    id: "builder-arc",
+    title: "How did a lawyer become an AI builder?",
+    subtitle: "Removing the final middleman between taste and code",
+    summary:
+      "Growing up with an engineer father, spending years beside NEAR engineers, and holding sharp UI/UX taste coiled a decade of ideas. When AI arrived, vibe coding removed the last bottleneck — turning latent vision into hackathon wins and shipped software.",
+    nodes: [2, 20, 26, 27, 30, 31, 32, 33, 34, 35, 36, 37, 39, 40],
+    path: [2, 20, 27, 30, 31, 32, 33, 36, 37, 40],
+  },
+  {
+    id: "agency-exit",
+    title: "What drives the refusal to settle?",
+    subtitle: "High agency, bypassing gatekeepers & sovereign exits",
+    summary:
+      "Leaving Venezuela solo at 18, rejecting comfortable complacency in Australia, cold-emailing the #1 crypto law partner instead of applying to grad programs, and leaving law the moment admission cleared — one consistent instinct for agency.",
+    nodes: [3, 7, 8, 11, 12, 13, 15, 16, 17, 20, 21, 36, 40],
+    path: [7, 8, 13, 16, 17, 20, 40],
+  },
+  {
+    id: "full-synthesis",
+    title: "How do all 5 chapters connect today?",
+    subtitle: "The compounding edge of a nonlinear mind",
+    summary:
+      "On paper: Caracas → Melbourne Law → Crypto BD → AI Builder. In latent space: one continuous trajectory of bicultural fluency, institutional literacy, cypherpunk sovereignty, and frontier craft compounding into a rare builder stack.",
+    nodes: [0, 3, 7, 10, 13, 17, 22, 24, 27, 28, 31, 32, 34, 37, 38, 40, 41],
+    path: [3, 7, 10, 17, 22, 28, 31, 32, 38, 41],
+  },
+];
+
+// =========================================================================
+// REAL 3D PCA PROJECTION (R^8 -> [-0.94, 0.94]^3)
+// =========================================================================
+function computePCA3() {
+  const samples = NODES.map((n) => n.dir);
+  const mean = new Array(D_MODEL).fill(0);
+  for (const s of samples) for (let d = 0; d < D_MODEL; d++) mean[d] += s[d] / samples.length;
+
+  const cov = Array.from({ length: D_MODEL }, () => new Array(D_MODEL).fill(0));
+  for (const s of samples) {
+    for (let i = 0; i < D_MODEL; i++) {
+      const di = s[i] - mean[i];
+      for (let j = 0; j < D_MODEL; j++) cov[i][j] += (di * (s[j] - mean[j])) / samples.length;
+    }
+  }
+
+  const basis = [];
+  const C = cov.map((r) => r.slice());
+  for (let k = 0; k < 3; k++) {
+    let v = unit(Array.from({ length: D_MODEL }, (_, i) => ((i + k * 3) % 2 === 0 ? 1 : -0.7) + 0.17 * i));
+    for (let iter = 0; iter < 80; iter++) {
+      const next = new Array(D_MODEL).fill(0);
+      for (let i = 0; i < D_MODEL; i++) {
+        let sum = 0;
+        for (let j = 0; j < D_MODEL; j++) sum += C[i][j] * v[j];
+        next[i] = sum;
+      }
+      for (const prev of basis) {
+        const proj = dot(next, prev);
+        for (let i = 0; i < D_MODEL; i++) next[i] -= proj * prev[i];
+      }
+      v = unit(next);
+    }
+    const Av = C.map((row) => dot(row, v));
+    const lam = dot(v, Av);
+    basis.push(v);
+    for (let i = 0; i < D_MODEL; i++) {
+      for (let j = 0; j < D_MODEL; j++) C[i][j] -= lam * v[i] * v[j];
+    }
+  }
+
+  let maxAbs = 0.01;
+  for (const s of samples) {
+    const centered = s.map((v, d) => v - mean[d]);
+    for (let k = 0; k < 3; k++) {
+      const c = Math.abs(dot(centered, basis[k]));
+      if (c > maxAbs) maxAbs = c;
+    }
+  }
+  const scale = 0.86 / maxAbs;
+  return { mean, basis, scale };
+}
+
+const PCA3 = computePCA3();
+
+function project3(vec8) {
+  const u = unit(vec8);
+  const centered = u.map((v, d) => v - PCA3.mean[d]);
+  return [
+    Math.max(-0.92, Math.min(0.92, dot(centered, PCA3.basis[0]) * PCA3.scale)),
+    Math.max(-0.92, Math.min(0.92, dot(centered, PCA3.basis[1]) * PCA3.scale)),
+    Math.max(-0.92, Math.min(0.92, dot(centered, PCA3.basis[2]) * PCA3.scale)),
+  ];
+}
+
+const NODE_POS3 = NODES.map((n) => project3(n.dir));
+
+// Chapter centroids for smooth timeline trajectory
+const CHAPTER_POS3 = CHAPTERS.map((ch) => {
+  const sum = [0, 0, 0];
+  for (const id of ch.anchorIds) {
+    sum[0] += NODE_POS3[id][0];
+    sum[1] += NODE_POS3[id][1];
+    sum[2] += NODE_POS3[id][2];
+  }
+  const n = ch.anchorIds.length;
+  return [sum[0] / n, sum[1] / n, sum[2] / n];
+});
+
+// Dense Background Field of Accumulated Unspoken Moments (1,600 stars that grow with time)
+const N_BG = 1600;
+function buildLivedField() {
+  const r = mulberry32(892026);
+  const gauss = () => (r() + r() + r() + r() - 2.0) * 0.85;
+  const pos3 = [];
+  const cluster = [];
+  const weight = [];
+  const bornAt = [];
+
+  for (let i = 0; i < N_BG; i++) {
+    let vec8;
+    let cIdx;
+    let born;
+    if (i < 1050) {
+      // Anchored organically around real nodes so each chapter visibly thickens its neighborhood
+      const host = NODES[i % N_NODES];
+      cIdx = host.cluster;
+      const spread = 0.22 + 0.52 * Math.pow(r(), 1.2);
+      vec8 = unit(host.dir.map((v) => v + gauss() * spread));
+      born = Math.max(0, Math.min(4.98, host.bornAt + (r() - 0.35) * 0.6));
+    } else {
+      // Diffuse global subconscious / lived-experience texture across the whole cube
+      vec8 = unit(Array.from({ length: D_MODEL }, () => gauss()));
+      let bestC = 0;
+      let bestDot = -2;
+      for (let c = 0; c < 4; c++) {
+        const d = dot(vec8, CLUSTERS[c].center);
+        if (d > bestDot) { bestDot = d; bestC = c; }
+      }
+      cIdx = bestC;
+      born = r() * 4.95;
+    }
+    const p = project3(vec8);
+    pos3.push([
+      Math.max(-0.96, Math.min(0.96, p[0] + (r() - 0.5) * 0.14)),
+      Math.max(-0.96, Math.min(0.96, p[1] + (r() - 0.5) * 0.14)),
+      Math.max(-0.96, Math.min(0.96, p[2] + (r() - 0.5) * 0.14)),
+    ]);
+    cluster.push(cIdx);
+    weight.push(0.35 + 0.65 * r());
+    bornAt.push(born);
+  }
+
+  // ~950 delicate local manifold filaments
+  const edges = [];
+  const maxEdges = 950;
+  for (let i = 0; i < N_BG && edges.length < maxEdges; i++) {
+    const a = pos3[i];
+    let bestJ = -1;
+    let bestD2 = 0.068;
+    for (let k = 0; k < 48; k++) {
+      const j = (i + 1 + ((k * 31) % (N_BG - 1))) % N_BG;
+      if (j === i) continue;
+      const b = pos3[j];
+      const dx = a[0] - b[0], dy = a[1] - b[1], dz = a[2] - b[2];
+      const d2 = dx * dx + dy * dy + dz * dz;
+      if (d2 > 0.002 && d2 < bestD2) {
+        bestD2 = d2;
+        bestJ = j;
+      }
+    }
+    if (bestJ >= 0) {
+      edges.push([i, bestJ, 1.0 - Math.sqrt(bestD2) / 0.27, Math.max(bornAt[i], bornAt[bestJ])]);
+    }
+  }
+  return { pos3, cluster, weight, bornAt, edges };
+}
+
+const BG = buildLivedField();
+const BG_POS3 = BG.pos3;
+const BG_CLUSTER = BG.cluster;
+const BG_WEIGHT = BG.weight;
+const BG_BORN = BG.bornAt;
+const BG_EDGES = BG.edges;
+
+// Evaluate node activations & retroactive echoes at a given timeline depth t in [0, 5] OR in a synthesis lens
+function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
+  const acts = new Array(N_NODES).fill(0);
+  const echoes = new Array(N_NODES).fill(0); // retroactive echo intensity from earlier chapters!
+  const activeEdges = [];
+
+  if (mode === "timeline") {
+    const t = Math.max(0.05, Math.min(5.0, timeDepth));
+    const curChap = Math.min(4, Math.floor(t));
+
+    for (let i = 0; i < N_NODES; i++) {
+      if (mutedIds && mutedIds[i]) continue;
+      const n = NODES[i];
+      if (n.bornAt > t) continue;
+      const age = t - n.bornAt;
+      if (n.chapter === curChap) {
+        // Current chapter nodes glow brightly as they crystallize
+        const ramp = Math.min(1.0, age / 0.22);
+        acts[i] = 0.65 + 0.35 * ramp;
+      } else {
+        // Past chapter nodes remain present as calm established stars
+        acts[i] = 0.26;
+      }
+    }
+
+    // Activate edges whose endpoints are born, and fire RETROACTIVE ECHOES on cross-era bridges!
+    for (let eIdx = 0; eIdx < EDGES.length; eIdx++) {
+      const [a, b, str, isBridge] = EDGES[eIdx];
+      if ((mutedIds && mutedIds[a]) || (mutedIds && mutedIds[b])) continue;
+      const na = NODES[a], nb = NODES[b];
+      if (na.bornAt > t || nb.bornAt > t) continue;
+
+      const aIsCur = na.chapter === curChap;
+      const bIsCur = nb.chapter === curChap;
+      let flow = 0.16;
+      let isRetro = false;
+
+      if (isBridge && (aIsCur !== bIsCur)) {
+        // Cross-era bridge connecting an earlier chapter into the active chapter!
+        flow = 0.96 * str;
+        isRetro = true;
+        const older = aIsCur ? b : a;
+        echoes[older] = Math.max(echoes[older], 0.95 * str);
+        acts[older] = Math.max(acts[older], 0.85 * str);
+      } else if (aIsCur && bIsCur) {
+        flow = 0.72 * str;
+      }
+      activeEdges.push({ idx: eIdx, a, b, flow, isBridge, isRetro });
+    }
+  } else {
+    // Lens / Synthesis mode: entire life (1989 -> Today) is present; selected constellation ignites!
+    const lens = LENSES[lensIdx] || LENSES[0];
+    const inLens = new Set(lens.nodes);
+    for (let i = 0; i < N_NODES; i++) {
+      if (mutedIds && mutedIds[i]) continue;
+      acts[i] = inLens.has(i) ? 0.95 : 0.18;
+    }
+    for (let eIdx = 0; eIdx < EDGES.length; eIdx++) {
+      const [a, b, str, isBridge] = EDGES[eIdx];
+      if ((mutedIds && mutedIds[a]) || (mutedIds && mutedIds[b])) continue;
+      const both = inLens.has(a) && inLens.has(b);
+      const one = inLens.has(a) || inLens.has(b);
+      const flow = both ? 0.96 * str : one ? 0.22 * str : 0.08;
+      activeEdges.push({ idx: eIdx, a, b, flow, isBridge, isRetro: both && isBridge });
+    }
+  }
+
+  // Cluster resonance meters (0..1)
+  const clusterEnergy = [0, 0, 0, 0];
+  const clusterCounts = [0, 0, 0, 0];
+  for (let i = 0; i < N_NODES; i++) {
+    const c = NODES[i].cluster;
+    clusterEnergy[c] += acts[i];
+    clusterCounts[c]++;
+  }
+  const clusterLevels = clusterEnergy.map((e, c) => Math.min(1, e / Math.max(1, clusterCounts[c] * 0.72)));
+
+  return { acts, echoes, activeEdges, clusterLevels };
+}
+
+;
+(() => {
+  const stage = document.querySelector(".lc-stage");
+  const canvas = stage.querySelector(".lc-gl");
+  const svgOverlays = [...stage.querySelectorAll(".lc-svg-overlay")];
+  const cubeBackG = stage.querySelector("[data-cube-back]");
+  const cubeFrontG = stage.querySelector("[data-cube-front]");
+  const labelsG = stage.querySelector("[data-labels]");
+
+  // Story Inspector DOM
+  const hudPanel = document.querySelector(".hud-panel");
+  const panelToggleBtn = document.querySelector("[data-panel-toggle]");
+  const tabTimelineBtn = document.querySelector("[data-tab-timeline]");
+  const tabLensBtn = document.querySelector("[data-tab-lens]");
+  const timelinePane = document.querySelector("[data-pane-timeline]");
+  const lensPane = document.querySelector("[data-pane-lens]");
+  const chapterBtns = [...document.querySelectorAll("[data-chapter-btn]")];
+  const lensBtns = [...document.querySelectorAll("[data-lens-btn]")];
+  const timeSlider = document.querySelector("[data-time-slider]");
+  const timeValEl = document.querySelector("[data-time-val]");
+  const playBtn = document.querySelector("[data-play-btn]");
+  const labelsBtn = document.querySelector("[data-labels-btn]");
+  const themeBtn = document.querySelector("[data-theme-btn]");
+  const storyTitleEl = document.querySelector("[data-story-title]");
+  const storyTextEl = document.querySelector("[data-story-text]");
+  const echoNoteEl = document.querySelector("[data-echo-note]");
+  const nodeCardEl = document.querySelector("[data-node-card]");
+  const activeListEl = document.querySelector("[data-active-list]");
+  const clusterBars = [...document.querySelectorAll("[data-cluster-bar]")];
+  const clusterVals = [...document.querySelectorAll("[data-cluster-val]")];
+
+  // Floating camera controls
+  const zoomInBtn = document.querySelector("[data-zoom-in]");
+  const zoomOutBtn = document.querySelector("[data-zoom-out]");
+  const zoomReadout = document.querySelector("[data-zoom-val]");
+  const resetCamBtn = document.querySelector("[data-cam-reset]");
+  const spinBtn = document.querySelector("[data-cam-spin]");
+
+  // 4 Emergent Cluster Palettes (Dark & Light)
+  const CLUSTER_RGB_DARK = [
+    [0.34, 0.74, 1.0],   // Systems & Sovereignty (cyan)
+    [0.98, 0.70, 0.28],  // Agency & Exit (amber)
+    [0.24, 0.88, 0.68],  // Frontier Tech & Craft (emerald)
+    [0.86, 0.46, 0.96],  // Narrative & Bridges (violet)
+  ];
+  const CLUSTER_RGB_LIGHT = [
+    [0.08, 0.40, 0.76],
+    [0.74, 0.36, 0.04],
+    [0.05, 0.52, 0.38],
+    [0.54, 0.16, 0.66],
+  ];
+  const CLUSTER_HEX_DARK = ["#58bdff", "#fab248", "#3de0ae", "#db75f5"];
+  const CLUSTER_HEX_LIGHT = ["#1466c2", "#bd5c0a", "#0d8561", "#8a29a8"];
+
+  const state = {
+    mode: "timeline", // "timeline" | "lens"
+    timeDepth: 4.95,  // Start near Today so the full living galaxy & retroactive echoes shine on first load!
+    lensIdx: 0,
+    playing: false,
+    showLabels: true,
+    selectedNode: 34, // "Removing the last middleman" — showcases cross-era synthesis immediately
+    hoveredNode: -1,
+    muted: {},        // nodeId -> true ("What if?" counterfactual mute)
+    autoSpin: false,
+    az: 0.68,
+    el: 0.42,
+    zoom: 0.94,
+    targetAz: 0.68,
+    targetEl: 0.42,
+    targetZoom: 0.94,
+    cw: 960,
+    ch: 760,
+    dpr: 1,
+  };
+
+  const isLight = () => document.body.getAttribute("data-theme") === "light";
+
+  // =========================================================================
+  // 1. SHARED 3D ORBIT + PERSPECTIVE CAMERA (IDENTICAL IN JS & GLSL)
+  // =========================================================================
+  const CAM_DIST = 5.2;
+
+  function camBasis(az, el) {
+    const ca = Math.cos(az), sa = Math.sin(az);
+    const ce = Math.cos(el), se = Math.sin(el);
+    return {
+      right: [-sa, ca, 0],
+      up: [-se * ca, -se * sa, ce],
+      fwd: [ce * ca, ce * sa, se],
+    };
+  }
+
+  function proj3(p, basis, cw, ch, zoom) {
+    const vx = p[0] * basis.right[0] + p[1] * basis.right[1] + p[2] * basis.right[2];
+    const vy = p[0] * basis.up[0] + p[1] * basis.up[1] + p[2] * basis.up[2];
+    const vz = p[0] * basis.fwd[0] + p[1] * basis.fwd[1] + p[2] * basis.fwd[2];
+    const persp = CAM_DIST / Math.max(0.85, CAM_DIST - vz);
+    const S = Math.min(cw, ch) * 0.34 * zoom;
+    return [cw * 0.5 + vx * persp * S, ch * 0.5 - vy * persp * S, vz, persp];
+  }
+
+  // =========================================================================
+  // 2. NATIVE WEBGL1 GALAXY RENDERER (LINES + ANALYTIC SDF POINTS)
+  // =========================================================================
+  const gl = canvas.getContext("webgl", {
+    alpha: true,
+    antialias: true,
+    premultipliedAlpha: false,
+    preserveDrawingBuffer: true,
+  });
+
+  let lineProg = null;
+  let pointProg = null;
+  let lineBuf = null;
+  let pointBuf = null;
+
+  function compileShader(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      console.error("Shader compile error:", gl.getShaderInfoLog(s));
+      return null;
+    }
+    return s;
+  }
+
+  function linkProgram(vsSrc, fsSrc) {
+    const vs = compileShader(gl.VERTEX_SHADER, vsSrc);
+    const fs = compileShader(gl.FRAGMENT_SHADER, fsSrc);
+    if (!vs || !fs) return null;
+    const p = gl.createProgram();
+    gl.attachShader(p, vs);
+    gl.attachShader(p, fs);
+    gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+      console.error("Program link error:", gl.getProgramInfoLog(p));
+      return null;
+    }
+    return p;
+  }
+
+  if (gl) {
+    const CAM_GLSL = `
+      uniform vec3 uRight;
+      uniform vec3 uUp;
+      uniform vec3 uFwd;
+      uniform vec2 uRes;
+      uniform float uScale;
+      vec4 project3D(vec3 p, out float depthFade, out float persp) {
+        float vx = dot(p, uRight);
+        float vy = dot(p, uUp);
+        float vz = dot(p, uFwd);
+        persp = 5.2 / max(0.85, 5.2 - vz);
+        float nx = (vx * persp * uScale) / (uRes.x * 0.5);
+        float ny = (vy * persp * uScale) / (uRes.y * 0.5);
+        float nz = -vz / 3.2;
+        depthFade = clamp(0.45 + 0.55 * (vz + 1.4) / 2.8, 0.25, 1.0);
+        return vec4(nx, ny, nz, 1.0);
+      }
+    `;
+
+    const lineVS = `
+      precision highp float;
+      attribute vec3 aPos;
+      attribute vec4 aCol;
+      varying vec4 vCol;
+      ${CAM_GLSL}
+      void main() {
+        float df, persp;
+        gl_Position = project3D(aPos, df, persp);
+        vCol = vec4(aCol.rgb, aCol.a * df);
+      }
+    `;
+    const lineFS = `
+      precision highp float;
+      varying vec4 vCol;
+      void main() { gl_FragColor = vCol; }
+    `;
+
+    const pointVS = `
+      precision highp float;
+      attribute vec3 aPos;
+      attribute vec4 aCol;
+      attribute vec4 aMeta;
+      uniform float uDpr;
+      varying vec4 vCol;
+      varying vec4 vMeta;
+      varying float vDepth;
+      ${CAM_GLSL}
+      void main() {
+        float df, persp;
+        gl_Position = project3D(aPos, df, persp);
+        gl_PointSize = clamp(aMeta.x * uDpr * (0.72 + 0.28 * persp), 1.5, 56.0);
+        vCol = aCol;
+        vMeta = aMeta;
+        vDepth = df;
+      }
+    `;
+    const pointFS = `
+      precision highp float;
+      varying vec4 vCol;
+      varying vec4 vMeta;
+      varying float vDepth;
+      uniform float uLight;
+      void main() {
+        vec2 uv = gl_PointCoord * 2.0 - 1.0;
+        float r = length(uv);
+        if (r > 1.0) discard;
+
+        float mode = vMeta.y;
+        float ringInt = vMeta.z;
+        float extra = vMeta.w;
+        vec3 col = vCol.rgb;
+        float alpha = 0.0;
+
+        if (mode < 0.5) {
+          // Mode 0: Crisp pinpoint lived-experience background star
+          float core = smoothstep(0.76, 0.14, r);
+          alpha = core * vCol.a * (0.45 + 0.55 * vDepth);
+        } else if (mode < 1.5) {
+          // Mode 1: Named Experience / Mental-Model Node
+          float coreR = mix(0.24, 0.34, clamp(ringInt, 0.0, 1.0));
+          float core = smoothstep(coreR + 0.14, coreR - 0.06, r);
+          float hot = exp(-r * r * 24.0);
+          float ring = exp(-pow((r - 0.78) * 14.0, 2.0)) * ringInt;
+          // Muted ("What if?") node: hollow dim ring
+          if (extra < -0.5) {
+            core *= 0.14;
+            hot = 0.0;
+            ring = exp(-pow((r - 0.68) * 13.0, 2.0)) * 0.85;
+          }
+          // Retroactive Echo or Selected node: crisp double ring
+          if (extra > 0.5) {
+            ring = max(ring, exp(-pow((r - 0.84) * 16.0, 2.0)) * 0.95);
+            ring = max(ring, exp(-pow((r - 0.56) * 16.0, 2.0)) * 0.65);
+          }
+          if (uLight < 0.5) col = mix(col, vec3(1.0), hot * 0.65);
+          else col = mix(col, col * 0.45, hot * 0.3);
+          alpha = clamp(core * 0.95 + ring * 0.85, 0.0, 1.0) * vCol.a * (0.48 + 0.52 * vDepth);
+        } else if (mode < 2.5) {
+          // Mode 2: Traveling bridge light packet / chapter waypoint
+          float core = smoothstep(0.48, 0.12, r);
+          float rim = exp(-pow((r - 0.78) * 14.0, 2.0)) * ringInt;
+          if (uLight < 0.5) col = mix(col, vec3(1.0), exp(-r * r * 18.0) * 0.6);
+          alpha = clamp(core + rim * 0.8, 0.0, 1.0) * vCol.a * (0.55 + 0.45 * vDepth);
+        } else {
+          // Mode 3: Selected node / active timeline optical reticle
+          float core = smoothstep(0.22, 0.05, r);
+          float ring1 = exp(-pow((r - 0.60) * 18.0, 2.0)) * 0.95;
+          float ring2 = exp(-pow((r - 0.88) * 20.0, 2.0)) * 0.48;
+          float crossX = exp(-pow(uv.y * 16.0, 2.0)) * step(0.36, abs(uv.x)) * step(abs(uv.x), 0.92);
+          float crossY = exp(-pow(uv.x * 16.0, 2.0)) * step(0.36, abs(uv.y)) * step(abs(uv.y), 0.92);
+          if (uLight < 0.5) col = mix(col, vec3(1.0), core * 0.7);
+          alpha = clamp(core + ring1 + ring2 + max(crossX, crossY) * 0.6, 0.0, 1.0) * vCol.a;
+        }
+
+        if (alpha < 0.004) discard;
+        gl_FragColor = vec4(col, alpha);
+      }
+    `;
+
+    lineProg = linkProgram(lineVS, lineFS);
+    pointProg = linkProgram(pointVS, pointFS);
+    lineBuf = gl.createBuffer();
+    pointBuf = gl.createBuffer();
+  }
+
+  const MAX_LINE_VERTS = 5400;
+  const lineData = new Float32Array(MAX_LINE_VERTS * 7);
+  const MAX_POINTS = 2200;
+  const pointData = new Float32Array(MAX_POINTS * 11);
+  let lineVerts = 0;
+  let pointCount = 0;
+
+  function pushLine(a, b, r, g, bl, alpha) {
+    if (lineVerts + 2 > MAX_LINE_VERTS) return;
+    let o = lineVerts * 7;
+    lineData[o++] = a[0]; lineData[o++] = a[1]; lineData[o++] = a[2];
+    lineData[o++] = r; lineData[o++] = g; lineData[o++] = bl; lineData[o++] = alpha;
+    lineData[o++] = b[0]; lineData[o++] = b[1]; lineData[o++] = b[2];
+    lineData[o++] = r; lineData[o++] = g; lineData[o++] = bl; lineData[o++] = alpha;
+    lineVerts += 2;
+  }
+
+  function pushPoint(p, r, g, b, a, size, mode, ring = 0, extra = 0) {
+    if (pointCount + 1 > MAX_POINTS) return;
+    let o = pointCount * 11;
+    pointData[o++] = p[0]; pointData[o++] = p[1]; pointData[o++] = p[2];
+    pointData[o++] = r; pointData[o++] = g; pointData[o++] = b; pointData[o++] = a;
+    pointData[o++] = size; pointData[o++] = mode; pointData[o++] = ring; pointData[o++] = extra;
+    pointCount++;
+  }
+
+  const CUBE_VERTS = [
+    [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+    [-1, -1,  1], [1, -1,  1], [1, 1,  1], [-1, 1,  1],
+  ];
+  const CUBE_EDGES = [
+    [0, 1], [1, 2], [2, 3], [3, 0],
+    [4, 5], [5, 6], [6, 7], [7, 4],
+    [0, 4], [1, 5], [2, 6], [3, 7],
+  ];
+  const CUBE_FACES = [
+    { idx: [0, 1, 2, 3], n: [0, 0, -1], grid: true },
+    { idx: [4, 5, 6, 7], n: [0, 0,  1], grid: false },
+    { idx: [0, 1, 5, 4], n: [0, -1, 0], grid: true },
+    { idx: [3, 2, 6, 7], n: [0,  1, 0], grid: true },
+    { idx: [0, 3, 7, 4], n: [-1, 0, 0], grid: true },
+    { idx: [1, 2, 6, 5], n: [ 1, 0, 0], grid: true },
+  ];
+
+  function lerp3(a, b, t) {
+    return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+  }
+
+  function resizeViewport() {
+    const rect = stage.getBoundingClientRect();
+    const cw = Math.max(200, Math.round(rect.width));
+    const ch = Math.max(200, Math.round(rect.height));
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    if (cw !== state.cw || ch !== state.ch || dpr !== state.dpr) {
+      state.cw = cw;
+      state.ch = ch;
+      state.dpr = dpr;
+      canvas.width = Math.round(cw * dpr);
+      canvas.height = Math.round(ch * dpr);
+      for (const s of svgOverlays) s.setAttribute("viewBox", `0 0 ${cw} ${ch}`);
+    }
+  }
+  window.addEventListener("resize", resizeViewport);
+
+  // =========================================================================
+  // 3. SVG OPTICAL CUBE FRAME + DE-OVERLAPPED HUMAN LABELS
+  // =========================================================================
+  function renderSvgFrameAndLabels(basis, evalRes) {
+    const { cw, ch, zoom } = state;
+    const light = isLight();
+    const hexPal = light ? CLUSTER_HEX_LIGHT : CLUSTER_HEX_DARK;
+    const pVerts = CUBE_VERTS.map((v) => proj3(v, basis, cw, ch, zoom));
+
+    const backPaths = [];
+    const backGrid = [];
+    for (const f of CUBE_FACES) {
+      const nd = f.n[0] * basis.fwd[0] + f.n[1] * basis.fwd[1] + f.n[2] * basis.fwd[2];
+      if (nd < -0.02) {
+        const pts = f.idx.map((i) => `${pVerts[i][0].toFixed(1)},${pVerts[i][1].toFixed(1)}`).join(" L");
+        const isFloor = f.n[2] < -0.5;
+        backPaths.push(`<path class="${isFloor ? "lc-face-floor" : "lc-face-wall"}" d="M${pts} Z"/>`);
+        if (f.grid) {
+          const c0 = CUBE_VERTS[f.idx[0]], c1 = CUBE_VERTS[f.idx[1]];
+          const c2 = CUBE_VERTS[f.idx[2]], c3 = CUBE_VERTS[f.idx[3]];
+          for (let g = 1; g < 4; g++) {
+            const t = g / 4;
+            const a1 = proj3(lerp3(c0, c1, t), basis, cw, ch, zoom);
+            const b1 = proj3(lerp3(c3, c2, t), basis, cw, ch, zoom);
+            const a2 = proj3(lerp3(c0, c3, t), basis, cw, ch, zoom);
+            const b2 = proj3(lerp3(c1, c2, t), basis, cw, ch, zoom);
+            backGrid.push(`M${a1[0].toFixed(1)},${a1[1].toFixed(1)} L${b1[0].toFixed(1)},${b1[1].toFixed(1)}`);
+            backGrid.push(`M${a2[0].toFixed(1)},${a2[1].toFixed(1)} L${b2[0].toFixed(1)},${b2[1].toFixed(1)}`);
+          }
+        }
+      }
+    }
+
+    const backEdgeD = [];
+    const frontEdgeD = [];
+    for (const [i, j] of CUBE_EDGES) {
+      const a = pVerts[i], b = pVerts[j];
+      const d = `M${a[0].toFixed(1)},${a[1].toFixed(1)} L${b[0].toFixed(1)},${b[1].toFixed(1)}`;
+      if ((a[2] + b[2]) * 0.5 < -0.15) backEdgeD.push(d);
+      else frontEdgeD.push(d);
+    }
+
+    const cornerTicks = [];
+    const tickLen = 0.085;
+    for (let i = 0; i < 8; i++) {
+      const v = CUBE_VERTS[i];
+      const p0 = pVerts[i];
+      for (let axis = 0; axis < 3; axis++) {
+        const v2 = v.slice();
+        v2[axis] -= Math.sign(v[axis]) * tickLen;
+        const p1 = proj3(v2, basis, cw, ch, zoom);
+        cornerTicks.push(`M${p0[0].toFixed(1)},${p0[1].toFixed(1)} L${p1[0].toFixed(1)},${p1[1].toFixed(1)}`);
+      }
+    }
+
+    cubeBackG.innerHTML =
+      backPaths.join("") +
+      (backGrid.length ? `<path class="lc-cube-grid" d="${backGrid.join(" ")}"/>` : "") +
+      (backEdgeD.length ? `<path class="lc-cube-edge-back" d="${backEdgeD.join(" ")}"/>` : "");
+
+    cubeFrontG.innerHTML =
+      (frontEdgeD.length ? `<path class="lc-cube-edge-front" d="${frontEdgeD.join(" ")}"/>` : "") +
+      `<path class="lc-cube-corners" d="${cornerTicks.join(" ")}"/>`;
+
+    if (!state.showLabels) {
+      labelsG.innerHTML = "";
+      return;
+    }
+
+    const items = [];
+    const placed = [];
+    const overlaps = (x0, y0, x1, y1) => {
+      for (let k = 0; k < placed.length; k++) {
+        const b = placed[k];
+        if (x0 < b[2] && x1 > b[0] && y0 < b[3] && y1 > b[1]) return true;
+      }
+      return false;
+    };
+
+    // Rank nodes by priority: selected > hovered > retroactive echoes > active anchors > active features
+    const maxLabels = Math.min(20, Math.round(9 + Math.max(0, zoom - 0.9) * 6.0));
+    const ranked = NODES.map((n, i) => {
+      const a = evalRes.acts[i];
+      const echo = evalRes.echoes[i];
+      const isSel = i === state.selectedNode;
+      const isHov = i === state.hoveredNode;
+      const isBorn = state.mode === "lens" || n.bornAt <= state.timeDepth;
+      const score = !isBorn ? -1
+        : (isSel ? 10 : 0) + (isHov ? 8 : 0) + echo * 2.2 + a * (n.kind === "anchor" ? 1.4 : 1.0);
+      return { i, a, echo, isSel, isHov, isBorn, score };
+    })
+      .filter((x) => x.isBorn && (x.score > 0.45 || zoom > 1.8))
+      .sort((x, y) => y.score - x.score)
+      .slice(0, maxLabels);
+
+    const offsets = [[10, 3], [10, -11], [10, 17], [-10, 3], [-10, -11], [-10, 17], [10, -25], [10, 31]];
+    for (const r of ranked) {
+      const n = NODES[r.i];
+      const sp = proj3(NODE_POS3[r.i], basis, cw, ch, zoom);
+      if (sp[0] < 16 || sp[0] > cw - 16 || sp[1] < 18 || sp[1] > ch - 18) continue;
+
+      const isMuted = !!state.muted[r.i];
+      const isEcho = r.echo > 0.3;
+      const col = isMuted
+        ? "#ff6472"
+        : r.isSel
+          ? (light ? "#0f2c66" : "#fff5cc")
+          : isEcho
+            ? (light ? "#b83a14" : "#ffe08a")
+            : hexPal[n.cluster];
+
+      const suffix = r.isSel || r.isHov ? ` · ${n.year}` : isEcho ? ` · Ch.${n.chapter + 1}` : "";
+      const txt = `${n.name}${suffix}`;
+      const tw = txt.length * 5.7;
+
+      let chosen = null;
+      for (const [ox, oy] of offsets) {
+        const anchor = ox >= 0 ? "start" : "end";
+        const lx = sp[0] + ox;
+        const ly = sp[1] + oy;
+        const rx0 = anchor === "start" ? lx : lx - tw;
+        if (!overlaps(rx0 - 2, ly - 9, rx0 + tw + 2, ly + 4)) {
+          chosen = { ox, oy, lx, ly, anchor, rx0 };
+          break;
+        }
+      }
+      if (!chosen && !r.isSel && !r.isHov) continue;
+      if (!chosen) chosen = { ox: 10, oy: 3, lx: sp[0] + 10, ly: sp[1] + 3, anchor: "start", rx0: sp[0] + 10 };
+      placed.push([chosen.rx0 - 2, chosen.ly - 9, chosen.rx0 + tw + 2, chosen.ly + 4]);
+
+      const opacity = r.isSel || r.isHov || isEcho ? 1.0 : Math.min(0.92, 0.45 + r.a * 0.52);
+      const leader = Math.abs(chosen.oy) > 6 || r.isSel
+        ? `<line x1="${sp[0].toFixed(1)}" y1="${sp[1].toFixed(1)}" x2="${(chosen.lx + (chosen.ox > 0 ? -2 : 2)).toFixed(1)}" y2="${(chosen.ly - 3).toFixed(1)}" stroke="${col}" stroke-width="0.65" opacity="0.5"/>`
+        : "";
+      items.push(
+        `<g class="lc-node-tag${r.isSel ? " is-sel" : ""}${r.isHov ? " is-hov" : ""}" style="opacity:${opacity.toFixed(2)}">` +
+        leader +
+        `<text x="${chosen.lx.toFixed(1)}" y="${chosen.ly.toFixed(1)}" text-anchor="${chosen.anchor}" fill="${col}">${txt}</text></g>`,
+      );
+    }
+
+    labelsG.innerHTML = items.join("");
+  }
+
+  // =========================================================================
+  // 4. STORY INSPECTOR HUD UPDATES
+  // =========================================================================
+  let lastHudKey = "";
+  function renderNodeCard() {
+    const id = state.selectedNode;
+    if (id < 0 || id >= N_NODES) {
+      nodeCardEl.innerHTML = `<div class="node-card-empty">Click any glowing star in the cube to inspect its story and hidden cross-era connections.</div>`;
+      return;
+    }
+    const n = NODES[id];
+    const ch = CHAPTERS[n.chapter];
+    const cl = CLUSTERS[n.cluster];
+    const hexPal = isLight() ? CLUSTER_HEX_LIGHT : CLUSTER_HEX_DARK;
+    const col = hexPal[n.cluster];
+    const isMuted = !!state.muted[id];
+
+    const informedBy = EDGES.filter(([, to]) => to === id).map(([from, , , isBridge, note]) => ({
+      id: from, node: NODES[from], isBridge, note,
+    }));
+    const echoedIn = EDGES.filter(([from]) => from === id).map(([, to, , isBridge, note]) => ({
+      id: to, node: NODES[to], isBridge, note,
+    }));
+
+    const linksHtml = (list, label, arrow) => {
+      if (!list.length) return "";
+      return (
+        `<div class="nc-links-block"><div class="nc-links-hdr">${label}</div><div class="nc-links-row">` +
+        list.map((item) =>
+          `<button class="nc-chip${item.isBridge ? " is-bridge" : ""}" data-jump-node="${item.id}" title="${item.note}">` +
+          `${arrow} ${item.node.name} <span class="nc-chip-yr">Ch.${item.node.chapter + 1}</span></button>`,
+        ).join("") +
+        `</div></div>`
+      );
+    };
+
+    nodeCardEl.innerHTML = `
+      <div class="nc-head">
+        <div>
+          <div class="nc-meta">
+            <span class="nc-dot" style="background:${col}"></span>
+            <span>${cl.name}</span>
+            <span>·</span>
+            <span>Ch.${ch.num} (${n.year})</span>
+          </div>
+          <div class="nc-title">${n.name}</div>
+        </div>
+        <button class="nc-mute-btn${isMuted ? " is-muted" : ""}" data-toggle-mute="${id}" title="Counterfactual: see what disconnects if this experience is muted">
+          ${isMuted ? "Restore" : "What if?"}
+        </button>
+      </div>
+      <div class="nc-story">${n.story}</div>
+      ${linksHtml(informedBy, "Informed by", "←")}
+      ${linksHtml(echoedIn, "Echoed later in", "→")}
+    `;
+  }
+
+  function updateHud(evalRes, force = false) {
+    const curChap = Math.min(4, Math.floor(state.timeDepth));
+    const key = `${state.mode}|${state.timeDepth.toFixed(2)}|${state.lensIdx}|${state.selectedNode}|${Object.keys(state.muted).join(",")}|${isLight()}`;
+    if (!force && key === lastHudKey) return;
+    lastHudKey = key;
+
+    const hexPal = isLight() ? CLUSTER_HEX_LIGHT : CLUSTER_HEX_DARK;
+
+    // Mode panes
+    tabTimelineBtn.classList.toggle("active", state.mode === "timeline");
+    tabLensBtn.classList.toggle("active", state.mode === "lens");
+    timelinePane.style.display = state.mode === "timeline" ? "block" : "none";
+    lensPane.style.display = state.mode === "lens" ? "block" : "none";
+
+    if (state.mode === "timeline") {
+      const ch = CHAPTERS[curChap];
+      timeValEl.textContent = `Ch.${ch.num} · ${ch.years}`;
+      if (document.activeElement !== timeSlider) timeSlider.value = state.timeDepth.toFixed(2);
+      chapterBtns.forEach((b, i) => b.classList.toggle("active", i === curChap));
+      storyTitleEl.textContent = `${ch.num}. ${ch.title}`;
+      storyTextEl.textContent = ch.summary;
+      echoNoteEl.textContent = ch.echoNote;
+    } else {
+      const lens = LENSES[state.lensIdx];
+      lensBtns.forEach((b, i) => b.classList.toggle("active", i === state.lensIdx));
+      storyTitleEl.textContent = lens.title;
+      storyTextEl.textContent = lens.summary;
+      echoNoteEl.textContent = lens.subtitle;
+    }
+
+    // Cluster resonance meters
+    for (let c = 0; c < 4; c++) {
+      const pct = Math.round(evalRes.clusterLevels[c] * 100);
+      clusterBars[c].style.width = `${pct}%`;
+      clusterBars[c].style.background = hexPal[c];
+      clusterVals[c].textContent = `${pct}%`;
+    }
+
+    // Active resonating nodes list (top 6 clickable)
+    const topNodes = NODES.map((n, i) => ({
+      n, i, a: evalRes.acts[i], echo: evalRes.echoes[i],
+    }))
+      .filter((x) => x.a > 0.25)
+      .sort((x, y) => (y.echo * 0.6 + y.a) - (x.echo * 0.6 + x.a))
+      .slice(0, 6);
+
+    activeListEl.innerHTML = topNodes.map(({ n, i, a, echo }) => {
+      const isEcho = echo > 0.3;
+      const isSel = i === state.selectedNode;
+      const col = isEcho ? (isLight() ? "#b83a14" : "#ffe08a") : hexPal[n.cluster];
+      return (
+        `<button class="act-row${isSel ? " is-sel" : ""}" data-select-node="${i}">` +
+        `<span class="hud-dot" style="background:${col}"></span>` +
+        `<span class="act-name">${n.name}</span>` +
+        `<span class="act-tag">${isEcho ? `ECHO Ch.${n.chapter + 1}` : n.year}</span></button>`
+      );
+    }).join("");
+
+    renderNodeCard();
+    if (zoomReadout) zoomReadout.textContent = `${state.zoom.toFixed(1)}×`;
+  }
+
+  // =========================================================================
+  // 5. MAIN 60FPS RENDER LOOP
+  // =========================================================================
+  let lastT = performance.now();
+
+  function renderFrame(now) {
+    const dt = Math.min(0.05, (now - lastT) * 0.001);
+    lastT = now;
+
+    resizeViewport();
+
+    if (state.playing && state.mode === "timeline") {
+      state.timeDepth += dt * 0.38;
+      if (state.timeDepth > 5.2) state.timeDepth = 0.08;
+    }
+    if (state.autoSpin) {
+      state.targetAz += dt * 0.14;
+    }
+
+    const damp = 1 - Math.exp(-12 * dt);
+    state.az += (state.targetAz - state.az) * damp;
+    state.el += (state.targetEl - state.el) * damp;
+    state.zoom += (state.targetZoom - state.zoom) * damp;
+
+    const effTime = Math.min(5.0, state.timeDepth);
+    const evalRes = evaluateState(state.mode, effTime, state.lensIdx, state.muted);
+    const basis = camBasis(state.az, state.el);
+    const light = isLight();
+    const pal = light ? CLUSTER_RGB_LIGHT : CLUSTER_RGB_DARK;
+    const goldCol = light ? [0.78, 0.24, 0.10] : [1.0, 0.85, 0.44];
+
+    if (gl && lineProg && pointProg) {
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, light ? gl.ONE_MINUS_SRC_ALPHA : gl.ONE);
+
+      lineVerts = 0;
+      pointCount = 0;
+      const tSec = now * 0.001;
+      const zoomBoost = Math.pow(state.zoom, 0.35);
+
+      // --- A. LINES ---
+      // 1. Growing background lived-experience manifold web
+      const webAlpha = light ? 0.12 : 0.14;
+      for (let i = 0; i < BG_EDGES.length; i++) {
+        const [aIdx, bIdx, w, born] = BG_EDGES[i];
+        if (state.mode === "timeline" && born > effTime) continue;
+        const c = pal[BG_CLUSTER[aIdx]];
+        pushLine(BG_POS3[aIdx], BG_POS3[bIdx], c[0], c[1], c[2], webAlpha * (0.45 + 0.55 * w));
+      }
+
+      // 2. Meaningful Experience Edges & Retroactive Cross-Era Bridges
+      for (let i = 0; i < evalRes.activeEdges.length; i++) {
+        const e = evalRes.activeEdges[i];
+        const isSelEdge = e.a === state.selectedNode || e.b === state.selectedNode;
+        const pA = NODE_POS3[e.a], pB = NODE_POS3[e.b];
+
+        if (e.isRetro || isSelEdge) {
+          // Luminous golden bridge connecting eras!
+          const alpha = isSelEdge ? 0.85 : 0.28 + e.flow * 0.56;
+          pushLine(pA, pB, goldCol[0], goldCol[1], goldCol[2], alpha);
+          // Crisp traveling light pulse from earlier chapter -> later chapter
+          const phase = (tSec * (0.34 + 0.25 * e.flow) + i * 0.17) % 1.0;
+          const pkt = lerp3(pA, pB, phase);
+          pushPoint(pkt, light ? goldCol[0] : 1.0, light ? goldCol[1] : 0.95, light ? goldCol[2] : 0.78, 0.92, 3.4 * zoomBoost, 2, 0.0, 0);
+        } else {
+          const c = pal[NODES[e.a].cluster];
+          pushLine(pA, pB, c[0], c[1], c[2], 0.08 + e.flow * 0.38);
+        }
+      }
+
+      // 3. Smooth Life Trajectory / Lens Synthesis Path
+      const pathPts = state.mode === "timeline"
+        ? CHAPTER_POS3
+        : LENSES[state.lensIdx].path.map((id) => NODE_POS3[id]);
+      const nSegs = pathPts.length - 1;
+      const subSteps = 6;
+      const progress = state.mode === "timeline" ? Math.max(0, effTime - 0.5) : nSegs;
+
+      for (let seg = 0; seg < nSegs; seg++) {
+        const p0 = pathPts[Math.max(0, seg - 1)];
+        const p1 = pathPts[seg];
+        const p2 = pathPts[seg + 1];
+        const p3 = pathPts[Math.min(nSegs, seg + 2)];
+        let prev = p1;
+        for (let k = 1; k <= subSteps; k++) {
+          const t = k / subSteps;
+          const t2 = t * t, t3 = t2 * t;
+          const cur = [0, 1, 2].map((d) =>
+            0.5 * (
+              2 * p1[d] +
+              (-p0[d] + p2[d]) * t +
+              (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * t2 +
+              (-p0[d] + 3 * p1[d] - 3 * p2[d] + p3[d]) * t3
+            ),
+          );
+          if (seg + t <= progress) {
+            pushLine(prev, cur, goldCol[0], goldCol[1], goldCol[2], 0.58);
+          }
+          prev = cur;
+        }
+      }
+
+      // --- B. POINTS ---
+      // 1. 1,600 Growing Background Lived-Experience Stars
+      const activeIdx = [];
+      for (let i = 0; i < N_NODES; i++) if (evalRes.acts[i] > 0.55) activeIdx.push(i);
+
+      for (let i = 0; i < N_BG; i++) {
+        if (state.mode === "timeline" && BG_BORN[i] > effTime) continue;
+        const bp = BG_POS3[i];
+        const c = pal[BG_CLUSTER[i]];
+        const w = BG_WEIGHT[i];
+        let symp = 0;
+        for (let k = 0; k < activeIdx.length; k++) {
+          const fp = NODE_POS3[activeIdx[k]];
+          const dx = bp[0] - fp[0], dy = bp[1] - fp[1], dz = bp[2] - fp[2];
+          const d2 = dx * dx + dy * dy + dz * dz;
+          if (d2 < 0.075) symp = Math.max(symp, (1.0 - d2 / 0.075) * evalRes.acts[activeIdx[k]]);
+        }
+        const baseA = light ? 0.28 + 0.28 * w : 0.30 + 0.34 * w;
+        const alpha = Math.min(0.9, baseA + symp * 0.36);
+        const sz = (2.1 + 1.9 * w + symp * 1.5) * zoomBoost;
+        pushPoint(bp, c[0], c[1], c[2], alpha, sz, 0, 0, 0);
+      }
+
+      // 2. 42 Named Experience & Mental-Model Nodes
+      for (let i = 0; i < N_NODES; i++) {
+        const n = NODES[i];
+        if (state.mode === "timeline" && n.bornAt > effTime) continue;
+
+        const a = evalRes.acts[i];
+        const echo = evalRes.echoes[i];
+        const isSel = i === state.selectedNode;
+        const isHov = i === state.hoveredNode;
+        const isMuted = !!state.muted[i];
+
+        let c = pal[n.cluster];
+        let ring = a > 0.55 ? 0.85 : n.kind === "anchor" ? 0.3 : 0.0;
+        let extra = 0;
+        let sz = (n.kind === "anchor" ? 5.2 : 3.8) + a * 5.2;
+        let alpha = 0.45 + a * 0.55;
+
+        if (isMuted) {
+          c = light ? [0.76, 0.14, 0.22] : [1.0, 0.38, 0.44];
+          extra = -1.0;
+          ring = 1.0;
+          sz = 9.0;
+          alpha = 0.85;
+        } else if (echo > 0.3) {
+          // Retroactive echo from an earlier chapter!
+          c = goldCol;
+          extra = 1.0;
+          ring = 1.0;
+          sz = 11.2;
+          alpha = 1.0;
+        } else if (isHov) {
+          ring = 1.0;
+          sz = Math.max(sz, 11.5);
+          alpha = 1.0;
+        }
+        pushPoint(NODE_POS3[i], c[0], c[1], c[2], alpha, sz * zoomBoost, 1, ring, extra);
+
+        if (isSel) {
+          const selCol = light ? [0.06, 0.20, 0.48] : [1.0, 0.94, 0.72];
+          pushPoint(NODE_POS3[i], selCol[0], selCol[1], selCol[2], 1.0, 17.5 * zoomBoost, 3, 1.0, 0);
+        }
+      }
+
+      // Upload & Draw
+      const camScale = Math.min(state.cw, state.ch) * 0.34 * state.zoom;
+      const setCamUniforms = (prog) => {
+        gl.uniform3fv(gl.getUniformLocation(prog, "uRight"), basis.right);
+        gl.uniform3fv(gl.getUniformLocation(prog, "uUp"), basis.up);
+        gl.uniform3fv(gl.getUniformLocation(prog, "uFwd"), basis.fwd);
+        gl.uniform2f(gl.getUniformLocation(prog, "uRes"), state.cw, state.ch);
+        gl.uniform1f(gl.getUniformLocation(prog, "uScale"), camScale);
+      };
+
+      gl.useProgram(lineProg);
+      setCamUniforms(lineProg);
+      gl.bindBuffer(gl.ARRAY_BUFFER, lineBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, lineData.subarray(0, lineVerts * 7), gl.DYNAMIC_DRAW);
+      const lPos = gl.getAttribLocation(lineProg, "aPos");
+      const lCol = gl.getAttribLocation(lineProg, "aCol");
+      gl.enableVertexAttribArray(lPos);
+      gl.enableVertexAttribArray(lCol);
+      gl.vertexAttribPointer(lPos, 3, gl.FLOAT, false, 28, 0);
+      gl.vertexAttribPointer(lCol, 4, gl.FLOAT, false, 28, 12);
+      gl.drawArrays(gl.LINES, 0, lineVerts);
+
+      gl.useProgram(pointProg);
+      setCamUniforms(pointProg);
+      gl.uniform1f(gl.getUniformLocation(pointProg, "uDpr"), state.dpr);
+      gl.uniform1f(gl.getUniformLocation(pointProg, "uLight"), light ? 1.0 : 0.0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, pointBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, pointData.subarray(0, pointCount * 11), gl.DYNAMIC_DRAW);
+      const pPos = gl.getAttribLocation(pointProg, "aPos");
+      const pCol = gl.getAttribLocation(pointProg, "aCol");
+      const pMeta = gl.getAttribLocation(pointProg, "aMeta");
+      gl.enableVertexAttribArray(pPos);
+      gl.enableVertexAttribArray(pCol);
+      gl.enableVertexAttribArray(pMeta);
+      gl.vertexAttribPointer(pPos, 3, gl.FLOAT, false, 44, 0);
+      gl.vertexAttribPointer(pCol, 4, gl.FLOAT, false, 44, 12);
+      gl.vertexAttribPointer(pMeta, 4, gl.FLOAT, false, 44, 28);
+      gl.drawArrays(gl.POINTS, 0, pointCount);
+    }
+
+    renderSvgFrameAndLabels(basis, evalRes);
+    updateHud(evalRes);
+
+    requestAnimationFrame(renderFrame);
+  }
+
+  // =========================================================================
+  // 6. INTERACTION: 3D ORBIT, ZOOM, CLICK NODE TO INSPECT STORY
+  // =========================================================================
+  function stageLocal(e) {
+    const r = stage.getBoundingClientRect();
+    return [e.clientX - r.left, e.clientY - r.top];
+  }
+
+  function findNearestNode(mx, my, maxPx = 16) {
+    const basis = camBasis(state.az, state.el);
+    let best = -1;
+    let bestD = maxPx;
+    for (let i = 0; i < N_NODES; i++) {
+      if (state.mode === "timeline" && NODES[i].bornAt > state.timeDepth) continue;
+      const sp = proj3(NODE_POS3[i], basis, state.cw, state.ch, state.zoom);
+      const d = Math.hypot(sp[0] - mx, sp[1] - my);
+      if (d < bestD) { bestD = d; best = i; }
+    }
+    return best;
+  }
+
+  let dragging = false;
+  let dragPrev = [0, 0];
+  let dragMoved = 0;
+
+  stage.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0) return;
+    stage.setPointerCapture(e.pointerId);
+    dragging = true;
+    dragPrev = stageLocal(e);
+    dragMoved = 0;
+    if (state.autoSpin) {
+      state.autoSpin = false;
+      if (spinBtn) spinBtn.classList.remove("active");
+    }
+  });
+
+  stage.addEventListener("pointermove", (e) => {
+    const pt = stageLocal(e);
+    if (!dragging) {
+      state.hoveredNode = findNearestNode(pt[0], pt[1], 16);
+      stage.style.cursor = state.hoveredNode >= 0 ? "pointer" : "grab";
+      return;
+    }
+    const dx = pt[0] - dragPrev[0];
+    const dy = pt[1] - dragPrev[1];
+    dragPrev = pt;
+    dragMoved += Math.hypot(dx, dy);
+    state.targetAz -= dx * 0.0075;
+    state.targetEl = Math.max(-1.25, Math.min(1.25, state.targetEl + dy * 0.0075));
+  });
+
+  stage.addEventListener("pointerup", (e) => {
+    if (dragging && dragMoved < 5) {
+      const pt = stageLocal(e);
+      const hit = findNearestNode(pt[0], pt[1], 18);
+      if (hit >= 0) {
+        state.selectedNode = hit;
+        updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      }
+    }
+    dragging = false;
+  });
+
+  stage.addEventListener("pointerleave", () => {
+    if (!dragging) state.hoveredNode = -1;
+  });
+
+  stage.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    const factor = Math.exp(-e.deltaY * 0.0014);
+    state.targetZoom = Math.max(0.65, Math.min(4.2, state.targetZoom * factor));
+  }, { passive: false });
+
+  function resetAll() {
+    state.targetAz = 0.68;
+    state.targetEl = 0.42;
+    state.targetZoom = 0.94;
+    state.muted = {};
+    state.autoSpin = false;
+    if (spinBtn) spinBtn.classList.remove("active");
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+  }
+  stage.addEventListener("dblclick", resetAll);
+
+  // =========================================================================
+  // 7. INSPECTOR & FLOATING CAMERA CONTROLS
+  // =========================================================================
+  tabTimelineBtn.addEventListener("click", () => {
+    state.mode = "timeline";
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+  });
+  tabLensBtn.addEventListener("click", () => {
+    state.mode = "lens";
+    state.playing = false;
+    playBtn.textContent = "Play Arc";
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+  });
+
+  chapterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.dataset.chapterBtn);
+      state.mode = "timeline";
+      state.playing = false;
+      playBtn.textContent = "Play Arc";
+      state.timeDepth = idx + 0.95;
+      state.selectedNode = CHAPTERS[idx].anchorIds[CHAPTERS[idx].anchorIds.length - 1];
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    });
+  });
+
+  lensBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.mode = "lens";
+      state.lensIdx = Number(btn.dataset.lensBtn);
+      const path = LENSES[state.lensIdx].path;
+      state.selectedNode = path[path.length - 1];
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    });
+  });
+
+  timeSlider.addEventListener("input", () => {
+    state.mode = "timeline";
+    state.playing = false;
+    playBtn.textContent = "Play Arc";
+    state.timeDepth = Number(timeSlider.value);
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+  });
+
+  playBtn.addEventListener("click", () => {
+    state.mode = "timeline";
+    if (!state.playing && state.timeDepth >= 4.85) state.timeDepth = 0.08;
+    state.playing = !state.playing;
+    playBtn.textContent = state.playing ? "Pause" : "Play Arc";
+  });
+
+  labelsBtn.addEventListener("click", () => {
+    state.showLabels = !state.showLabels;
+    labelsBtn.classList.toggle("active", state.showLabels);
+  });
+
+  themeBtn.addEventListener("click", () => {
+    const next = isLight() ? "dark" : "light";
+    document.body.setAttribute("data-theme", next);
+    themeBtn.textContent = next === "light" ? "Dark" : "Light";
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+  });
+
+  panelToggleBtn.addEventListener("click", () => {
+    const collapsed = hudPanel.classList.toggle("collapsed");
+    panelToggleBtn.textContent = collapsed ? "Story" : "Hide";
+    setTimeout(resizeViewport, 280);
+  });
+
+  activeListEl.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-select-node]");
+    if (btn) {
+      state.selectedNode = Number(btn.dataset.selectNode);
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    }
+  });
+
+  nodeCardEl.addEventListener("click", (e) => {
+    const jump = e.target.closest("[data-jump-node]");
+    if (jump) {
+      const id = Number(jump.dataset.jumpNode);
+      state.selectedNode = id;
+      if (state.mode === "timeline" && NODES[id].bornAt > state.timeDepth) {
+        state.timeDepth = NODES[id].chapter + 0.95;
+      }
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      return;
+    }
+    const muteBtn = e.target.closest("[data-toggle-mute]");
+    if (muteBtn) {
+      const id = Number(muteBtn.dataset.toggleMute);
+      if (state.muted[id]) delete state.muted[id];
+      else state.muted[id] = true;
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    }
+  });
+
+  if (zoomInBtn) zoomInBtn.addEventListener("click", () => {
+    state.targetZoom = Math.min(4.2, state.targetZoom * 1.28);
+  });
+  if (zoomOutBtn) zoomOutBtn.addEventListener("click", () => {
+    state.targetZoom = Math.max(0.65, state.targetZoom / 1.28);
+  });
+  if (resetCamBtn) resetCamBtn.addEventListener("click", resetAll);
+  if (spinBtn) {
+    spinBtn.addEventListener("click", () => {
+      state.autoSpin = !state.autoSpin;
+      spinBtn.classList.toggle("active", state.autoSpin);
+    });
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (e.target.tagName === "INPUT") return;
+    if (e.code === "Space") {
+      e.preventDefault();
+      playBtn.click();
+    } else if (e.key >= "1" && e.key <= "5") {
+      chapterBtns[Number(e.key) - 1].click();
+    } else if (e.key === "r" || e.key === "R") {
+      resetAll();
+    } else if (e.key === "+" || e.key === "=") {
+      state.targetZoom = Math.min(4.2, state.targetZoom * 1.22);
+    } else if (e.key === "-" || e.key === "_") {
+      state.targetZoom = Math.max(0.65, state.targetZoom / 1.22);
+    }
+  });
+
+  resizeViewport();
+  updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+  requestAnimationFrame(renderFrame);
+})();
+</script></body></html>
