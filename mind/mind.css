@@ -1,0 +1,35 @@
+/* Fig 1 on the site's blueprint palette (overrides the kit's neutral greys) */
+.iso.mind{
+  --anatomy-page:#0c1120;--anatomy-card:#10172a;--anatomy-text:#9aa5b8;--anatomy-strong:#ebe5d6;--anatomy-muted:#6f7a90;
+  --anatomy-paper:#111a2f;--anatomy-face:#1a2540;--anatomy-top:#1d2945;
+  --anatomy-shade-0:#0c1222;--anatomy-shade-1:#10182c;--anatomy-shade-2:#141e35;--anatomy-shade-3:#18233d;
+  --anatomy-lit-top:#2a3654;--anatomy-lit-shade:#1d2742;
+  --anatomy-hi:#d3e0e9;--anatomy-mid:#7a90a8;--anatomy-lo:#46586f;--anatomy-faint:#2b3953;--anatomy-lit:#ffffff;
+  --anatomy-halo:#03060d;--anatomy-dot:#d7e2ea;
+  --mind-amber:#f2a541;
+}
+.mind .iso-plate{background:var(--anatomy-card)}
+.mind-glow{fill:var(--mind-amber);opacity:0;filter:drop-shadow(0 0 3px var(--mind-amber));pointer-events:none}
+.mind-busglow{fill:none;stroke:var(--mind-amber);stroke-width:1.2;opacity:0;vector-effect:non-scaling-stroke;pointer-events:none}
+.mind-flow{fill:none;stroke:var(--mind-amber);stroke-width:1.1;stroke-dasharray:2 4;opacity:0;animation:mindflow .9s linear infinite;vector-effect:non-scaling-stroke;pointer-events:none}
+@keyframes mindflow{to{stroke-dashoffset:-12}}
+.mind-trace.iso-line{transition:stroke .2s}
+[data-t] .mind-trace{stroke:var(--anatomy-lo)}
+[data-t].on .mind-trace,[data-t] .on{stroke:var(--mind-amber)}
+.mind-hit{fill:transparent;stroke:none;cursor:pointer}
+.mind-lamp,.mind-pin,.mind-label{cursor:pointer}
+.mind-lamp.hover .iso-edge{stroke:var(--mind-amber)}
+.mind-label:hover .iso-face-text,.mind-label:focus-visible .iso-face-text{fill:var(--mind-amber)}
+.mind-label:focus-visible{outline:none}
+.mind-label:focus-visible .iso-edge{stroke:var(--mind-amber)}
+.mind-pinglow{fill:var(--mind-amber);opacity:0;transition:opacity .3s;filter:drop-shadow(0 0 4px var(--mind-amber));pointer-events:none}
+.mind-pin.on .mind-pinglow{opacity:1}
+.mind-pin.on .iso-face-text{fill:var(--mind-amber)}
+.mind-tip{fill:var(--mind-amber);filter:drop-shadow(0 0 5px var(--mind-amber));pointer-events:none}
+.mind-drag{fill:transparent;cursor:crosshair;touch-action:none}
+.mind-cardno{fill:var(--anatomy-hi);font-family:var(--anatomy-mono);font-weight:600}
+.mind-stage:focus-visible{outline:2px solid var(--mind-amber);outline-offset:4px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){.mind-flow{animation:none;stroke-dasharray:none}}
+.mind-encout{fill:var(--mind-amber);filter:drop-shadow(0 0 3px var(--mind-amber));pointer-events:none}
+.mind-label .mind-hit{fill:transparent}
+.mind-led{fill:var(--mind-amber);opacity:.85;filter:drop-shadow(0 0 3px var(--mind-amber));pointer-events:none}
