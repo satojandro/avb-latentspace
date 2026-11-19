@@ -1,859 +1,1149 @@
-(function () {
-  const D = __DATA__;
+(() => {
+  const DATA = __DATA__;
   const stage = document.querySelector(".lc-stage");
-  if (!stage) return;
-
-  const still = matchMedia("(prefers-reduced-motion: reduce)");
-  let isLight = document.body.dataset.theme === "light" ? 1 : 0;
-
-  const CUBE_CX = D.cube.cx;
-  const CUBE_CY = D.cube.cy;
-  const CUBE_CZ = D.cube.cz;
-  const CUBE_HALF = D.cube.half; // 104 world units inside 115u half-width glass
-
-  function toWorld(p3) {
-    return [
-      CUBE_CX + p3[0] * CUBE_HALF,
-      CUBE_CY + p3[1] * CUBE_HALF,
-      CUBE_CZ + p3[2] * CUBE_HALF,
-    ];
-  }
-
-  const NODE_W = FEATURE_POS3.map(toWorld);
-  const TOKEN_W = TOKEN_POS3.map((p) => [
-    CUBE_CX + p[0] * (CUBE_HALF + 6),
-    CUBE_CY + p[1] * (CUBE_HALF + 6),
-    CUBE_CZ + p[2] * (CUBE_HALF + 6),
-  ]);
-  const NODE_VB = NODE_W.map((w) => iso(w, D.P));
-  const TOKEN_VB = TOKEN_W.map((w) => iso(w, D.P));
-
-  const CLUSTER_HEX_DARK = ["#ffae42", "#47d6ff", "#42eba8", "#d17aff"];
-  const CLUSTER_HEX_LIGHT = ["#c86410", "#0e74ad", "#108568", "#8834a6"];
-
-  // --- WebGL Fragment Shader (48 SAE nodes, 16 pulsing circuits, 3D axes, drop-lines, 4D hypercube) ---
-  const FRAGMENT = `
-uniform float uLight;
-uniform float uFirst;
-uniform float uLayer;
-uniform float uSteerMag;
-uniform float uHoverIdx;
-uniform vec3 uCursor;
-uniform vec4 uNodes[48];
-uniform vec4 uTraj[7];
-uniform vec4 uTokens[5];
-uniform vec4 uEdgeA[16];
-uniform vec4 uEdgeB[16];
-
-const vec3 C_CENTER = vec3(${CUBE_CX.toFixed(1)}, ${CUBE_CY.toFixed(1)}, ${CUBE_CZ.toFixed(1)});
-const float C_INNER = ${(CUBE_HALF + 9.5).toFixed(1)};
-const float FLOOR_Z = ${(D.cube.z0).toFixed(1)};
-
-vec2 rayPoint(vec3 p0, vec3 V, vec3 q) {
-  vec3 d = q - p0;
-  float t = dot(d, V);
-  float dist = length(d - t * V);
-  return vec2(dist, t);
-}
-
-vec3 raySegment(vec3 p0, vec3 V, vec3 a, vec3 b) {
-  vec3 u = b - a;
-  vec3 w = a - p0;
-  float uu = dot(u, u);
-  float uv = dot(u, V);
-  float uw = dot(u, w);
-  float vw = dot(V, w);
-  float denom = max(uu - uv * uv, 1e-5);
-  float s = clamp((uv * vw - uw) / denom, 0.0, 1.0);
-  vec3 q = a + u * s;
-  vec2 rp = rayPoint(p0, V, q);
-  return vec3(rp.x, s, rp.y);
-}
-
-vec2 hitBox(vec3 p0, vec3 V, vec3 bmin, vec3 bmax) {
-  vec3 invV = 1.0 / (V + vec3(1e-7));
-  vec3 t0 = (bmin - p0) * invV;
-  vec3 t1 = (bmax - p0) * invV;
-  vec3 tmin = min(t0, t1);
-  vec3 tmax = max(t0, t1);
-  return vec2(max(max(tmin.x, tmin.y), tmin.z), min(min(tmax.x, tmax.y), tmax.z));
-}
-
-vec3 clusterColor(float cIdx, float isL) {
-  if (isL > 0.5) {
-    if (cIdx < 0.5) return vec3(0.82, 0.42, 0.08);
-    if (cIdx < 1.5) return vec3(0.06, 0.46, 0.72);
-    if (cIdx < 2.5) return vec3(0.07, 0.54, 0.42);
-    return vec3(0.54, 0.20, 0.66);
-  }
-  if (cIdx < 0.5) return vec3(1.00, 0.68, 0.26);
-  if (cIdx < 1.5) return vec3(0.28, 0.84, 1.00);
-  if (cIdx < 2.5) return vec3(0.26, 0.92, 0.68);
-  return vec3(0.82, 0.48, 1.00);
-}
-
-vec4 over(vec4 top, vec4 under) {
-  return top + under * (1.0 - top.a);
-}
-
-void main() {
-  vec2 vb = viewOf(gl_FragCoord.xy);
-  float px = pixelOf();
-  vec3 V = towardViewer();
-  vec3 p0 = rayOf(vb);
-
-  vec3 bmin = C_CENTER - vec3(C_INNER);
-  vec3 bmax = C_CENTER + vec3(C_INNER);
-  vec2 hb = hitBox(p0, V, bmin, bmax);
-  float inCube = smoothstep(-2.0 * px, 2.0 * px, hb.y - hb.x);
-  if (inCube < 0.001) {
-    gl_FragColor = vec4(0.0);
-    return;
-  }
-
-  vec3 colDark = vec3(0.0);
-  vec4 inkLight = vec4(0.0);
-  float thin = max(0.55, 0.85 * px);
-
-  // 1. Floor projection pool & crisp crosshair directly beneath x(l)
-  vec3 pf = onFloor(vb, FLOOR_Z);
-  vec2 fRel = abs(pf.xy - C_CENTER.xy);
-  float onFloorMask = (1.0 - smoothstep(C_INNER - 2.0, C_INNER, fRel.x))
-                    * (1.0 - smoothstep(C_INNER - 2.0, C_INNER, fRel.y));
-  float fDist = length(pf.xy - uCursor.xy);
-  float floorPool = exp(-pow(fDist / 48.0, 2.0)) * onFloorMask * 0.22;
-  float floorRing = exp(-pow((fDist - 7.5) / (0.85 + 0.5 * px), 2.0)) * onFloorMask * 0.45;
-  colDark += vec3(0.45, 0.80, 1.0) * (floorPool + floorRing);
-  if (uLight > 0.5) {
-    float fa = (floorPool * 0.35 + floorRing * 0.55);
-    if (fa > 0.004) inkLight = over(vec4(vec3(0.14, 0.34, 0.66) * fa, fa), inkLight);
-  }
-
-  // 2. Principal Component Axes (PC1, PC2, PC3) through origin + orthogonal drop-line from x(l)
-  float axisLine = 0.0;
-  for (int a = 0; a < 3; a++) {
-    vec3 dir = (a == 0) ? vec3(1.0, 0.0, 0.0) : (a == 1 ? vec3(0.0, 1.0, 0.0) : vec3(0.0, 0.0, 1.0));
-    vec3 rs = raySegment(p0, V, C_CENTER - dir * (C_INNER - 4.0), C_CENTER + dir * (C_INNER - 4.0));
-    axisLine = max(axisLine, exp(-pow(rs.x / (thin * 1.1), 2.0)) * 0.14);
-  }
-  // Orthogonal drop-line from uCursor down to floor (z = FLOOR_Z)
-  {
-    vec3 rsDrop = raySegment(p0, V, uCursor, vec3(uCursor.xy, FLOOR_Z));
-    float dash = 0.4 + 0.6 * smoothstep(-0.1, 0.2, sin(rsDrop.y * 42.0));
-    float dropL = exp(-pow(rsDrop.x / (thin * 1.05), 2.0)) * 0.38 * dash;
-    axisLine = max(axisLine, dropL);
-  }
-  colDark += vec3(0.52, 0.78, 1.0) * axisLine * inCube;
-  if (uLight > 0.5 && axisLine > 0.005) {
-    float aa = axisLine * 0.68 * inCube;
-    inkLight = over(vec4(vec3(0.20, 0.34, 0.54) * aa, aa), inkLight);
-  }
-
-  // 3. 4D Nested Hypercube Lattice (morphs cleanly with layer depth l = 0..6)
-  float lNorm = uLayer / 6.0;
-  float innerScale = (0.44 + 0.18 * lNorm) * C_INNER;
-  vec3 innerC = C_CENTER + vec3(1.0, -0.6, 0.75) * (lNorm - 0.5) * 16.0;
-  float tessLine = 0.0;
-  for (int axis = 0; axis < 3; axis++) {
-    for (int i = 0; i < 4; i++) {
-      float s1 = (i == 0 || i == 2) ? -1.0 : 1.0;
-      float s2 = (i < 2) ? -1.0 : 1.0;
-      vec3 a, b;
-      if (axis == 0) {
-        a = innerC + vec3(-innerScale, s1 * innerScale, s2 * innerScale);
-        b = innerC + vec3( innerScale, s1 * innerScale, s2 * innerScale);
-      } else if (axis == 1) {
-        a = innerC + vec3(s1 * innerScale, -innerScale, s2 * innerScale);
-        b = innerC + vec3(s1 * innerScale,  innerScale, s2 * innerScale);
-      } else {
-        a = innerC + vec3(s1 * innerScale, s2 * innerScale, -innerScale);
-        b = innerC + vec3(s1 * innerScale, s2 * innerScale,  innerScale);
-      }
-      vec3 rs = raySegment(p0, V, a, b);
-      tessLine = max(tessLine, exp(-pow(rs.x / (thin * 1.15), 2.0)) * 0.30);
-    }
-  }
-  for (int i = 0; i < 8; i++) {
-    float sx = (mod(float(i), 2.0) < 0.5) ? -1.0 : 1.0;
-    float sy = (mod(floor(float(i) / 2.0), 2.0) < 0.5) ? -1.0 : 1.0;
-    float sz = (i < 4) ? -1.0 : 1.0;
-    vec3 outerPt = C_CENTER + vec3(sx, sy, sz) * (C_INNER - 2.0);
-    vec3 innerPt = innerC + vec3(sx, sy, sz) * innerScale;
-    vec3 rs = raySegment(p0, V, outerPt, innerPt);
-    tessLine = max(tessLine, exp(-pow(rs.x / (thin * 1.05), 2.0)) * (0.20 - 0.08 * rs.y));
-  }
-  colDark += vec3(0.42, 0.68, 0.96) * tessLine * inCube;
-  if (uLight > 0.5 && tessLine > 0.005) {
-    float ta = tessLine * 0.62 * inCube;
-    inkLight = over(vec4(vec3(0.22, 0.34, 0.50) * ta, ta), inkLight);
-  }
-
-  // 4. 16 Active Circuit Filaments with Directional Signal Pulses
-  for (int i = 0; i < 16; i++) {
-    float strength = max(0.24, uEdgeA[i].w);
-    vec3 a = uEdgeA[i].xyz;
-    vec3 b = uEdgeB[i].xyz;
-    vec3 rs = raySegment(p0, V, a, b);
-    float core = exp(-pow(rs.x / (max(0.8, 1.15 * px)), 2.0));
-    float glow = exp(-pow(rs.x / 4.8, 2.0)) * 0.34;
-    float phase = fract(rs.y - uTime * 0.55 - float(i) * 0.19);
-    float packet = exp(-pow((phase - 0.5) * 7.0, 2.0)) * smoothstep(0.18, 0.7, uEdgeA[i].w);
-    vec3 c = clusterColor(uEdgeB[i].w, uLight);
-    float e = (core * (0.85 + 1.15 * packet) + glow) * strength * inCube;
-    colDark += mix(c, vec3(1.0, 0.98, 0.94), packet * 0.6) * e;
-    if (uLight > 0.5 && e > 0.01) {
-      float ea = min(0.88, (core * (0.72 + 0.45 * packet) + glow * 0.42) * strength * inCube);
-      inkLight = over(vec4(c * ea, ea), inkLight);
-    }
-  }
-
-  // 5. Residual Stream Trajectory (6 segments + discrete L0..L6 layer waypoints)
-  for (int i = 0; i < 6; i++) {
-    vec3 a = uTraj[i].xyz;
-    vec3 b = uTraj[i + 1].xyz;
-    vec3 rs = raySegment(p0, V, a, b);
-    float segLayer = float(i) + rs.y;
-    float traversed = 1.0 - smoothstep(uLayer - 0.1, uLayer + 0.08, segLayer);
-    float wCore = mix(0.9, 1.9, traversed) + 0.5 * px;
-    float core = exp(-pow(rs.x / wCore, 2.0));
-    float aura = exp(-pow(rs.x / 7.5, 2.0)) * 0.42 * traversed;
-    float futureGhost = core * 0.32 * (1.0 - traversed);
-
-    vec3 pathColDark = mix(vec3(0.45, 0.80, 1.0), vec3(1.0, 0.97, 0.90), traversed * (0.5 + 0.5 * (segLayer / 6.0)));
-    colDark += (pathColDark * (core * 1.45 * traversed + aura) + vec3(0.58, 0.78, 0.98) * futureGhost) * inCube;
-    if (uLight > 0.5) {
-      vec3 pathColLight = mix(vec3(0.28, 0.36, 0.48), vec3(0.08, 0.22, 0.58), traversed);
-      float pa = min(0.95, (core * (0.92 * traversed + 0.28 * (1.0 - traversed)) + aura * 0.38) * inCube);
-      if (pa > 0.008) inkLight = over(vec4(pathColLight * pa, pa), inkLight);
-    }
-  }
-  // Discrete layer waypoint rings L0..L6 along the trajectory
-  for (int i = 0; i < 7; i++) {
-    vec2 rp = rayPoint(p0, V, uTraj[i].xyz);
-    float reached = 1.0 - smoothstep(uLayer - 0.15, uLayer + 0.15, float(i));
-    float rW = mix(2.2, 3.2, reached);
-    float ring = exp(-pow((rp.x - rW) / (0.75 + 0.5 * px), 2.0)) * (0.35 + 0.75 * reached);
-    float dotC = (1.0 - smoothstep(1.3 - 0.5 * px, 1.3 + 0.5 * px, rp.x)) * (0.45 + 0.75 * reached);
-    colDark += vec3(0.88, 0.96, 1.0) * (ring + dotC) * inCube;
-    if (uLight > 0.5) {
-      float wa = min(0.92, (ring * 0.8 + dotC * 0.9) * inCube);
-      if (wa > 0.008) inkLight = over(vec4(vec3(0.08, 0.22, 0.56) * wa, wa), inkLight);
-    }
-  }
-
-  // 6. 48 Crisp Monosemantic SAE Feature Nodes
-  for (int i = 0; i < 48; i++) {
-    vec3 np = uNodes[i].xyz;
-    float act = uNodes[i].w;
-    float isHov = 1.0 - step(0.5, abs(float(i) - uHoverIdx));
-    vec2 rp = rayPoint(p0, V, np);
-    float r = 2.0 + 2.8 * min(1.0, act) + 1.6 * isHov;
-    float core = 1.0 - smoothstep(r - 0.8 * px, r + 0.8 * px, rp.x);
-    float ring = exp(-pow((rp.x - (r + 2.8)) / (0.75 + 0.45 * px), 2.0)) * (smoothstep(0.4, 1.0, act) * 0.78 + isHov * 0.95);
-    float halo = exp(-pow(rp.x / (r * 2.4), 2.0)) * (0.18 + 0.56 * act + 0.42 * isHov);
-    float cIdx = floor(float(i) / 12.0);
-    vec3 c = clusterColor(cIdx, uLight);
-
-    vec3 nodeDark = mix(c * (0.52 + 0.95 * act), vec3(1.0, 0.99, 0.96), core * min(0.9, act * 0.72 + isHov * 0.6));
-    colDark += (nodeDark * core * (0.55 + 1.1 * act + 0.7 * isHov) + c * (halo + ring)) * inCube;
-    if (uLight > 0.5) {
-      float na = min(0.96, (core * (0.48 + 0.52 * min(1.0, act) + 0.4 * isHov) + ring * 0.75 + halo * 0.28) * inCube);
-      if (na > 0.008) {
-        vec3 nCol = mix(c, vec3(0.97, 0.98, 1.0), core * smoothstep(0.6, 1.25, act) * 0.45);
-        inkLight = over(vec4(nCol * na, na), inkLight);
-      }
-    }
-  }
-
-  // 7. 5 Unembedding Target Beacons + Sight-line to Top Token
-  float bestP = -1.0;
-  vec3 bestPos = uTokens[0].xyz;
-  for (int i = 0; i < 5; i++) {
-    vec3 tp = uTokens[i].xyz;
-    float prob = uTokens[i].w;
-    if (prob > bestP) { bestP = prob; bestPos = tp; }
-    vec2 rp = rayPoint(p0, V, tp);
-    float r = 2.8 + 2.5 * prob;
-    float ring = exp(-pow((rp.x - r * 1.55) / (0.75 + 0.45 * px), 2.0)) * (0.35 + 0.85 * prob);
-    float dotCore = 1.0 - smoothstep(r * 0.62 - 0.6 * px, r * 0.62 + 0.6 * px, rp.x);
-    vec3 bCol = (uLight > 0.5) ? vec3(0.76, 0.22, 0.12) : vec3(1.0, 0.86, 0.48);
-    colDark += bCol * (dotCore * (0.45 + 0.95 * prob) + ring * 0.9);
-    if (uLight > 0.5) {
-      float ba = min(0.92, dotCore * (0.42 + 0.56 * prob) + ring * 0.62);
-      if (ba > 0.008) inkLight = over(vec4(bCol * ba, ba), inkLight);
-    }
-  }
-  {
-    vec3 rs = raySegment(p0, V, uCursor, bestPos);
-    float dash = 0.45 + 0.55 * sin(rs.y * 34.0 - uTime * 3.4);
-    float line = exp(-pow(rs.x / (0.65 + 0.45 * px), 2.0)) * (0.32 + 0.42 * bestP) * (0.55 + 0.45 * dash) * inCube;
-    colDark += vec3(1.0, 0.88, 0.54) * line;
-    if (uLight > 0.5 && line > 0.008) {
-      float la = min(0.72, line * 0.88);
-      inkLight = over(vec4(vec3(0.76, 0.22, 0.12) * la, la), inkLight);
-    }
-  }
-
-  // 8. Focal Residual-Stream State Orb at x(l)
-  {
-    vec2 rp = rayPoint(p0, V, uCursor);
-    float rOrb = 4.4 + 0.45 * sin(uTime * 2.8);
-    float core = 1.0 - smoothstep(rOrb - 0.85 * px, rOrb + 0.85 * px, rp.x);
-    float rim = exp(-pow((rp.x - rOrb * 1.75) / (0.95 + 0.5 * px), 2.0)) * 0.68;
-    float bloom = exp(-pow(rp.x / 18.0, 2.0)) * 0.55;
-    vec3 orbTint = mix(vec3(0.55, 0.88, 1.0), vec3(1.0, 0.70, 0.34), min(1.0, uSteerMag));
-
-    colDark += (vec3(1.0, 0.99, 0.96) * core * 1.5 + orbTint * (rim + bloom)) * inCube;
-    if (uLight > 0.5) {
-      vec3 oInk = mix(vec3(0.08, 0.24, 0.64), vec3(0.82, 0.30, 0.08), min(1.0, uSteerMag));
-      float oa = min(0.96, (core * 0.95 + rim * 0.62 + bloom * 0.20) * inCube);
-      vec3 oSeen = mix(oInk, vec3(0.97, 0.98, 1.0), core * 0.55);
-      inkLight = over(vec4(oSeen * oa, oa), inkLight);
-    }
-  }
-
-  float dither = (hash12(gl_FragCoord.xy + fract(uTime * 0.61) * 91.0)
-                + hash12(gl_FragCoord.yx * 1.37 + fract(uTime * 0.37) * 57.0) - 1.0) / 255.0;
-
-  if (uLight > 0.5) {
-    vec4 outL = inkLight * uFirst;
-    outL.rgb = min(outL.rgb, vec3(outL.a));
-    float gate = smoothstep(0.0, 1.5 / 255.0, outL.a);
-    outL = max(outL + vec4(dither * gate), vec4(0.0));
-    outL.rgb = min(outL.rgb, vec3(outL.a));
-    gl_FragColor = outL;
-  } else {
-    vec3 c = tonemap(colDark, 1.15) * uFirst;
-    float m = max(c.r, max(c.g, c.b));
-    c = max(c + dither * smoothstep(0.0, 1.5 / 255.0, m), 0.0);
-    gl_FragColor = vec4(c, max(c.r, max(c.g, c.b)));
-  }
-}
-`;
-
   const canvas = stage.querySelector(".lc-gl");
-  const layer = glLayer({
-    canvas,
-    fragment: FRAGMENT,
-    view: [D.W, D.H],
-    camera: D.camera,
-    uniforms: [
-      "uLight", "uFirst", "uLayer", "uSteerMag", "uHoverIdx", "uCursor",
-      "uNodes", "uTraj", "uTokens", "uEdgeA", "uEdgeB",
-    ],
-    fixed: {},
-  });
-  if (layer) stage.setAttribute("data-gl", "");
+  const svgOverlays = [...stage.querySelectorAll(".lc-svg-overlay")];
+  const cubeBackG = stage.querySelector("[data-cube-back]");
+  const cubeFrontG = stage.querySelector("[data-cube-front]");
+  const labelsG = stage.querySelector("[data-labels]");
 
-  // SVG elements
-  const carriageEl = stage.querySelector("[data-part='carriage']");
-  const knobPtrEl = stage.querySelector("[data-part='knob-ptr']");
-  const barEls = Array.from(stage.querySelectorAll("[data-bar]"));
-  const barCapEls = Array.from(stage.querySelectorAll("[data-bar-cap]"));
-  const labelsLayer = stage.querySelector("[data-labels]");
-
-  // Telemetry HUD elements
-  const hudPromptBtns = Array.from(document.querySelectorAll("[data-prompt-btn]"));
-  const hudLayerSlider = document.querySelector("[data-layer-slider]");
-  const hudLayerVal = document.querySelector("[data-layer-val]");
-  const hudPlayBtn = document.querySelector("[data-play-btn]");
-  const hudLabelsBtn = document.querySelector("[data-labels-btn]");
-  const hudThemeBtn = document.querySelector("[data-theme-btn]");
-  const hudPanelBtn = document.querySelector("[data-panel-toggle]");
+  // HUD elements
   const hudPanel = document.querySelector(".hud-panel");
-  const hudNote = document.querySelector("[data-stage-note]");
-  const hudVecBars = Array.from(document.querySelectorAll("[data-vec-bar]"));
-  const hudVecVals = Array.from(document.querySelectorAll("[data-vec-val]"));
-  const hudFeatList = document.querySelector("[data-feat-list]");
-  const hudTokenBars = Array.from(document.querySelectorAll("[data-tok-bar]"));
-  const hudTokenPcts = Array.from(document.querySelectorAll("[data-tok-pct]"));
-  const hudEntropy = document.querySelector("[data-entropy]");
-  const hudSteerBadge = document.querySelector("[data-steer-badge]");
+  const panelToggleBtn = document.querySelector("[data-panel-toggle]");
+  const promptBtns = [...document.querySelectorAll("[data-prompt-btn]")];
+  const layerSlider = document.querySelector("[data-layer-slider]");
+  const layerValEl = document.querySelector("[data-layer-val]");
+  const stageNoteEl = document.querySelector("[data-stage-note]");
+  const entropyEl = document.querySelector("[data-entropy]");
+  const steerBadgeEl = document.querySelector("[data-steer-badge]");
+  const featListEl = document.querySelector("[data-feat-list]");
+  const clampBarEl = document.querySelector("[data-clamp-bar]");
+  const playBtn = document.querySelector("[data-play-btn]");
+  const labelsBtn = document.querySelector("[data-labels-btn]");
+  const themeBtn = document.querySelector("[data-theme-btn]");
+  const vecBars = [...document.querySelectorAll("[data-vec-bar]")];
+  const vecVals = [...document.querySelectorAll("[data-vec-val]")];
+  const tokBars = [...document.querySelectorAll("[data-tok-bar]")];
+  const tokPcts = [...document.querySelectorAll("[data-tok-pct]")];
 
-  // Interactive state
-  let promptIdx = 0;
-  let targetLayer = 4.2;
-  const curLayer = { x: 4.2, v: 0 };
-  const targetSteer = [0, 0, 0];
-  const curSteer = [0, 0, 0];
-  let tourActive = true;
-  let showLabels = true;
-  let hoverIdx = -1;
-  let idleTimer = 0;
-  let firstClock = 0;
-  let clock = 0;
-  let last = 0;
-  let frame = 0;
-  let visible = false;
-  let dragging = null;
+  // Floating camera controls
+  const zoomInBtn = document.querySelector("[data-zoom-in]");
+  const zoomOutBtn = document.querySelector("[data-zoom-out]");
+  const zoomReadout = document.querySelector("[data-zoom-val]");
+  const resetCamBtn = document.querySelector("[data-cam-reset]");
+  const modeOrbitBtn = document.querySelector("[data-mode-orbit]");
+  const modeSteerBtn = document.querySelector("[data-mode-steer]");
+  const spinBtn = document.querySelector("[data-cam-spin]");
 
-  const uNodesArr = new Float32Array(48 * 4);
-  const uTrajArr = new Float32Array(7 * 4);
-  const uTokensArr = new Float32Array(5 * 4);
-  const uEdgeAArr = new Float32Array(16 * 4);
-  const uEdgeBArr = new Float32Array(16 * 4);
+  // 4 semantic neighborhood palettes (dark & light)
+  const CLUSTER_RGB_DARK = [
+    [0.34, 0.74, 1.0],   // Entities & World (cyan-blue)
+    [0.98, 0.70, 0.28],  // Syntax & Code (warm amber)
+    [0.24, 0.88, 0.68],  // Physical & Nature (emerald-teal)
+    [0.86, 0.46, 0.96],  // Sequence & Tone (violet-magenta)
+  ];
+  const CLUSTER_RGB_LIGHT = [
+    [0.08, 0.40, 0.76],
+    [0.74, 0.36, 0.04],
+    [0.05, 0.52, 0.38],
+    [0.54, 0.16, 0.66],
+  ];
+  const CLUSTER_HEX_DARK = ["#58bdff", "#fab248", "#3de0ae", "#db75f5"];
+  const CLUSTER_HEX_LIGHT = ["#1466c2", "#bd5c0a", "#0d8561", "#8a29a8"];
 
-  let dispTraj = Array.from({ length: 7 }, () => [CUBE_CX, CUBE_CY, CUBE_CZ]);
-  let dispActs = new Array(48).fill(0);
-  let dispProbs = new Array(5).fill(0.2);
+  // Application state
+  const state = {
+    promptIdx: 0,
+    layer: 4.35,
+    playing: true,
+    showLabels: true,
+    steer3: [0, 0, 0],
+    clamped: {}, // featureId -> "clamp" | "ablate"
+    hoveredFeat: -1,
+    interactMode: "orbit", // "orbit" | "steer"
+    autoSpin: false,
+    // Camera (radians + zoom)
+    az: 0.66,
+    el: 0.44,
+    zoom: 0.94,
+    targetAz: 0.66,
+    targetEl: 0.44,
+    targetZoom: 0.94,
+    cw: 960,
+    ch: 760,
+    dpr: 1,
+    run: null,
+  };
 
-  function setPrompt(idx) {
-    promptIdx = ((idx % PROMPTS.length) + PROMPTS.length) % PROMPTS.length;
-    targetSteer[0] = targetSteer[1] = targetSteer[2] = 0;
-    updateKnob();
-    hudPromptBtns.forEach((b, i) => b.classList.toggle("active", i === promptIdx));
-    run();
+  const isLight = () => document.body.getAttribute("data-theme") === "light";
+
+  function recomputeRun() {
+    const hasSteer = Math.hypot(...state.steer3) > 0.015;
+    const steer8 = hasSteer ? unprojectSteer(state.steer3) : null;
+    const hasClamp = Object.keys(state.clamped).length > 0;
+    state.run = forward(state.promptIdx, steer8, hasClamp ? state.clamped : null);
+  }
+  recomputeRun();
+
+  // =========================================================================
+  // 1. SHARED 3D ORBIT + PERSPECTIVE CAMERA (IDENTICAL IN JS & GLSL)
+  // =========================================================================
+  const CAM_DIST = 5.2;
+
+  function camBasis(az, el) {
+    const ca = Math.cos(az), sa = Math.sin(az);
+    const ce = Math.cos(el), se = Math.sin(el);
+    return {
+      right: [-sa, ca, 0],
+      up: [-se * ca, -se * sa, ce],
+      fwd: [ce * ca, ce * sa, se],
+    };
   }
 
-  function updateKnob() {
-    if (!knobPtrEl) return;
-    const angle = -2.1 + (promptIdx / (PROMPTS.length - 1)) * 4.2;
-    const cx = D.knob.cx, cy = D.knob.cy, z = D.knob.z;
-    const dx = Math.cos(angle), dy = Math.sin(angle);
-    const pA = iso([cx - dx * 2.5, cy - dy * 2.5, z], D.P);
-    const pB = iso([cx + dx * 6.8, cy + dy * 6.8, z], D.P);
-    knobPtrEl.setAttribute("d", `M${pA[0].toFixed(1)},${pA[1].toFixed(1)} L${pB[0].toFixed(1)},${pB[1].toFixed(1)}`);
+  function proj3(p, basis, cw, ch, zoom) {
+    const vx = p[0] * basis.right[0] + p[1] * basis.right[1] + p[2] * basis.right[2];
+    const vy = p[0] * basis.up[0] + p[1] * basis.up[1] + p[2] * basis.up[2];
+    const vz = p[0] * basis.fwd[0] + p[1] * basis.fwd[1] + p[2] * basis.fwd[2];
+    const persp = CAM_DIST / Math.max(0.85, CAM_DIST - vz);
+    const S = Math.min(cw, ch) * 0.34 * zoom;
+    return [cw * 0.5 + vx * persp * S, ch * 0.5 - vy * persp * S, vz, persp];
   }
 
-  function updateCarriage(lVal) {
-    if (!carriageEl) return;
-    const frac = Math.max(0, Math.min(1, lVal / N_LAYERS));
-    const dxWorld = (frac - 0.5) * D.rail.span;
-    const p0 = iso([0, 0, 0], D.P);
-    const p1 = iso([dxWorld, 0, 0], D.P);
-    carriageEl.setAttribute("transform", `translate(${(p1[0] - p0[0]).toFixed(2)} ${(p1[1] - p0[1]).toFixed(2)})`);
+  // =========================================================================
+  // 2. NATIVE WEBGL1 GALAXY RENDERER (LINES + ANALYTIC SDF POINTS)
+  // =========================================================================
+  const gl = canvas.getContext("webgl", {
+    alpha: true,
+    antialias: true,
+    premultipliedAlpha: false,
+    preserveDrawingBuffer: true,
+  });
+
+  let lineProg = null;
+  let pointProg = null;
+  let lineBuf = null;
+  let pointBuf = null;
+
+  function compileShader(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      console.error("Shader compile error:", gl.getShaderInfoLog(s));
+      return null;
+    }
+    return s;
   }
 
-  function updateBars(probs, topIdx) {
-    for (let i = 0; i < barEls.length; i++) {
-      const p = Math.max(0.04, Math.min(1, probs[i] || 0));
-      const h = p * D.bars.maxH;
-      const b = D.bars.items[i];
-      const cyl = cylinder(b.x, b.y, b.r, b.z0, h, D.P, 20);
-      barEls[i].setAttribute("d", cyl.fill);
-      barEls[i].setAttribute("data-top", i === topIdx ? "1" : "0");
-      if (barCapEls[i]) barCapEls[i].setAttribute("d", ring(b.x, b.y, b.r, b.z0 + h, D.P, 20));
+  function linkProgram(vsSrc, fsSrc) {
+    const vs = compileShader(gl.VERTEX_SHADER, vsSrc);
+    const fs = compileShader(gl.FRAGMENT_SHADER, fsSrc);
+    if (!vs || !fs) return null;
+    const p = gl.createProgram();
+    gl.attachShader(p, vs);
+    gl.attachShader(p, fs);
+    gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+      console.error("Program link error:", gl.getProgramInfoLog(p));
+      return null;
     }
+    return p;
   }
 
-  // Projected 3D SVG semantic callout labels (top firing features + unembedding beacons + cursor + hover)
-  function updateCallouts(cursorW, lens) {
-    if (!labelsLayer) return;
-    if (!showLabels) {
-      labelsLayer.innerHTML = "";
-      return;
-    }
-    const parts = [];
-    const palette = isLight ? CLUSTER_HEX_LIGHT : CLUSTER_HEX_DARK;
+  if (gl) {
+    stage.setAttribute("data-gl", "1");
 
-    // 1. Unembedding target beacons on cube boundary
-    for (let i = 0; i < TOKENS.length; i++) {
-      const [vx, vy] = TOKEN_VB[i];
-      const p = dispProbs[i];
-      const isTop = i === lens.topIdx;
-      const dx = vx > D.cube.vbCenter[0] ? 10 : -10;
-      const anchor = dx > 0 ? "start" : "end";
-      const op = (isTop ? 0.96 : 0.45 + 0.35 * p).toFixed(2);
-      parts.push(
-        `<g class="lc-tag ${isTop ? "lc-tag-top" : ""}" opacity="${op}">` +
-        `<text x="${(vx + dx).toFixed(1)}" y="${(vy + 3).toFixed(1)}" text-anchor="${anchor}">${TOKENS[i].text} ${Math.round(p * 100)}%</text>` +
-        `</g>`
-      );
-    }
-
-    // 2. Top 4 firing SAE features (plus hovered node if any)
-    const ranked = FEATURES.map((f, i) => ({ f, i, a: dispActs[i] }))
-      .sort((a, b) => b.a - a.a)
-      .slice(0, 4)
-      .filter((x) => x.a > 0.32);
-
-    if (hoverIdx >= 0 && !ranked.some((r) => r.i === hoverIdx)) {
-      ranked.unshift({ f: FEATURES[hoverIdx], i: hoverIdx, a: dispActs[hoverIdx], hovered: true });
-    }
-
-    const usedY = TOKEN_VB.map((pt) => pt[1]);
-    for (const item of ranked) {
-      const [vx, vy] = NODE_VB[item.i];
-      let ly = vy - 18;
-      for (const uy of usedY) if (Math.abs(ly - uy) < 16) ly = uy - 16;
-      usedY.push(ly);
-      const side = vx >= D.cube.vbCenter[0] ? 1 : -1;
-      const lx = vx + side * 16;
-      const anchor = side > 0 ? "start" : "end";
-      const col = palette[item.f.cluster];
-      parts.push(
-        `<g class="lc-feat-tag ${item.hovered ? "is-hov" : ""}">` +
-        `<path d="M${vx.toFixed(1)},${vy.toFixed(1)} L${(lx - side * 3).toFixed(1)},${(ly - 2).toFixed(1)}" stroke="${col}" stroke-width="0.7" opacity="0.65"/>` +
-        `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor}" fill="${col}">F${String(item.i).padStart(2, "0")} ${item.f.name}</text>` +
-        `</g>`
-      );
-    }
-
-    // 3. Current residual-stream cursor tag x(L) placed cleanly to the left of the orb
-    const [cx, cy] = iso(cursorW, D.P);
-    parts.push(
-      `<g class="lc-cursor-tag">` +
-      `<text x="${(cx - 12).toFixed(1)}" y="${(cy - 10).toFixed(1)}" text-anchor="end">x(L${curLayer.x.toFixed(1)})</text>` +
-      `</g>`
-    );
-
-    labelsLayer.innerHTML = parts.join("");
-  }
-
-  // Update telemetry HUD
-  let lastHudTime = 0;
-  function updateHud(now, lens, steerMag) {
-    if (now - lastHudTime < 45) return; // ~22 Hz DOM updates for silky 60fps WebGL
-    lastHudTime = now;
-
-    if (hudLayerSlider && document.activeElement !== hudLayerSlider) {
-      hudLayerSlider.value = curLayer.x.toFixed(2);
-    }
-    if (hudLayerVal) hudLayerVal.textContent = `L${curLayer.x.toFixed(1)} / 6.0`;
-    if (hudNote) hudNote.textContent = lens.note;
-    if (hudEntropy) hudEntropy.textContent = `${lens.entropy.toFixed(2)} bits`;
-    if (hudSteerBadge) {
-      hudSteerBadge.textContent = steerMag > 0.05 ? `STEER Δ ${steerMag.toFixed(2)}` : "UNSTEERED";
-      hudSteerBadge.classList.toggle("active", steerMag > 0.05);
-    }
-    if (hudPlayBtn) hudPlayBtn.textContent = tourActive ? "Pause" : "Play";
-
-    // 8-D residual stream bars
-    for (let d = 0; d < 8; d++) {
-      const v = lens.vec8[d];
-      const bar = hudVecBars[d];
-      if (bar) {
-        const pct = Math.min(50, Math.abs(v) * 62);
-        bar.style.left = v >= 0 ? "50%" : `${50 - pct}%`;
-        bar.style.width = `${pct}%`;
-        bar.classList.toggle("neg", v < 0);
+    const CAM_GLSL = `
+      uniform vec3 uRight;
+      uniform vec3 uUp;
+      uniform vec3 uFwd;
+      uniform vec2 uRes;
+      uniform float uScale;
+      vec4 project3D(vec3 p, out float depthFade, out float persp) {
+        float vx = dot(p, uRight);
+        float vy = dot(p, uUp);
+        float vz = dot(p, uFwd);
+        persp = 5.2 / max(0.85, 5.2 - vz);
+        float nx = (vx * persp * uScale) / (uRes.x * 0.5);
+        float ny = (vy * persp * uScale) / (uRes.y * 0.5);
+        float nz = -vz / 3.2;
+        depthFade = clamp(0.45 + 0.55 * (vz + 1.4) / 2.8, 0.25, 1.0);
+        return vec4(nx, ny, nz, 1.0);
       }
-      if (hudVecVals[d]) hudVecVals[d].textContent = (v >= 0 ? "+" : "") + v.toFixed(2);
-    }
+    `;
 
-    // Top 5 firing SAE features
-    if (hudFeatList) {
-      const palette = isLight ? CLUSTER_HEX_LIGHT : CLUSTER_HEX_DARK;
-      const top5 = FEATURES.map((f, i) => ({ f, i, a: dispActs[i] }))
-        .sort((a, b) => b.a - a.a)
-        .slice(0, 5);
-      hudFeatList.innerHTML = top5
-        .map(({ f, i, a }) => {
-          const w = Math.min(100, (a / 1.4) * 100);
-          return `<div class="hud-feat-row">
-            <span class="hud-dot" style="background:${palette[f.cluster]}"></span>
-            <span class="hud-feat-name">F${String(i).padStart(2, "0")} ${f.name}</span>
-            <span class="hud-feat-bar"><i style="width:${w.toFixed(0)}%;background:${palette[f.cluster]}"></i></span>
-            <span class="hud-feat-num">${a.toFixed(2)}</span>
-          </div>`;
-        })
-        .join("");
-    }
-
-    // Logit Lens probabilities
-    for (let i = 0; i < TOKENS.length; i++) {
-      const p = dispProbs[i];
-      if (hudTokenBars[i]) {
-        hudTokenBars[i].style.width = `${(p * 100).toFixed(1)}%`;
-        hudTokenBars[i].classList.toggle("top", i === lens.topIdx);
+    // Program 1: Razor-thin 3D lines (background manifold web, circuit filaments, hypercube, trajectory)
+    const lineVS = `
+      precision highp float;
+      attribute vec3 aPos;
+      attribute vec4 aCol;
+      varying vec4 vCol;
+      ${CAM_GLSL}
+      void main() {
+        float df, persp;
+        gl_Position = project3D(aPos, df, persp);
+        vCol = vec4(aCol.rgb, aCol.a * df);
       }
-      if (hudTokenPcts[i]) hudTokenPcts[i].textContent = `${Math.round(p * 100)}%`;
-    }
-  }
-
-  // --- HUD & Pointer Interactions ---
-  hudPromptBtns.forEach((btn, i) => {
-    btn.addEventListener("click", () => {
-      tourActive = false; idleTimer = 0;
-      setPrompt(i);
-    });
-  });
-
-  if (hudLayerSlider) {
-    hudLayerSlider.addEventListener("input", (e) => {
-      tourActive = false; idleTimer = 0;
-      targetLayer = parseFloat(e.target.value);
-      run();
-    });
-  }
-
-  if (hudPlayBtn) {
-    hudPlayBtn.addEventListener("click", () => {
-      tourActive = !tourActive; idleTimer = 0;
-      hudPlayBtn.textContent = tourActive ? "Pause" : "Play";
-      run();
-    });
-  }
-
-  if (hudLabelsBtn) {
-    hudLabelsBtn.addEventListener("click", () => {
-      showLabels = !showLabels;
-      hudLabelsBtn.classList.toggle("active", showLabels);
-      run();
-    });
-  }
-
-  if (hudThemeBtn) {
-    hudThemeBtn.addEventListener("click", () => {
-      isLight = isLight ? 0 : 1;
-      document.body.dataset.theme = isLight ? "light" : "dark";
-      hudThemeBtn.textContent = isLight ? "Dark" : "Light";
-      run();
-    });
-  }
-
-  if (hudPanelBtn && hudPanel) {
-    hudPanelBtn.addEventListener("click", () => {
-      const collapsed = hudPanel.classList.toggle("collapsed");
-      hudPanelBtn.textContent = collapsed ? "Inspector" : "Hide";
-    });
-  }
-
-  function viewPointFromEvent(e) {
-    const svg = stage.querySelector("svg");
-    const rect = svg.getBoundingClientRect();
-    // Respect preserveAspectRatio="xMidYMid meet"
-    const scale = Math.min(rect.width / D.W, rect.height / D.H);
-    const ox = rect.left + (rect.width - D.W * scale) / 2;
-    const oy = rect.top + (rect.height - D.H * scale) / 2;
-    return [(e.clientX - ox) / scale, (e.clientY - oy) / scale];
-  }
-
-  stage.addEventListener("pointerdown", (e) => {
-    const t = e.target;
-    tourActive = false;
-    idleTimer = 0;
-    if (t && t.closest && t.closest("[data-hit='knob']")) {
-      setPrompt(promptIdx + 1);
-      return;
-    }
-    if (t && t.closest && t.closest("[data-hit='rail']")) {
-      dragging = "rail";
-      stage.setPointerCapture(e.pointerId);
-      handleRailDrag(e);
-      return;
-    }
-    dragging = "cube";
-    stage.setPointerCapture(e.pointerId);
-    handleCubeDrag(e);
-  });
-
-  function handleRailDrag(e) {
-    const [vx] = viewPointFromEvent(e);
-    const frac = Math.max(0, Math.min(1, (vx - D.rail.vbX0) / (D.rail.vbX1 - D.rail.vbX0)));
-    targetLayer = frac * N_LAYERS;
-    run();
-  }
-
-  function handleCubeDrag(e) {
-    const [vx, vy] = viewPointFromEvent(e);
-    const sx = Math.max(-1, Math.min(1, (vx - D.cube.vbCenter[0]) / 160));
-    const sy = Math.max(-1, Math.min(1, -(vy - D.cube.vbCenter[1]) / 160));
-    targetSteer[0] = sx * 0.95;
-    targetSteer[1] = -sx * 0.45 + sy * 0.45;
-    targetSteer[2] = sy * 0.95;
-    run();
-  }
-
-  stage.addEventListener("pointermove", (e) => {
-    if (dragging === "rail") { handleRailDrag(e); return; }
-    if (dragging === "cube") { handleCubeDrag(e); return; }
-    // Hover detection on 48 SAE feature nodes
-    const [vx, vy] = viewPointFromEvent(e);
-    let best = -1, bestD = 16;
-    for (let i = 0; i < NODE_VB.length; i++) {
-      const d = Math.hypot(vx - NODE_VB[i][0], vy - NODE_VB[i][1]);
-      if (d < bestD) { bestD = d; best = i; }
-    }
-    if (best !== hoverIdx) {
-      hoverIdx = best;
-      run();
-    }
-  });
-
-  stage.addEventListener("pointerleave", () => {
-    if (hoverIdx !== -1) { hoverIdx = -1; run(); }
-  });
-
-  stage.addEventListener("pointerup", () => {
-    if (dragging === "cube") {
-      targetSteer[0] *= 0.65;
-      targetSteer[1] *= 0.65;
-      targetSteer[2] *= 0.65;
-    }
-    dragging = null;
-  });
-
-  stage.addEventListener("dblclick", () => {
-    targetSteer[0] = targetSteer[1] = targetSteer[2] = 0;
-    run();
-  });
-
-  window.addEventListener("keydown", (e) => {
-    if (e.target && e.target.tagName === "INPUT") return;
-    if (e.key === "ArrowRight") {
-      tourActive = false; idleTimer = 0;
-      targetLayer = Math.min(N_LAYERS, targetLayer + 0.4);
-      e.preventDefault(); run();
-    } else if (e.key === "ArrowLeft") {
-      tourActive = false; idleTimer = 0;
-      targetLayer = Math.max(0, targetLayer - 0.4);
-      e.preventDefault(); run();
-    } else if (e.key === " ") {
-      tourActive = !tourActive; idleTimer = 0;
-      e.preventDefault(); run();
-    } else if (e.key >= "1" && e.key <= "5") {
-      tourActive = false; idleTimer = 0;
-      setPrompt(Number(e.key) - 1);
-    } else if (e.key === "r" || e.key === "R") {
-      targetSteer[0] = targetSteer[1] = targetSteer[2] = 0;
-      run();
-    }
-  });
-
-  updateKnob();
-  hudPromptBtns.forEach((b, i) => b.classList.toggle("active", i === 0));
-  {
-    const initRun = forward(0);
-    dispTraj = initRun.states.map((s) => toWorld(project3(s)));
-    const initLens = logitLens(initRun, targetLayer);
-    dispActs = initLens.acts.slice();
-    dispProbs = initLens.probs.slice();
-  }
-
-  function tick(now) {
-    const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60;
-    last = now;
-    clock += dt;
-    firstClock += dt;
-    const calm = still.matches;
-
-    if (!calm) {
-      if (!tourActive && !dragging) {
-        idleTimer += dt;
-        if (idleTimer > 18) tourActive = true;
+    `;
+    const lineFS = `
+      precision highp float;
+      varying vec4 vCol;
+      void main() {
+        gl_FragColor = vCol;
       }
-      if (tourActive && !dragging) {
-        targetLayer += dt * 0.48;
-        if (targetLayer > N_LAYERS + 1.6) {
-          targetLayer = 0.0;
-          promptIdx = (promptIdx + 1) % PROMPTS.length;
-          targetSteer[0] = targetSteer[1] = targetSteer[2] = 0;
-          updateKnob();
-          hudPromptBtns.forEach((b, i) => b.classList.toggle("active", i === promptIdx));
+    `;
+
+    // Program 2: Crisp analytic SDF points (background pinpoint stars, jewel SAE nodes, rings, reticle)
+    // aMeta = (sizePx, mode, ringIntensity, extra)
+    // mode 0: pinpoint star | mode 1: SAE feature (core + fine ring) | mode 2: pulse/beacon | mode 3: cursor reticle
+    const pointVS = `
+      precision highp float;
+      attribute vec3 aPos;
+      attribute vec4 aCol;
+      attribute vec4 aMeta;
+      uniform float uDpr;
+      varying vec4 vCol;
+      varying vec4 vMeta;
+      varying float vDepth;
+      ${CAM_GLSL}
+      void main() {
+        float df, persp;
+        gl_Position = project3D(aPos, df, persp);
+        gl_PointSize = clamp(aMeta.x * uDpr * (0.72 + 0.28 * persp), 1.5, 56.0);
+        vCol = aCol;
+        vMeta = aMeta;
+        vDepth = df;
+      }
+    `;
+    const pointFS = `
+      precision highp float;
+      varying vec4 vCol;
+      varying vec4 vMeta;
+      varying float vDepth;
+      uniform float uLight;
+      void main() {
+        vec2 uv = gl_PointCoord * 2.0 - 1.0;
+        float r = length(uv);
+        if (r > 1.0) discard;
+
+        float mode = vMeta.y;
+        float ringInt = vMeta.z;
+        float extra = vMeta.w;
+        vec3 col = vCol.rgb;
+        float alpha = 0.0;
+
+        if (mode < 0.5) {
+          // Mode 0: Crisp pinpoint background superposition star
+          float core = smoothstep(0.76, 0.14, r);
+          alpha = core * vCol.a * (0.45 + 0.55 * vDepth);
+        } else if (mode < 1.5) {
+          // Mode 1: Named SAE feature — razor-sharp jewel core + optional fine 1px ring
+          float coreR = mix(0.26, 0.34, clamp(ringInt, 0.0, 1.0));
+          float core = smoothstep(coreR + 0.14, coreR - 0.06, r);
+          float hot = exp(-r * r * 26.0);
+          // Delicate concentric ring when firing, hovered, clamped, or ablated
+          float ringPos = 0.78;
+          float ring = exp(-pow((r - ringPos) * 14.0, 2.0)) * ringInt;
+          // Ablated state (extra < -0.5): hollow ring, suppressed core
+          if (extra < -0.5) {
+            core *= 0.18;
+            hot = 0.0;
+            ring = exp(-pow((r - 0.68) * 13.0, 2.0)) * 0.95;
+          }
+          // Clamped state (extra > 0.5): crisp double ring
+          if (extra > 0.5) {
+            ring = max(ring, exp(-pow((r - 0.82) * 16.0, 2.0)) * 0.95);
+            ring = max(ring, exp(-pow((r - 0.56) * 16.0, 2.0)) * 0.65);
+          }
+          if (uLight < 0.5) {
+            col = mix(col, vec3(1.0), hot * 0.65);
+          } else {
+            col = mix(col, col * 0.45, hot * 0.3);
+          }
+          alpha = clamp(core * 0.95 + ring * 0.85, 0.0, 1.0) * vCol.a * (0.45 + 0.55 * vDepth);
+        } else if (mode < 2.5) {
+          // Mode 2: Signal packet / waypoint / token beacon (crisp dot + subtle rim)
+          float core = smoothstep(0.46, 0.12, r);
+          float rim = exp(-pow((r - 0.78) * 14.0, 2.0)) * ringInt;
+          if (uLight < 0.5) col = mix(col, vec3(1.0), exp(-r * r * 18.0) * 0.55);
+          alpha = clamp(core + rim * 0.8, 0.0, 1.0) * vCol.a * (0.55 + 0.45 * vDepth);
+        } else {
+          // Mode 3: Active residual stream cursor x(l) — precision optical reticle
+          float core = smoothstep(0.24, 0.06, r);
+          float ring1 = exp(-pow((r - 0.58) * 18.0, 2.0)) * 0.95;
+          float ring2 = exp(-pow((r - 0.88) * 20.0, 2.0)) * 0.45;
+          float crossX = exp(-pow(uv.y * 16.0, 2.0)) * step(0.35, abs(uv.x)) * step(abs(uv.x), 0.92);
+          float crossY = exp(-pow(uv.x * 16.0, 2.0)) * step(0.35, abs(uv.y)) * step(abs(uv.y), 0.92);
+          float cross = max(crossX, crossY) * 0.65;
+          if (uLight < 0.5) col = mix(col, vec3(1.0), core * 0.7);
+          alpha = clamp(core + ring1 + ring2 + cross, 0.0, 1.0) * vCol.a;
+        }
+
+        if (alpha < 0.004) discard;
+        gl_FragColor = vec4(col, alpha);
+      }
+    `;
+
+    lineProg = linkProgram(lineVS, lineFS);
+    pointProg = linkProgram(pointVS, pointFS);
+    lineBuf = gl.createBuffer();
+    pointBuf = gl.createBuffer();
+  }
+
+  // Pre-allocated typed arrays for zero-GC 60fps uploads
+  const MAX_LINE_VERTS = 5400; // 2700 segments
+  const lineData = new Float32Array(MAX_LINE_VERTS * 7); // x,y,z, r,g,b,a
+  const MAX_POINTS = 2200;
+  const pointData = new Float32Array(MAX_POINTS * 11); // x,y,z, r,g,b,a, size,mode,ring,extra
+
+  let lineVerts = 0;
+  let pointCount = 0;
+
+  function pushLine(a, b, r, g, bl, alpha) {
+    if (lineVerts + 2 > MAX_LINE_VERTS) return;
+    let o = lineVerts * 7;
+    lineData[o++] = a[0]; lineData[o++] = a[1]; lineData[o++] = a[2];
+    lineData[o++] = r; lineData[o++] = g; lineData[o++] = bl; lineData[o++] = alpha;
+    lineData[o++] = b[0]; lineData[o++] = b[1]; lineData[o++] = b[2];
+    lineData[o++] = r; lineData[o++] = g; lineData[o++] = bl; lineData[o++] = alpha;
+    lineVerts += 2;
+  }
+
+  function pushPoint(p, r, g, b, a, size, mode, ring = 0, extra = 0) {
+    if (pointCount + 1 > MAX_POINTS) return;
+    let o = pointCount * 11;
+    pointData[o++] = p[0]; pointData[o++] = p[1]; pointData[o++] = p[2];
+    pointData[o++] = r; pointData[o++] = g; pointData[o++] = b; pointData[o++] = a;
+    pointData[o++] = size; pointData[o++] = mode; pointData[o++] = ring; pointData[o++] = extra;
+    pointCount++;
+  }
+
+  // 4D Tesseract edges (16 vertices, 32 edges)
+  const TESS_VERTS = [];
+  for (let i = 0; i < 16; i++) {
+    TESS_VERTS.push([
+      i & 1 ? 1 : -1,
+      i & 2 ? 1 : -1,
+      i & 4 ? 1 : -1,
+      i & 8 ? 1 : -1,
+    ]);
+  }
+  const TESS_EDGES = [];
+  for (let i = 0; i < 16; i++) {
+    for (let b = 0; b < 4; b++) {
+      const j = i ^ (1 << b);
+      if (j > i) TESS_EDGES.push([i, j]);
+    }
+  }
+
+  // 3D Cube geometry (8 corners, 12 edges, 6 faces)
+  const CUBE_VERTS = [
+    [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+    [-1, -1,  1], [1, -1,  1], [1, 1,  1], [-1, 1,  1],
+  ];
+  const CUBE_EDGES = [
+    [0, 1], [1, 2], [2, 3], [3, 0], // bottom
+    [4, 5], [5, 6], [6, 7], [7, 4], // top
+    [0, 4], [1, 5], [2, 6], [3, 7], // vertical
+  ];
+  const CUBE_FACES = [
+    { idx: [0, 1, 2, 3], n: [0, 0, -1], grid: true },
+    { idx: [4, 5, 6, 7], n: [0, 0,  1], grid: false },
+    { idx: [0, 1, 5, 4], n: [0, -1, 0], grid: true },
+    { idx: [3, 2, 6, 7], n: [0,  1, 0], grid: true },
+    { idx: [0, 3, 7, 4], n: [-1, 0, 0], grid: true },
+    { idx: [1, 2, 6, 5], n: [ 1, 0, 0], grid: true },
+  ];
+
+  function lerp3(a, b, t) {
+    return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+  }
+
+  function resizeViewport() {
+    const rect = stage.getBoundingClientRect();
+    const cw = Math.max(200, Math.round(rect.width));
+    const ch = Math.max(200, Math.round(rect.height));
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    if (cw !== state.cw || ch !== state.ch || dpr !== state.dpr) {
+      state.cw = cw;
+      state.ch = ch;
+      state.dpr = dpr;
+      canvas.width = Math.round(cw * dpr);
+      canvas.height = Math.round(ch * dpr);
+      for (const s of svgOverlays) s.setAttribute("viewBox", `0 0 ${cw} ${ch}`);
+    }
+  }
+  window.addEventListener("resize", resizeViewport);
+
+  // =========================================================================
+  // 3. SVG 3D OPTICAL CUBE FRAME + SEMANTIC CALLOUTS (SYNCHRONIZED 1:1)
+  // =========================================================================
+  function renderSvgFrameAndLabels(basis, lens, traj3) {
+    const { cw, ch, zoom } = state;
+    const light = isLight();
+    const hexPal = light ? CLUSTER_HEX_LIGHT : CLUSTER_HEX_DARK;
+    const pVerts = CUBE_VERTS.map((v) => proj3(v, basis, cw, ch, zoom));
+
+    // Back-facing faces (normal pointing away from camera: dot(n, fwd) < 0)
+    const backPaths = [];
+    const backGrid = [];
+    for (const f of CUBE_FACES) {
+      const nd = f.n[0] * basis.fwd[0] + f.n[1] * basis.fwd[1] + f.n[2] * basis.fwd[2];
+      if (nd < -0.02) {
+        const pts = f.idx.map((i) => `${pVerts[i][0].toFixed(1)},${pVerts[i][1].toFixed(1)}`).join(" L");
+        const isFloor = f.n[2] < -0.5;
+        backPaths.push(`<path class="${isFloor ? "lc-face-floor" : "lc-face-wall"}" d="M${pts} Z"/>`);
+        if (f.grid) {
+          const c0 = CUBE_VERTS[f.idx[0]], c1 = CUBE_VERTS[f.idx[1]];
+          const c2 = CUBE_VERTS[f.idx[2]], c3 = CUBE_VERTS[f.idx[3]];
+          for (let g = 1; g < 4; g++) {
+            const t = g / 4;
+            const a1 = proj3(lerp3(c0, c1, t), basis, cw, ch, zoom);
+            const b1 = proj3(lerp3(c3, c2, t), basis, cw, ch, zoom);
+            const a2 = proj3(lerp3(c0, c3, t), basis, cw, ch, zoom);
+            const b2 = proj3(lerp3(c1, c2, t), basis, cw, ch, zoom);
+            backGrid.push(`M${a1[0].toFixed(1)},${a1[1].toFixed(1)} L${b1[0].toFixed(1)},${b1[1].toFixed(1)}`);
+            backGrid.push(`M${a2[0].toFixed(1)},${a2[1].toFixed(1)} L${b2[0].toFixed(1)},${b2[1].toFixed(1)}`);
+          }
         }
       }
     }
 
-    const clampedTargetL = Math.max(0, Math.min(N_LAYERS, targetLayer));
-    settle(curLayer, clampedTargetL, dt, 0.24, calm);
-
-    const kFollow = calm ? 1 : 1 - Math.exp(-dt * 8.5);
-    for (let i = 0; i < 3; i++) curSteer[i] += (targetSteer[i] - curSteer[i]) * kFollow;
-    const steerMag = Math.hypot(curSteer[0], curSteer[1], curSteer[2]);
-    const steer8 = steerMag > 0.01 ? unprojectSteer(curSteer) : null;
-
-    const runRes = forward(promptIdx, steer8);
-    const lens = logitLens(runRes, curLayer.x);
-
-    const targetTraj = runRes.states.map((s) => toWorld(project3(s)));
-    for (let i = 0; i < 7; i++) {
-      for (let c = 0; c < 3; c++) dispTraj[i][c] += (targetTraj[i][c] - dispTraj[i][c]) * kFollow;
+    // Separate cube edges into back vs front based on midpoint depth
+    const backEdgeD = [];
+    const frontEdgeD = [];
+    for (const [i, j] of CUBE_EDGES) {
+      const a = pVerts[i], b = pVerts[j];
+      const d = `M${a[0].toFixed(1)},${a[1].toFixed(1)} L${b[0].toFixed(1)},${b[1].toFixed(1)}`;
+      if ((a[2] + b[2]) * 0.5 < -0.15) backEdgeD.push(d);
+      else frontEdgeD.push(d);
     }
-    for (let i = 0; i < 48; i++) dispActs[i] += (lens.acts[i] - dispActs[i]) * kFollow;
-    for (let i = 0; i < 5; i++) dispProbs[i] += (lens.probs[i] - dispProbs[i]) * kFollow;
 
-    const cl = Math.max(0, Math.min(N_LAYERS, curLayer.x));
-    const i0 = Math.min(N_LAYERS - 1, Math.floor(cl));
-    const i1 = i0 + 1;
-    const f = cl - i0;
-    const sf = f * f * (3 - 2 * f);
-    const cursorW = [
-      dispTraj[i0][0] * (1 - sf) + dispTraj[i1][0] * sf,
-      dispTraj[i0][1] * (1 - sf) + dispTraj[i1][1] * sf,
-      dispTraj[i0][2] * (1 - sf) + dispTraj[i1][2] * sf,
+    // Precision corner tick brackets at the 8 vertices
+    const cornerTicks = [];
+    const tickLen = 0.09;
+    for (let i = 0; i < 8; i++) {
+      const v = CUBE_VERTS[i];
+      const p0 = pVerts[i];
+      for (let axis = 0; axis < 3; axis++) {
+        const v2 = v.slice();
+        v2[axis] -= Math.sign(v[axis]) * tickLen;
+        const p1 = proj3(v2, basis, cw, ch, zoom);
+        cornerTicks.push(`M${p0[0].toFixed(1)},${p0[1].toFixed(1)} L${p1[0].toFixed(1)},${p1[1].toFixed(1)}`);
+      }
+    }
+
+    cubeBackG.innerHTML =
+      backPaths.join("") +
+      (backGrid.length ? `<path class="lc-cube-grid" d="${backGrid.join(" ")}"/>` : "") +
+      (backEdgeD.length ? `<path class="lc-cube-edge-back" d="${backEdgeD.join(" ")}"/>` : "");
+
+    // PC1, PC2, PC3 subtle axis tags outside positive cube faces
+    const axDefs = [
+      { p: [1.12, 0, 0], txt: "PC1" },
+      { p: [0, 1.12, 0], txt: "PC2" },
+      { p: [0, 0, 1.12], txt: "PC3" },
     ];
+    const axSvg = axDefs.map((ax) => {
+      const sp = proj3(ax.p, basis, cw, ch, zoom);
+      return `<text class="lc-axis-tag" x="${sp[0].toFixed(1)}" y="${sp[1].toFixed(1)}" text-anchor="middle" dominant-baseline="middle">${ax.txt}</text>`;
+    }).join("");
 
-    for (let i = 0; i < 48; i++) {
-      uNodesArr[i * 4 + 0] = NODE_W[i][0];
-      uNodesArr[i * 4 + 1] = NODE_W[i][1];
-      uNodesArr[i * 4 + 2] = NODE_W[i][2];
-      uNodesArr[i * 4 + 3] = dispActs[i];
-    }
-    for (let i = 0; i < 7; i++) {
-      uTrajArr[i * 4 + 0] = dispTraj[i][0];
-      uTrajArr[i * 4 + 1] = dispTraj[i][1];
-      uTrajArr[i * 4 + 2] = dispTraj[i][2];
-      uTrajArr[i * 4 + 3] = i;
-    }
-    for (let i = 0; i < 5; i++) {
-      uTokensArr[i * 4 + 0] = TOKEN_W[i][0];
-      uTokensArr[i * 4 + 1] = TOKEN_W[i][1];
-      uTokensArr[i * 4 + 2] = TOKEN_W[i][2];
-      uTokensArr[i * 4 + 3] = dispProbs[i];
+    cubeFrontG.innerHTML =
+      (frontEdgeD.length ? `<path class="lc-cube-edge-front" d="${frontEdgeD.join(" ")}"/>` : "") +
+      `<path class="lc-cube-corners" d="${cornerTicks.join(" ")}"/>` +
+      axSvg;
+
+    // Semantic Callouts (dynamically richer when zooming in!)
+    if (!state.showLabels) {
+      labelsG.innerHTML = "";
+      return;
     }
 
-    const scoredEdges = CIRCUIT_EDGES.map(([a, b, w]) => ({
-      a, b,
-      s: Math.sqrt(Math.max(0, dispActs[a]) * Math.max(0, dispActs[b])) * w,
-      cluster: FEATURES[b].cluster,
-    })).sort((x, y) => y.s - x.s);
+    const items = [];
+    const placed = []; // [x0, y0, x1, y1]
+    const overlaps = (x0, y0, x1, y1) => {
+      for (let k = 0; k < placed.length; k++) {
+        const b = placed[k];
+        if (x0 < b[2] && x1 > b[0] && y0 < b[3] && y1 > b[1]) return true;
+      }
+      return false;
+    };
 
-    for (let i = 0; i < 16; i++) {
-      const e = scoredEdges[i];
-      const pa = NODE_W[e.a], pb = NODE_W[e.b];
-      uEdgeAArr[i * 4 + 0] = pa[0];
-      uEdgeAArr[i * 4 + 1] = pa[1];
-      uEdgeAArr[i * 4 + 2] = pa[2];
-      uEdgeAArr[i * 4 + 3] = Math.min(1.25, e.s * 1.2);
-      uEdgeBArr[i * 4 + 0] = pb[0];
-      uEdgeBArr[i * 4 + 1] = pb[1];
-      uEdgeBArr[i * 4 + 2] = pb[2];
-      uEdgeBArr[i * 4 + 3] = e.cluster;
-    }
+    // 1. Active residual stream cursor label (highest priority)
+    const cPos = proj3(lens.pos3, basis, cw, ch, zoom);
+    const cTxt = `x(L${lens.layer.toFixed(1)})`;
+    const cLx = cPos[0] + 20, cLy = cPos[1] - 18;
+    placed.push([cLx - 2, cLy - 10, cLx + cTxt.length * 6.2 + 4, cLy + 4]);
+    items.push(
+      `<g class="lc-cursor-tag">` +
+      `<line x1="${(cPos[0] + 7).toFixed(1)}" y1="${(cPos[1] - 7).toFixed(1)}" x2="${(cLx - 2).toFixed(1)}" y2="${(cLy - 3).toFixed(1)}" stroke="currentColor" stroke-width="0.7" opacity="0.65"/>` +
+      `<text x="${cLx.toFixed(1)}" y="${cLy.toFixed(1)}">${cTxt}</text></g>`,
+    );
 
-    const firstEnv = calm ? 1 : 0.45 + 0.55 * smooth(0, 1, firstClock / 0.35);
-    if (layer) {
-      layer.draw(
-        {
-          uLight: isLight,
-          uFirst: firstEnv,
-          uLayer: curLayer.x,
-          uSteerMag: steerMag,
-          uHoverIdx: hoverIdx,
-          uCursor: cursorW,
-          uNodes: uNodesArr,
-          uTraj: uTrajArr,
-          uTokens: uTokensArr,
-          uEdgeA: uEdgeAArr,
-          uEdgeB: uEdgeBArr,
-        },
-        calm ? 0.8 : clock,
+    // 2. Unembedding target beacons (5 tokens)
+    for (let i = 0; i < TOKENS.length; i++) {
+      const sp = proj3(TOKEN_POS3[i], basis, cw, ch, zoom);
+      if (sp[0] < -40 || sp[0] > cw + 40 || sp[1] < -20 || sp[1] > ch + 20) continue;
+      const isTop = i === lens.topIdx;
+      const pct = Math.round(lens.probs[i] * 100);
+      const txt = `${TOKENS[i].text} ${pct}%`;
+      const anchor = sp[0] > cw * 0.5 ? "start" : "end";
+      const dx = anchor === "start" ? 9 : -9;
+      const tw = txt.length * 6.2;
+      const rx0 = anchor === "start" ? sp[0] + dx : sp[0] + dx - tw;
+      placed.push([rx0 - 2, sp[1] - 8, rx0 + tw + 2, sp[1] + 5]);
+      items.push(
+        `<g class="lc-tag ${isTop ? "lc-tag-top" : ""}" transform="translate(${sp[0].toFixed(1)},${sp[1].toFixed(1)})">` +
+        `<text x="${dx}" y="3" text-anchor="${anchor}">${txt}</text></g>`,
       );
     }
 
-    updateCarriage(curLayer.x);
-    updateBars(dispProbs, lens.topIdx);
-    updateCallouts(cursorW, lens);
-    updateHud(now, lens, steerMag);
+    // 3. Top firing SAE features + clamped/ablated + hovered (de-overlapped!)
+    const maxFeatLabels = Math.min(18, Math.round(6 + Math.max(0, zoom - 0.9) * 5.0));
+    const ranked = FEATURES.map((f, i) => ({
+      i,
+      a: lens.acts[i],
+      mode: state.clamped[i] || null,
+    })).sort((x, y) => {
+      const px = (x.mode ? 2 : 0) + x.a;
+      const py = (y.mode ? 2 : 0) + y.a;
+      return py - px;
+    });
 
-    frame = visible && !calm ? requestAnimationFrame(tick) : 0;
-  }
-
-  function run() {
-    if (!frame && visible) {
-      last = 0;
-      frame = requestAnimationFrame(tick);
+    const shown = [];
+    if (state.hoveredFeat >= 0) shown.push(state.hoveredFeat);
+    for (const r of ranked) {
+      if (shown.length >= maxFeatLabels) break;
+      if (r.i === state.hoveredFeat) continue;
+      if (r.a < 0.22 && !r.mode && zoom < 1.7) continue;
+      if (r.a < 0.02 && !r.mode && zoom < 2.5) continue;
+      shown.push(r.i);
     }
+
+    const offsets = [[9, 3], [9, -11], [9, 17], [-9, 3], [-9, -11], [9, -24], [9, 30]];
+    for (const idx of shown) {
+      const f = FEATURES[idx];
+      const sp = proj3(FEATURE_POS3[idx], basis, cw, ch, zoom);
+      if (sp[0] < 14 || sp[0] > cw - 14 || sp[1] < 16 || sp[1] > ch - 16) continue;
+      const isHov = idx === state.hoveredFeat;
+      const cMode = state.clamped[idx];
+      const col = cMode === "clamp" ? "#ffbe55" : cMode === "ablate" ? "#ff5c6c" : hexPal[f.cluster];
+      const badge = cMode === "clamp" ? " [CLAMP]" : cMode === "ablate" ? " [ABLATE]" : "";
+      const valStr = isHov ? ` · ${lens.acts[idx].toFixed(2)}` : "";
+      const txt = `${f.name}${badge}${valStr}`;
+      const tw = txt.length * 5.6;
+
+      let chosen = null;
+      for (const [ox, oy] of offsets) {
+        const anchor = ox >= 0 ? "start" : "end";
+        const lx = sp[0] + ox;
+        const ly = sp[1] + oy;
+        const rx0 = anchor === "start" ? lx : lx - tw;
+        if (!overlaps(rx0 - 2, ly - 9, rx0 + tw + 2, ly + 4)) {
+          chosen = { ox, oy, lx, ly, anchor, rx0 };
+          break;
+        }
+      }
+      if (!chosen && !isHov && !cMode) continue;
+      if (!chosen) chosen = { ox: 9, oy: 3, lx: sp[0] + 9, ly: sp[1] + 3, anchor: "start", rx0: sp[0] + 9 };
+      placed.push([chosen.rx0 - 2, chosen.ly - 9, chosen.rx0 + tw + 2, chosen.ly + 4]);
+
+      const opacity = isHov || cMode ? 1.0 : Math.min(0.96, 0.52 + lens.acts[idx] * 0.48);
+      const leader = Math.abs(chosen.oy) > 6
+        ? `<line x1="${sp[0].toFixed(1)}" y1="${sp[1].toFixed(1)}" x2="${(chosen.lx + (chosen.ox > 0 ? -2 : 2)).toFixed(1)}" y2="${(chosen.ly - 3).toFixed(1)}" stroke="${col}" stroke-width="0.6" opacity="0.45"/>`
+        : "";
+      items.push(
+        `<g class="lc-feat-tag${isHov ? " is-hov" : ""}" style="opacity:${opacity.toFixed(2)}">` +
+        leader +
+        `<text x="${chosen.lx.toFixed(1)}" y="${chosen.ly.toFixed(1)}" text-anchor="${chosen.anchor}" fill="${col}">${txt}</text></g>`,
+      );
+    }
+
+    labelsG.innerHTML = items.join("");
   }
 
-  new IntersectionObserver(
-    (entries) => {
-      visible = entries[entries.length - 1].isIntersecting;
-      if (visible) run();
-    },
-    { rootMargin: "120px 0px" },
-  ).observe(stage);
+  // =========================================================================
+  // 4. TELEMETRY HUD UPDATES
+  // =========================================================================
+  let lastHudMs = 0;
+  function updateHud(lens, force = false) {
+    const now = performance.now();
+    if (!force && now - lastHudMs < 45) return;
+    lastHudMs = now;
 
-  window.addEventListener("resize", () => run());
+    layerValEl.textContent = `L${lens.layer.toFixed(1)} / 6.0`;
+    if (document.activeElement !== layerSlider) layerSlider.value = lens.layer.toFixed(2);
+    stageNoteEl.textContent = lens.note;
+    entropyEl.textContent = `${lens.entropy.toFixed(2)} bits`;
+
+    const steerMag = Math.hypot(...state.steer3);
+    const clampKeys = Object.keys(state.clamped);
+    if (steerMag > 0.02) {
+      steerBadgeEl.textContent = `STEERED (${steerMag.toFixed(2)})`;
+      steerBadgeEl.classList.add("active");
+    } else if (clampKeys.length > 0) {
+      steerBadgeEl.textContent = `${clampKeys.length} INTERVENED`;
+      steerBadgeEl.classList.add("active");
+    } else {
+      steerBadgeEl.textContent = "UNSTEERED";
+      steerBadgeEl.classList.remove("active");
+    }
+
+    // Clamped / ablated pills bar
+    if (clampBarEl) {
+      if (clampKeys.length === 0) {
+        clampBarEl.innerHTML = `<span class="hud-clamp-empty">Click any glowing node to clamp or ablate it</span>`;
+      } else {
+        clampBarEl.innerHTML =
+          clampKeys.map((k) => {
+            const id = Number(k);
+            const m = state.clamped[id];
+            return `<button class="hud-clamp-pill is-${m}" data-clear-feat="${id}" title="Click to remove">${FEATURES[id].name} · ${m === "clamp" ? "+1.45" : "0.0"} ×</button>`;
+          }).join("") +
+          `<button class="hud-clamp-clear" data-clear-all>Clear</button>`;
+      }
+    }
+
+    // 8-D Residual Stream bars
+    for (let d = 0; d < 8; d++) {
+      const v = lens.vec8[d];
+      const pct = Math.min(50, Math.abs(v) * 50);
+      const bar = vecBars[d];
+      bar.style.width = `${pct.toFixed(1)}%`;
+      bar.style.left = v >= 0 ? "50%" : `${(50 - pct).toFixed(1)}%`;
+      bar.classList.toggle("neg", v < 0);
+      vecVals[d].textContent = (v >= 0 ? "+" : "") + v.toFixed(2);
+    }
+
+    // Top 6 firing SAE features (clickable to clamp/ablate!)
+    const hexPal = isLight() ? CLUSTER_HEX_LIGHT : CLUSTER_HEX_DARK;
+    const topF = FEATURES.map((f, i) => ({ f, i, a: lens.acts[i], m: state.clamped[i] || null }))
+      .sort((x, y) => (y.m ? 2 : 0) + y.a - ((x.m ? 2 : 0) + x.a))
+      .slice(0, 6);
+
+    featListEl.innerHTML = topF.map(({ f, i, a, m }) => {
+      const w = Math.min(100, (a / 1.5) * 100);
+      const col = m === "clamp" ? "#ffbe55" : m === "ablate" ? "#ff5c6c" : hexPal[f.cluster];
+      const tag = m === "clamp" ? " [C]" : m === "ablate" ? " [×]" : "";
+      return (
+        `<button class="hud-feat-row${m ? " is-" + m : ""}" data-feat-click="${i}" title="Click to cycle: normal → clamp → ablate">` +
+        `<span class="hud-dot" style="background:${col}"></span>` +
+        `<span class="hud-feat-name">${f.name}${tag}</span>` +
+        `<span class="hud-feat-bar"><i style="width:${w.toFixed(0)}%;background:${col}"></i></span>` +
+        `<span class="hud-feat-num">${a.toFixed(2)}</span></button>`
+      );
+    }).join("");
+
+    // Logit Lens probabilities
+    for (let i = 0; i < TOKENS.length; i++) {
+      const p = lens.probs[i];
+      tokBars[i].style.width = `${(p * 100).toFixed(1)}%`;
+      tokBars[i].classList.toggle("top", i === lens.topIdx);
+      tokPcts[i].textContent = `${Math.round(p * 100)}%`;
+    }
+
+    if (zoomReadout) zoomReadout.textContent = `${state.zoom.toFixed(1)}×`;
+  }
+
+  function cycleFeatureIntervention(id) {
+    const cur = state.clamped[id];
+    if (!cur) state.clamped[id] = "clamp";
+    else if (cur === "clamp") state.clamped[id] = "ablate";
+    else delete state.clamped[id];
+    recomputeRun();
+    updateHud(logitLens(state.run, state.layer), true);
+  }
+
+  // =========================================================================
+  // 5. MAIN 60FPS RENDER LOOP
+  // =========================================================================
+  let lastT = performance.now();
+
+  function renderFrame(now) {
+    const dt = Math.min(0.05, (now - lastT) * 0.001);
+    lastT = now;
+
+    resizeViewport();
+
+    if (state.playing) {
+      state.layer += dt * 0.62;
+      if (state.layer > N_LAYERS + 0.55) state.layer = 0;
+    }
+    if (state.autoSpin) {
+      state.targetAz += dt * 0.14;
+    }
+
+    // Smooth camera damping
+    const damp = 1 - Math.exp(-12 * dt);
+    state.az += (state.targetAz - state.az) * damp;
+    state.el += (state.targetEl - state.el) * damp;
+    state.zoom += (state.targetZoom - state.zoom) * damp;
+
+    const effLayer = Math.min(N_LAYERS, state.layer);
+    const lens = logitLens(state.run, effLayer);
+    const traj3 = state.run.states.map((s) => project3(s));
+    const basis = camBasis(state.az, state.el);
+    const light = isLight();
+    const pal = light ? CLUSTER_RGB_LIGHT : CLUSTER_RGB_DARK;
+
+    if (gl && lineProg && pointProg) {
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, light ? gl.ONE_MINUS_SRC_ALPHA : gl.ONE);
+
+      lineVerts = 0;
+      pointCount = 0;
+
+      const tSec = now * 0.001;
+      const zoomBoost = Math.pow(state.zoom, 0.35);
+
+      // --- A. LINES ---
+      // 1. Central faint PC1/PC2/PC3 crosshair axes
+      const axCol = light ? [0.22, 0.28, 0.38, 0.14] : [0.45, 0.60, 0.80, 0.12];
+      pushLine([-1, 0, 0], [1, 0, 0], ...axCol);
+      pushLine([0, -1, 0], [0, 1, 0], ...axCol);
+      pushLine([0, 0, -1], [0, 0, 1], ...axCol);
+
+      // 2. Dense dormant background manifold web (~1,100 hair-thin filaments)
+      const webAlpha = light ? 0.14 : 0.165;
+      for (let i = 0; i < BG_EDGES.length; i++) {
+        const [aIdx, bIdx, w] = BG_EDGES[i];
+        const c = pal[BG_CLUSTER[aIdx]];
+        pushLine(BG_POS3[aIdx], BG_POS3[bIdx], c[0], c[1], c[2], webAlpha * (0.45 + 0.55 * w));
+      }
+
+      // 3. 4D Tesseract inner wireframe rotating with layer depth
+      const ang = effLayer * 0.42 + tSec * 0.14;
+      const ca4 = Math.cos(ang), sa4 = Math.sin(ang);
+      const tPts = TESS_VERTS.map((v) => {
+        const x = v[0] * ca4 - v[3] * sa4;
+        const w = v[0] * sa4 + v[3] * ca4;
+        const p4 = 0.24 / (2.5 - w * 0.48);
+        return [x * p4, v[1] * p4, v[2] * p4];
+      });
+      const tCol = light ? [0.24, 0.34, 0.56, 0.18] : [0.42, 0.72, 0.98, 0.15];
+      for (let i = 0; i < TESS_EDGES.length; i++) {
+        const [a, b] = TESS_EDGES[i];
+        pushLine(tPts[a], tPts[b], ...tCol);
+      }
+
+      // 4. 48 Mechanistic Circuit Edges + Traveling Signal Packets
+      for (let i = 0; i < CIRCUIT_EDGES.length; i++) {
+        const [aIdx, bIdx, weight] = CIRCUIT_EDGES[i];
+        const aA = lens.acts[aIdx];
+        const aB = lens.acts[bIdx];
+        const flow = Math.min(1.0, Math.sqrt(aA * aB) * weight * 1.15);
+        const c = pal[FEATURES[aIdx].cluster];
+        if (flow > 0.08) {
+          pushLine(FEATURE_POS3[aIdx], FEATURE_POS3[bIdx], c[0], c[1], c[2], 0.14 + flow * 0.58);
+          // Crisp traveling signal packet
+          const phase = (tSec * (0.42 + 0.32 * flow) + i * 0.19) % 1.0;
+          const pkt = lerp3(FEATURE_POS3[aIdx], FEATURE_POS3[bIdx], phase);
+          pushPoint(pkt, light ? c[0] : 1.0, light ? c[1] : 0.96, light ? c[2] : 0.85, 0.88 * flow, 3.0 * zoomBoost, 2, 0.0, 0);
+        } else {
+          pushLine(FEATURE_POS3[aIdx], FEATURE_POS3[bIdx], c[0], c[1], c[2], light ? 0.06 : 0.055);
+        }
+      }
+
+      // 5. Residual-Stream Trajectory (subdivided smooth curve L0 -> L6)
+      const subSteps = 6;
+      const pastCol = light ? [0.78, 0.24, 0.12] : [1.0, 0.86, 0.48];
+      const futCol = light ? [0.25, 0.38, 0.55] : [0.48, 0.74, 1.0];
+      for (let seg = 0; seg < N_LAYERS; seg++) {
+        const p0 = traj3[Math.max(0, seg - 1)];
+        const p1 = traj3[seg];
+        const p2 = traj3[seg + 1];
+        const p3 = traj3[Math.min(N_LAYERS, seg + 2)];
+        let prev = p1;
+        for (let k = 1; k <= subSteps; k++) {
+          const t = k / subSteps;
+          const t2 = t * t, t3 = t2 * t;
+          // Catmull-Rom spline
+          const cur = [0, 1, 2].map((d) =>
+            0.5 * (
+              2 * p1[d] +
+              (-p0[d] + p2[d]) * t +
+              (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * t2 +
+              (-p0[d] + 3 * p1[d] - 3 * p2[d] + p3[d]) * t3
+            ),
+          );
+          const lPos = seg + t;
+          const isPast = lPos <= effLayer;
+          if (isPast) {
+            pushLine(prev, cur, pastCol[0], pastCol[1], pastCol[2], 0.92);
+          } else {
+            pushLine(prev, cur, futCol[0], futCol[1], futCol[2], light ? 0.24 : 0.22);
+          }
+          prev = cur;
+        }
+      }
+
+      // 6. Orthogonal drop-line from cursor x(l) to cube floor (z = -1)
+      const floorPt = [lens.pos3[0], lens.pos3[1], -1.0];
+      pushLine(lens.pos3, floorPt, pastCol[0], pastCol[1], pastCol[2], light ? 0.36 : 0.32);
+      pushLine([floorPt[0] - 0.04, floorPt[1], -1], [floorPt[0] + 0.04, floorPt[1], -1], pastCol[0], pastCol[1], pastCol[2], 0.4);
+      pushLine([floorPt[0], floorPt[1] - 0.04, -1], [floorPt[0], floorPt[1] + 0.04, -1], pastCol[0], pastCol[1], pastCol[2], 0.4);
+
+      // --- B. POINTS ---
+      // 1. 1,200 Dense Background Superposition Stars ("dark matter" latent concepts)
+      const activeIdx = [];
+      for (let i = 0; i < N_FEATURES; i++) if (lens.acts[i] > 0.35) activeIdx.push(i);
+
+      for (let i = 0; i < N_BG; i++) {
+        const bp = BG_POS3[i];
+        const c = pal[BG_CLUSTER[i]];
+        const w = BG_WEIGHT[i];
+        // Subtle sympathetic glow when a nearby named SAE feature fires
+        let symp = 0;
+        for (let k = 0; k < activeIdx.length; k++) {
+          const fp = FEATURE_POS3[activeIdx[k]];
+          const dx = bp[0] - fp[0], dy = bp[1] - fp[1], dz = bp[2] - fp[2];
+          const d2 = dx * dx + dy * dy + dz * dz;
+          if (d2 < 0.075) {
+            symp = Math.max(symp, (1.0 - d2 / 0.075) * lens.acts[activeIdx[k]]);
+          }
+        }
+        const baseA = light ? 0.30 + 0.30 * w : 0.34 + 0.38 * w;
+        const alpha = Math.min(0.92, baseA + symp * 0.42);
+        const sz = (2.3 + 2.0 * w + symp * 1.8) * zoomBoost;
+        pushPoint(bp, c[0], c[1], c[2], alpha, sz, 0, 0, 0);
+      }
+
+      // 2. 48 Named SAE Features (fine jewel-like cores + crisp 1px activation rings)
+      for (let i = 0; i < N_FEATURES; i++) {
+        const a = lens.acts[i];
+        const isHov = i === state.hoveredFeat;
+        const cMode = state.clamped[i];
+        let c = pal[FEATURES[i].cluster];
+        let extra = 0;
+        let ring = a > 0.08 ? Math.min(1.0, a * 0.92) : 0.0;
+        let sz = (4.0 + a * 6.2) * zoomBoost;
+        let alpha = 0.48 + Math.min(0.52, a * 0.62);
+
+        if (cMode === "clamp") {
+          c = light ? [0.82, 0.46, 0.02] : [1.0, 0.78, 0.32];
+          extra = 1.0;
+          ring = 1.0;
+          sz = 12.5 * zoomBoost;
+          alpha = 1.0;
+        } else if (cMode === "ablate") {
+          c = light ? [0.76, 0.12, 0.22] : [1.0, 0.36, 0.42];
+          extra = -1.0;
+          ring = 1.0;
+          sz = 9.8 * zoomBoost;
+          alpha = 0.95;
+        } else if (isHov) {
+          ring = 1.0;
+          sz = Math.max(sz, 11.5 * zoomBoost);
+          alpha = 1.0;
+        }
+        pushPoint(FEATURE_POS3[i], c[0], c[1], c[2], alpha, sz, 1, ring, extra);
+      }
+
+      // 3. Discrete L0..L6 Layer Waypoints
+      for (let l = 0; l <= N_LAYERS; l++) {
+        const reached = l <= effLayer + 0.02;
+        const c = reached ? pastCol : futCol;
+        pushPoint(traj3[l], c[0], c[1], c[2], reached ? 0.95 : 0.42, (reached ? 5.6 : 3.6) * zoomBoost, 2, reached ? 0.7 : 0.0, 0);
+      }
+
+      // 4. 5 Unembedding Target Beacons on Cube Boundary
+      for (let i = 0; i < TOKENS.length; i++) {
+        const isTop = i === lens.topIdx;
+        const p = lens.probs[i];
+        const c = isTop ? (light ? [0.78, 0.22, 0.12] : [1.0, 0.86, 0.46]) : pal[TOKENS[i].cluster];
+        const pulse = isTop ? 0.82 + 0.18 * Math.sin(tSec * 4.2) : 0.42;
+        pushPoint(TOKEN_POS3[i], c[0], c[1], c[2], 0.58 + 0.42 * p, (5.2 + p * 6.8) * zoomBoost, 2, pulse, 0);
+      }
+
+      // 5. Active Residual Stream Cursor x(l) (crisp optical reticle)
+      const curCol = light ? [0.06, 0.20, 0.48] : [1.0, 0.94, 0.72];
+      pushPoint(lens.pos3, curCol[0], curCol[1], curCol[2], 1.0, 16.5 * zoomBoost, 3, 1.0, 0);
+
+      // Upload & Draw Lines
+      const camScale = Math.min(state.cw, state.ch) * 0.34 * state.zoom;
+      const setCamUniforms = (prog) => {
+        gl.uniform3fv(gl.getUniformLocation(prog, "uRight"), basis.right);
+        gl.uniform3fv(gl.getUniformLocation(prog, "uUp"), basis.up);
+        gl.uniform3fv(gl.getUniformLocation(prog, "uFwd"), basis.fwd);
+        gl.uniform2f(gl.getUniformLocation(prog, "uRes"), state.cw, state.ch);
+        gl.uniform1f(gl.getUniformLocation(prog, "uScale"), camScale);
+      };
+
+      gl.useProgram(lineProg);
+      setCamUniforms(lineProg);
+      gl.bindBuffer(gl.ARRAY_BUFFER, lineBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, lineData.subarray(0, lineVerts * 7), gl.DYNAMIC_DRAW);
+      const lPos = gl.getAttribLocation(lineProg, "aPos");
+      const lCol = gl.getAttribLocation(lineProg, "aCol");
+      gl.enableVertexAttribArray(lPos);
+      gl.enableVertexAttribArray(lCol);
+      gl.vertexAttribPointer(lPos, 3, gl.FLOAT, false, 28, 0);
+      gl.vertexAttribPointer(lCol, 4, gl.FLOAT, false, 28, 12);
+      gl.drawArrays(gl.LINES, 0, lineVerts);
+
+      // Upload & Draw Points
+      gl.useProgram(pointProg);
+      setCamUniforms(pointProg);
+      gl.uniform1f(gl.getUniformLocation(pointProg, "uDpr"), state.dpr);
+      gl.uniform1f(gl.getUniformLocation(pointProg, "uLight"), light ? 1.0 : 0.0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, pointBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, pointData.subarray(0, pointCount * 11), gl.DYNAMIC_DRAW);
+      const pPos = gl.getAttribLocation(pointProg, "aPos");
+      const pCol = gl.getAttribLocation(pointProg, "aCol");
+      const pMeta = gl.getAttribLocation(pointProg, "aMeta");
+      gl.enableVertexAttribArray(pPos);
+      gl.enableVertexAttribArray(pCol);
+      gl.enableVertexAttribArray(pMeta);
+      gl.vertexAttribPointer(pPos, 3, gl.FLOAT, false, 44, 0);
+      gl.vertexAttribPointer(pCol, 4, gl.FLOAT, false, 44, 12);
+      gl.vertexAttribPointer(pMeta, 4, gl.FLOAT, false, 44, 28);
+      gl.drawArrays(gl.POINTS, 0, pointCount);
+    }
+
+    renderSvgFrameAndLabels(basis, lens, traj3);
+    updateHud(lens);
+
+    requestAnimationFrame(renderFrame);
+  }
+
+  // =========================================================================
+  // 6. INTERACTION: 3D ORBIT, ZOOM, STEERING, NODE CLICK CLAMP/ABLATE
+  // =========================================================================
+  function stageLocal(e) {
+    const r = stage.getBoundingClientRect();
+    return [e.clientX - r.left, e.clientY - r.top];
+  }
+
+  function findNearestFeature(mx, my, maxPx = 15) {
+    const basis = camBasis(state.az, state.el);
+    let best = -1;
+    let bestD = maxPx;
+    for (let i = 0; i < N_FEATURES; i++) {
+      const sp = proj3(FEATURE_POS3[i], basis, state.cw, state.ch, state.zoom);
+      const d = Math.hypot(sp[0] - mx, sp[1] - my);
+      if (d < bestD) {
+        bestD = d;
+        best = i;
+      }
+    }
+    return best;
+  }
+
+  let dragMode = null; // "orbit" | "steer"
+  let dragStart = [0, 0];
+  let dragPrev = [0, 0];
+  let dragMoved = 0;
+  let steerOrigin = [0, 0, 0];
+
+  stage.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0) return;
+    stage.setPointerCapture(e.pointerId);
+    const pt = stageLocal(e);
+    dragStart = pt;
+    dragPrev = pt;
+    dragMoved = 0;
+    const useSteer = e.shiftKey || state.interactMode === "steer";
+    dragMode = useSteer ? "steer" : "orbit";
+    if (useSteer) steerOrigin = state.steer3.slice();
+    if (!useSteer && state.autoSpin) {
+      state.autoSpin = false;
+      if (spinBtn) spinBtn.classList.remove("active");
+    }
+  });
+
+  stage.addEventListener("pointermove", (e) => {
+    const pt = stageLocal(e);
+    if (!dragMode) {
+      state.hoveredFeat = findNearestFeature(pt[0], pt[1], 14);
+      stage.style.cursor = state.hoveredFeat >= 0 ? "pointer" : state.interactMode === "steer" ? "crosshair" : "grab";
+      return;
+    }
+    const dx = pt[0] - dragPrev[0];
+    const dy = pt[1] - dragPrev[1];
+    dragPrev = pt;
+    dragMoved += Math.hypot(dx, dy);
+
+    if (dragMode === "orbit") {
+      state.targetAz -= dx * 0.0075;
+      state.targetEl = Math.max(-1.25, Math.min(1.25, state.targetEl + dy * 0.0075));
+    } else if (dragMode === "steer") {
+      const totalDx = (pt[0] - dragStart[0]) / (Math.min(state.cw, state.ch) * 0.28);
+      const totalDy = -(pt[1] - dragStart[1]) / (Math.min(state.cw, state.ch) * 0.28);
+      const basis = camBasis(state.az, state.el);
+      state.steer3 = [0, 1, 2].map((d) =>
+        Math.max(-1.25, Math.min(1.25, steerOrigin[d] + basis.right[d] * totalDx + basis.up[d] * totalDy)),
+      );
+      recomputeRun();
+    }
+  });
+
+  stage.addEventListener("pointerup", (e) => {
+    if (dragMode && dragMoved < 5) {
+      const pt = stageLocal(e);
+      const hit = findNearestFeature(pt[0], pt[1], 16);
+      if (hit >= 0) cycleFeatureIntervention(hit);
+    }
+    dragMode = null;
+  });
+
+  stage.addEventListener("pointerleave", () => {
+    if (!dragMode) state.hoveredFeat = -1;
+  });
+
+  stage.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    const factor = Math.exp(-e.deltaY * 0.0014);
+    state.targetZoom = Math.max(0.65, Math.min(4.2, state.targetZoom * factor));
+  }, { passive: false });
+
+  function resetAll() {
+    state.targetAz = 0.66;
+    state.targetEl = 0.44;
+    state.targetZoom = 0.94;
+    state.steer3 = [0, 0, 0];
+    state.clamped = {};
+    state.autoSpin = false;
+    if (spinBtn) spinBtn.classList.remove("active");
+    recomputeRun();
+    updateHud(logitLens(state.run, state.layer), true);
+  }
+
+  stage.addEventListener("dblclick", resetAll);
+
+  // =========================================================================
+  // 7. HUD & FLOATING CAMERA CONTROL WIRING
+  // =========================================================================
+  function selectPrompt(idx) {
+    state.promptIdx = idx;
+    state.steer3 = [0, 0, 0];
+    state.layer = 0.05;
+    state.playing = true;
+    playBtn.textContent = "Pause";
+    promptBtns.forEach((b, i) => b.classList.toggle("active", i === idx));
+    recomputeRun();
+    updateHud(logitLens(state.run, state.layer), true);
+  }
+
+  promptBtns.forEach((btn) => {
+    btn.addEventListener("click", () => selectPrompt(Number(btn.dataset.promptBtn)));
+  });
+
+  layerSlider.addEventListener("input", () => {
+    state.playing = false;
+    playBtn.textContent = "Play";
+    state.layer = Number(layerSlider.value);
+    updateHud(logitLens(state.run, state.layer), true);
+  });
+
+  playBtn.addEventListener("click", () => {
+    state.playing = !state.playing;
+    playBtn.textContent = state.playing ? "Pause" : "Play";
+  });
+
+  labelsBtn.addEventListener("click", () => {
+    state.showLabels = !state.showLabels;
+    labelsBtn.classList.toggle("active", state.showLabels);
+  });
+
+  themeBtn.addEventListener("click", () => {
+    const next = isLight() ? "dark" : "light";
+    document.body.setAttribute("data-theme", next);
+    themeBtn.textContent = next === "light" ? "Dark" : "Light";
+    updateHud(logitLens(state.run, state.layer), true);
+  });
+
+  panelToggleBtn.addEventListener("click", () => {
+    const collapsed = hudPanel.classList.toggle("collapsed");
+    panelToggleBtn.textContent = collapsed ? "Inspector" : "Hide";
+    setTimeout(resizeViewport, 280);
+  });
+
+  featListEl.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-feat-click]");
+    if (btn) cycleFeatureIntervention(Number(btn.dataset.featClick));
+  });
+
+  if (clampBarEl) {
+    clampBarEl.addEventListener("click", (e) => {
+      const clearOne = e.target.closest("[data-clear-feat]");
+      if (clearOne) {
+        delete state.clamped[Number(clearOne.dataset.clearFeat)];
+        recomputeRun();
+        updateHud(logitLens(state.run, state.layer), true);
+        return;
+      }
+      if (e.target.closest("[data-clear-all]")) {
+        state.clamped = {};
+        recomputeRun();
+        updateHud(logitLens(state.run, state.layer), true);
+      }
+    });
+  }
+
+  if (zoomInBtn) zoomInBtn.addEventListener("click", () => {
+    state.targetZoom = Math.min(4.2, state.targetZoom * 1.28);
+  });
+  if (zoomOutBtn) zoomOutBtn.addEventListener("click", () => {
+    state.targetZoom = Math.max(0.65, state.targetZoom / 1.28);
+  });
+  if (resetCamBtn) resetCamBtn.addEventListener("click", resetAll);
+  if (modeOrbitBtn && modeSteerBtn) {
+    modeOrbitBtn.addEventListener("click", () => {
+      state.interactMode = "orbit";
+      modeOrbitBtn.classList.add("active");
+      modeSteerBtn.classList.remove("active");
+    });
+    modeSteerBtn.addEventListener("click", () => {
+      state.interactMode = "steer";
+      modeSteerBtn.classList.add("active");
+      modeOrbitBtn.classList.remove("active");
+    });
+  }
+  if (spinBtn) {
+    spinBtn.addEventListener("click", () => {
+      state.autoSpin = !state.autoSpin;
+      spinBtn.classList.toggle("active", state.autoSpin);
+    });
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (e.target.tagName === "INPUT") return;
+    if (e.code === "Space") {
+      e.preventDefault();
+      state.playing = !state.playing;
+      playBtn.textContent = state.playing ? "Pause" : "Play";
+    } else if (e.key >= "1" && e.key <= "5") {
+      selectPrompt(Number(e.key) - 1);
+    } else if (e.key === "r" || e.key === "R") {
+      resetAll();
+    } else if (e.key === "+" || e.key === "=") {
+      state.targetZoom = Math.min(4.2, state.targetZoom * 1.22);
+    } else if (e.key === "-" || e.key === "_") {
+      state.targetZoom = Math.max(0.65, state.targetZoom / 1.22);
+    }
+  });
+
+  // Expose tiny debug hook for automated inspection
+  window.__CHAMBER = {
+    state,
+    setView(az, el, zoom) {
+      state.az = state.targetAz = az;
+      state.el = state.targetEl = el;
+      state.zoom = state.targetZoom = zoom;
+    },
+    setLayer(l) {
+      state.playing = false;
+      state.layer = l;
+    },
+    selectPrompt,
+    cycleFeatureIntervention,
+  };
+
+  resizeViewport();
+  updateHud(logitLens(state.run, state.layer), true);
+  requestAnimationFrame(renderFrame);
 })();

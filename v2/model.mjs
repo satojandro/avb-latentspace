@@ -192,7 +192,7 @@ export const PROMPTS = [
   },
 ];
 
-export function forward(promptIdx, steer8 = null) {
+export function forward(promptIdx, steer8 = null, clamped = null) {
   const prompt = PROMPTS[promptIdx] || PROMPTS[0];
   const states = [];
   const featActs = [];
@@ -200,12 +200,15 @@ export function forward(promptIdx, steer8 = null) {
   let x = prompt.x0.slice();
   if (steer8) x = add(x, steer8, 0.32);
 
-  // Sparse SAE encoder: cosine similarity minus sparsity bias
+  // Sparse SAE encoder: cosine similarity minus sparsity bias, with optional feature clamping/ablation
   const evalFeatures = (vec) => {
     const u = unit(vec);
-    return FEATURES.map((f) => {
+    return FEATURES.map((f, i) => {
+      if (clamped && clamped[i] === "ablate") return 0;
       const a = dot(u, f.dir) - 0.45;
-      return a > 0 ? Math.min(1.5, a * 2.45) : 0;
+      let val = a > 0 ? Math.min(1.5, a * 2.45) : 0;
+      if (clamped && clamped[i] === "clamp") val = Math.max(val, 1.45);
+      return val;
     });
   };
 
@@ -224,7 +227,8 @@ export function forward(promptIdx, steer8 = null) {
     let dxMlp = new Array(D_MODEL).fill(0);
     for (let i = 0; i < N_FEATURES; i++) {
       if (acts[i] > 0) {
-        for (let d = 0; d < D_MODEL; d++) dxMlp[d] += acts[i] * FEATURES[i].dir[d] * 0.085;
+        const boost = clamped && clamped[i] === "clamp" ? 0.58 : 0.085;
+        for (let d = 0; d < D_MODEL; d++) dxMlp[d] += acts[i] * FEATURES[i].dir[d] * boost;
       }
     }
 
@@ -318,6 +322,86 @@ export const TOKEN_POS3 = TOKENS.map((t) => {
   const m = Math.max(Math.abs(p[0]), Math.abs(p[1]), Math.abs(p[2]), 1e-4);
   return p.map((v) => (v / m) * 0.96);
 });
+
+// Dense background superposition field ("dark matter" dormant SAE dictionary concepts)
+export const N_BG = 1800;
+function buildBackgroundField() {
+  const r = mulberry32(42071);
+  const gauss = () => (r() + r() + r() + r() - 2.0) * 0.85;
+  const pos3 = [];
+  const cluster = [];
+  const weight = [];
+
+  for (let i = 0; i < N_BG; i++) {
+    let vec8;
+    let cIdx;
+    if (i < 1100) {
+      // Cluster-anchored superposed concepts (dense galaxies around the 4 neighborhoods)
+      cIdx = i % 4;
+      const base = CLUSTERS[cIdx].center;
+      const spread = 0.26 + 0.62 * Math.pow(r(), 1.2);
+      vec8 = unit(base.map((v) => v + gauss() * spread));
+    } else {
+      // Diffuse global superposition filling the entire cube volume
+      vec8 = unit(Array.from({ length: D_MODEL }, () => gauss()));
+      let bestC = 0;
+      let bestDot = -2;
+      for (let c = 0; c < 4; c++) {
+        const d = dot(vec8, CLUSTERS[c].center);
+        if (d > bestDot) {
+          bestDot = d;
+          bestC = c;
+        }
+      }
+      cIdx = bestC;
+    }
+    const p = project3(vec8);
+    // Slight deterministic micro-jitter in 3D so points fill the optical volume organically
+    const jx = (r() - 0.5) * 0.14;
+    const jy = (r() - 0.5) * 0.14;
+    const jz = (r() - 0.5) * 0.14;
+    pos3.push([
+      Math.max(-0.96, Math.min(0.96, p[0] + jx)),
+      Math.max(-0.96, Math.min(0.96, p[1] + jy)),
+      Math.max(-0.96, Math.min(0.96, p[2] + jz)),
+    ]);
+    cluster.push(cIdx);
+    weight.push(0.35 + 0.65 * r());
+  }
+
+  // Build ~1,100 hair-thin local manifold edges (cosmic web)
+  const edges = [];
+  const maxEdges = 1100;
+  for (let i = 0; i < N_BG && edges.length < maxEdges; i++) {
+    const a = pos3[i];
+    let bestJ = -1;
+    let bestD2 = 0.068; // max distance ~0.26
+    for (let k = 0; k < 54; k++) {
+      const j = (i + 1 + ((k * 29) % (N_BG - 1))) % N_BG;
+      if (j === i) continue;
+      const b = pos3[j];
+      const dx = a[0] - b[0];
+      const dy = a[1] - b[1];
+      const dz = a[2] - b[2];
+      const d2 = dx * dx + dy * dy + dz * dz;
+      if (d2 > 0.002 && d2 < bestD2) {
+        bestD2 = d2;
+        bestJ = j;
+      }
+    }
+    if (bestJ >= 0) {
+      edges.push([i, bestJ, 1.0 - Math.sqrt(bestD2) / 0.27]);
+    }
+  }
+  return { pos3, cluster, weight, edges };
+}
+
+const BG = buildBackgroundField();
+export const BG_POS3 = BG.pos3;
+export const BG_CLUSTER = BG.cluster;
+export const BG_WEIGHT = BG.weight;
+export const BG_EDGES = BG.edges;
+
 
 export function logitLens(run, layerDepth) {
   const cl = Math.max(0, Math.min(N_LAYERS, layerDepth));
