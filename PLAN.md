@@ -1,3 +1,5 @@
+> **⚠️ V1 — DEPRECATED.** This plan describes V1, which has been set aside (tag `v1`). V2 starts fresh in a new session; do not resume this plan.
+
 # Personal site: plan and status
 
 A personal website told as one interactive machine. The home page is **Fig 1**, an isometric
