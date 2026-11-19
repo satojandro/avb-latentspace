@@ -169,7 +169,7 @@ function link(layer) {
 }
 
 /* ---------- the prompt: three token cards in a reader, a context knob, and attention cables up to block 1 ---------- */
-const CARD_Y = [-26, 0, 26], READER = { x: -24, y: -40, w: 18, d: 80, r: 2.5 }, READER_H = 10;
+const CARD_Y = [28, 0, -28], READER = { x: -24, y: -42, w: 18, d: 84, r: 2.5 }, READER_H = 10;
 function reader() {
   const out = [], top = TRAY_Z[0] + TH, rx = -13;
   out.push(S(k.slabOf(READER, 0, READER_H, P, 3, 0.7), { tone: "mid", inner: L(k.sideSeam(READER, 4, P, 3), { tone: "faint" }) }));
@@ -177,15 +177,15 @@ function reader() {
   out.push(D(k.corners(READER, 3.2).map(([x, y]) => at([x, y, READER_H])), { size: 0.45 }));
   // card slots and cards, back to front
   CARD_Y.forEach((yc, j) => {
-    const slot = { x: -19.5, y: yc - 10, w: 3.6, d: 20, r: 0.6 };
+    const slot = { x: -19.5, y: yc - 9, w: 3.6, d: 18, r: 0.6 };
     out.push(S(k.slabOf(slot, READER_H, 1.4, P, 2), { tone: "lo" }));
-    const card = { x: -18.8, y: yc - 9, w: 2.2, d: 18, r: 0.4 };
+    const card = { x: -18.8, y: yc - 8, w: 2.2, d: 16, r: 0.4 };
     out.push(`<g data-tok="${j}">` + S(k.slabOf(card, READER_H + 1.4, 20, P, 2, 0.3), { tone: "hi", crease: "lo" }) +
-      `<text class="mind-tokword" ${j === 1 ? "data-ctxword" : ""} transform="${k.sideMatrix([card.x + card.w, yc - 7], READER_H + 13, P, "right")}" font-size="4.4">${["I", CONTEXTS[0], "build"][j]}</text>` +
+      `<text class="mind-tokword" ${j === 1 ? "data-ctxword" : ""} transform="${k.sideMatrix([card.x + card.w, yc + 6.5], READER_H + 13, P, "right")}" font-size="3.6">${["I", CONTEXTS[0], "build"][j]}</text>` +
       `<path class="mind-tokglow" data-tokglow="${j}" d="${k.planOutline(k.insetPlan(card, 0.2), READER_H + 21.4, P, 2)}"/></g>`);
   });
   // the context knob: five detents, one per context word
-  const kx = -14, ky = 33;
+  const kx = -14, ky = -35;
   out.push(S(k.cylinder(kx, ky, 5.6, READER_H, 1, P, 28), { tone: "lo" }));
   const det = k.radialTicks(kx, ky, 6.4, CONTEXTS.length, 1, READER_H, [0, 1.4], P, -0.6 * Math.PI, 1.2 * Math.PI * (CONTEXTS.length / (CONTEXTS.length - 1)));
   out.push(L(det.major || det.minor, { tone: "mid" }));
@@ -195,11 +195,12 @@ function reader() {
     `<path class="iso-line" data-tone="lit" data-free="start" data-knobptr d=""/>` +
     `<path class="mind-hit" d="${k.ring(kx, ky, 7, READER_H + 3, P, 18)}"/></g>`);
   // riser post with clamps, carrying three attention cables up to block 1
-  out.push(S(k.cylinder(rx, 0, 2.2, READER_H, top + 4 - READER_H, P, 16), { tone: "mid", crease: "none" }));
-  out.push(S(k.cylinder(rx, 0, 3, top + 4, 1.6, P, 16), { tone: "mid" }));
-  for (const h of [64, 112, 160]) out.push(S(k.slabOf({ x: rx - 2.5, y: -7, w: 5, d: 14, r: 1 }, h, 2.6, P, 2, 0.3), { tone: "lo" }));
+  const ry = -14;
+  out.push(S(k.cylinder(rx, ry, 2.2, READER_H, top + 4 - READER_H, P, 16), { tone: "mid", crease: "none" }));
+  out.push(S(k.cylinder(rx, ry, 3, top + 4, 1.6, P, 16), { tone: "mid" }));
+  for (const h of [64, 112, 160]) out.push(S(k.slabOf({ x: rx - 2.5, y: ry - 7, w: 5, d: 14, r: 1 }, h, 2.6, P, 2, 0.3), { tone: "lo" }));
   CARD_Y.forEach((yc, j) => {
-    const yr = (j - 1) * 3.4, yt = (j - 1) * 10;
+    const yr = ry + (1 - j) * 3.4, yt = (1 - j) * 10;
     const pts = [[-17.7, yc, READER_H + 21.4], [-17.7, yc, READER_H + 27], [rx + 0.4, yr, READER_H + 34], [rx + 0.4, yr, top + 8], [3, yt, top + 8], [8.5, yt, top + 3]].map(at);
     out.push(`<g data-link="att${j}">` + k.wireSvg(pts[0], pts[pts.length - 1], { via: pts.slice(1, -1), tone: "lo" }) + `<path class="mind-flow" d="${k.pathOf(pts)}"/></g>`);
   });
@@ -368,15 +369,15 @@ const live = readFileSync(join(HERE, "live.js"), "utf8");
 const script = `(()=>{\n${readFileSync(join(HERE, "kit/iso-kit.mjs"), "utf8").replace(/^export /gm, "")}\n${MODEL_SRC}\nconst P=${JSON.stringify(P)};\nconst LAMP_COUNT=${NEURONS.length};\n${live}\n})();`;
 
 const keys = [
-  { mark: "lit", label: "Stylus: the point in latent space" },
-  { mark: "raised", label: "Lamps: neurons, lit when active" },
-  { mark: "flat", label: "Map: two numbers left after compression" },
+  { mark: "lit", label: "Stylus: where the vector ends, projected" },
+  { mark: "raised", label: "Lamps: MLP neurons, lit by activation" },
+  { mark: "flat", label: "Sliders: the 8-number residual stream after each block" },
 ];
 const plate = k.plateHtml({
-  fig: "Fig 1", title: "Latent space, and my brain", hint: "Click lamps · drag the map",
+  fig: "Fig 1", title: "Latent space, and my brain", hint: "Turn the knob · click lamps · drag the map",
   readout: "…",
   keys,
-  caption: "Each tray is one layer of a life. Lamps are the things that shaped me; the encoder squeezes every lit lamp into two numbers, z₁ and z₂, and that pair is a point on the map. Projects sit where their own lamps would put the point, so nearby pins grew from similar parts of me.",
+  caption: "A real transformer forward pass at toy size. The card reader embeds three tokens; an attention head in block 1 copies the context word into the residual stream; each tray is a block whose neurons fire on a key direction (GELU) and add a value direction; the last block's vector is RMS-normalised and compared with each project's unembedding vector, and softmax turns the logits into the five tube levels. The map is the first two principal components of the 8-D stream. Weights are set by hand; a trained model learns them.",
   body: `<div class="iso-stage mind-stage" tabindex="0" role="application" aria-label="Latent space figure: arrow keys step through projects, Enter opens the selected one">${svg}</div>`,
 });
 writeFileSync(join(HERE, "mind-body.html"), plate);

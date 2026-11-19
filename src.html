@@ -167,14 +167,15 @@ body.in-plate{overflow:hidden}
     <section class="how" aria-labelledby="how-h">
       <div>
         <span class="label">How to read the machine</span>
-        <h2 id="how-h">A brain is a stack of layers. So is a model.</h2>
-        <p class="lede">A neural network never stores its inputs. It turns them into activations, layer by layer, until everything it knows fits in a few numbers. That small space is called latent space, and it's where new things come from.</p>
+        <h2 id="how-h">How a language model thinks, built from my life.</h2>
+        <p class="lede">This is a real transformer forward pass, small enough to see. A model doesn't store sentences. It turns each word into a vector, a list of numbers, and every layer adds to that vector until it points at the next word. The space those vectors live in is latent space. Here, the neurons are things that shaped me, and the next word is a project.</p>
+        <p class="coord" style="margin-top:14px">This model: 8 dimensions, 4 blocks, 26 neurons, 5 output tokens, weights set by hand. Llama 3 8B: 4,096 dimensions, 32 blocks, 14,336 neurons per block, 128,256 tokens, weights learned.</p>
       </div>
       <ol class="steps">
-        <li><span class="label">1 · Layers fire</span><b>Each tray is part of my life.</b><p>A lamp is one thing that shaped me. It lights when that part of me is in play.</p></li>
-        <li><span class="label">2 · Signals fall</span><b>Each layer feeds the next.</b><p>A tray's bus bar sums its lamps and passes them down, the way each layer of a network transforms the one above.</p></li>
-        <li><span class="label">3 · Squeeze</span><b>26 activations become 2 numbers.</b><p>The encoder compresses every lamp into z₁ and z₂. That pair is a point on the map: latent space.</p></li>
-        <li><span class="label">4 · Decode</span><b>Close points, related ideas.</b><p>The decoder turns the point into the nearest project. Drag across the map to explore the space between them.</p></li>
+        <li><span class="label">1 · Embed</span><b>Words become vectors.</b><p>The prompt is three tokens: "I", a context word, "build". Turn the knob on the card reader to change the context word.</p></li>
+        <li><span class="label">2 · Attend</span><b>"build" looks back at the prompt.</b><p>An attention head scores each earlier token and copies in what it finds. The three cables light up by attention weight.</p></li>
+        <li><span class="label">3 · Add, layer by layer</span><b>Neurons write into one shared stream.</b><p>Each lamp has a key it fires on and a direction it writes. The 8 sliders on each tray show the vector after that block, the residual stream.</p></li>
+        <li><span class="label">4 · Unembed</span><b>The vector picks the next token.</b><p>It's compared with each project's direction. The tubes show the probabilities. The map is a 2-D projection of the vector's path. Click a lamp to switch it off, or drag the map to steer.</p></li>
       </ol>
     </section>
     <nav class="chapters" aria-label="Chapters" id="chapters"><span class="label">Open a layer</span></nav>
@@ -380,7 +381,7 @@ PARTS.forEach(p=>{ const b=document.createElement("button"); b.type="button"; b.
 { const st=document.querySelector(".mind .iso-stage"); if(st&&st.scrollWidth>st.clientWidth) st.scrollLeft=(st.scrollWidth-st.clientWidth)*0.62; }
 const figCorner=document.querySelector('.mind [data-corner="fig"]'); if(figCorner) figCorner.textContent="Fig 1 · "+CONFIG.name;
 $("#foot").textContent="© "+new Date().getFullYear()+" "+CONFIG.name;
-document.addEventListener("mind:open",e=>{ const {id,project}=e.detail; if(id==="built") focusProject=project??null; go(id); });
+document.addEventListener("mind:open",e=>{ const {id,project,ctx}=e.detail; if(id==="built"){ focusProject=project??null; focusCtx=ctx??null; } go(id); });
 let current=null, focusProject=null, returnFocus=null;
 function go(id){ location.hash = id; }
 function openPlate(id){
@@ -565,9 +566,16 @@ function drawNet(){ const {ctx,w,h}=fitCanvas(netCv); if(!net||net.w!==w||net.h!
     if(n.label){ ctx.font="500 11px 'JetBrains Mono', monospace"; ctx.fillStyle=n.act>.2?C.fg:C.muted; ctx.textAlign=n.li===0?"right":"left"; ctx.fillText(n.label.toUpperCase(),n.x+(n.li===0?-14:14),n.y+4); } }); }
 
 /* ---------- plates 6 & 7 ---------- */
+let focusCtx=null;
+function grewFrom(i){ const M=window.MIND; if(!M) return "";
+  // the prompt that predicts this project best, and the neurons that pushed it there most (direct logit attribution)
+  let best=focusCtx&&M.forward(focusCtx).probs.indexOf(Math.max(...M.forward(focusCtx).probs))===i?focusCtx:null;
+  if(!best){ let bp=-1; M.CONTEXTS.forEach(c=>{ const p=M.forward(c).probs[i]; if(p>bp){bp=p;best=c;} }); }
+  const top=M.attribution(best,i).slice(0,5);
+  return `<p class="coord">Strongest prompt: "I ${best} build" · p ${M.forward(best).probs[i].toFixed(2)}</p><div class="grew" aria-label="Neurons that pushed this project most">${top.map(a=>`<span>L${a.layer+1} · ${a.name}</span>`).join("")}</div>`; }
 function renderProjects(){ const PR=(window.MIND&&MIND.PROJECTS)||[];
-  $("#projects").innerHTML=PR.map((p,i)=>`<article class="proj${focusProject===i?" focus":""}" id="proj-${i}"><div class="row"><span class="label">Pin ${String(i+1).padStart(2,"0")} · z = (${p.z[0].toFixed(2)}, ${p.z[1].toFixed(2)})</span>${IS_PLACEHOLDER?'<span class="badge">placeholder</span>':""}</div>
-  <h3>${p.name}</h3><p>${p.line}</p><div class="grew" aria-label="Grew from">${p.from.map(f=>`<span>${f}</span>`).join("")}</div><dl class="spec"><dt>Stack</dt><dd>${p.stack}</dd><dt>Status</dt><dd>${p.status}</dd><dt>Year</dt><dd>${p.year}</dd>
+  $("#projects").innerHTML=PR.map((p,i)=>`<article class="proj${focusProject===i?" focus":""}" id="proj-${i}"><div class="row"><span class="label">Output token ${String(i+1).padStart(2,"0")}</span>${IS_PLACEHOLDER?'<span class="badge">placeholder</span>':""}</div>
+  <h3>${p.name}</h3><p>${p.line}</p>${grewFrom(i)}<dl class="spec"><dt>Stack</dt><dd>${p.stack}</dd><dt>Status</dt><dd>${p.status}</dd><dt>Year</dt><dd>${p.year}</dd>
   <dt>Link</dt><dd><a href="${p.url}" target="_blank" rel="noopener">${p.url==="#"?"add a link":"visit →"}</a></dd></dl></article>`).join(""); }
 $("#curious").innerHTML=CONFIG.curious.map(c=>`<span>${c}</span>`).join("");
 $("#links").innerHTML=CONFIG.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join("");

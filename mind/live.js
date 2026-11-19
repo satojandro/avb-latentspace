@@ -20,7 +20,7 @@ const bridgeEl = svg.querySelector('[data-part="bridge"]'), carriageEl = svg.que
 const cardEl = svg.querySelector('[data-part="card"]'), cardNo = svg.querySelector("[data-cardno]");
 const ctxWord = svg.querySelector("[data-ctxword]"), knob = svg.querySelector("[data-knob]"), knobPtr = svg.querySelector("[data-knobptr]");
 const dragEl = svg.querySelector("[data-drag]"), decLed = svg.querySelector("[data-decled]");
-const CARD_RISE = 22, SLIDE = 4.2, BANK_X = (l) => l * 94 + 40, KNOB = [-14, 33, 10 + 1 + 4.5 + 0.1];
+const CARD_RISE = 22, SLIDE = 4.2, BANK_X = (l) => l * 94 + 40, KNOB = [-14, -35, 10 + 1 + 4.5 + 0.1];
 
 // ---- state ----
 let ctx = 0, off = new Set(), steer = null; // steer: [du, dv] on the map

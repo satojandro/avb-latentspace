@@ -33,3 +33,13 @@
 .mind-encout{fill:var(--mind-amber);filter:drop-shadow(0 0 3px var(--mind-amber));pointer-events:none}
 .mind-label .mind-hit{fill:transparent}
 .mind-led{fill:var(--mind-amber);opacity:.85;filter:drop-shadow(0 0 3px var(--mind-amber));pointer-events:none}
+.mind-fill{fill:var(--mind-amber);opacity:.85;filter:drop-shadow(0 0 3px var(--mind-amber));pointer-events:none}
+.mind-traj{fill:none;stroke:var(--mind-amber);stroke-width:1.2;stroke-dasharray:3 2.5;vector-effect:non-scaling-stroke;pointer-events:none}
+.mind-trajdot{fill:var(--anatomy-paper);stroke:var(--mind-amber);stroke-width:1;vector-effect:non-scaling-stroke;pointer-events:none}
+.mind-tokglow{fill:none;stroke:var(--mind-amber);stroke-width:1.2;opacity:0;vector-effect:non-scaling-stroke;pointer-events:none}
+.mind-tokword{fill:var(--anatomy-hi);font-family:var(--anatomy-mono);font-weight:600}
+.mind-lamp:focus,.mind-pin:focus{outline:none}
+.mind-lamp.off{opacity:.38}
+.mind-lamp.off .iso-edge{stroke-dasharray:1.5 1.5}
+.mind-knob:hover .iso-edge,.mind-knob:focus-visible .iso-edge{stroke:var(--mind-amber)}
+.mind-knob:focus{outline:none}

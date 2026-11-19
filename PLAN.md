@@ -64,13 +64,20 @@ teach → Project One, connect → Five, fix → Two, explore → Three, trade �
 - [x] v4 detail pass (braces, clamps, socket screws, decoder vents/LED)
 - [x] **v5 model**: `mind/model.mjs` rewritten as a real forward pass (tested, numbers above)
 - [x] **v5 geometry** (`mind/build.mjs`): token reader + knob + attention cables, slider banks, unembed block, trajectory path, probability tubes. Edits applied; **not yet built or checked**.
-- [x] **v5 live** (`mind/live.js`): rewritten for the new model (builds, runs without errors; not yet visually checked):
+- [x] **v5 live** (`mind/live.js`): rewritten for the new model (done, checked in the browser):
   - state: `ctx` index, `off` (ablated set), `steer` (du, dv) from map drag
   - each frame: `forward(ctx, off, steerVec)`; displayed values follow targets with a cascade (block l starts 0.35·l s after a change)
   - write: lamp glow = clamp(act/1.5); sliders `[data-slider="l:d"]` translate x by clamp(rmsnorm(states[l+1])[d]/2, ±1)·SLIDE; attention flows `[data-link="att{j}"]` and `[data-tokglow]` by attn[j]; knob pointer `[data-knobptr]`; context word `[data-ctxword]`; trajectory `[data-traj]` and `[data-td]` from `project2(states[i])`; stylus/bridge at final projection; logit posts `[data-logit]` and tubes `[data-fill]` (rebuild with `cylinder(...).fill`) by probs; card number = argmax
   - input: lamp click toggles ablation; knob click / arrow keys change ctx; map drag sets steering; pin click → open projects; tray label → chapter; tour cycles ctx every ~5 s when idle
   - readout: `"I <ctx> build" → Project X · p 0.87 · n neurons off`
-- [ ] v5 site text in `src.html`: rewrite the 4 "How to read" steps for tokens → attention → blocks → unembed; caption with real-model scale; projects plate "Grew from" = `attribution(ctx, p)` (direct logit attribution)
-- [ ] Verify: build, screenshots desktop + 390 px, line check 0, interactions; publish to the artifact URL
+- [x] v5 site text in `src.html`: rewrite the 4 "How to read" steps for tokens → attention → blocks → unembed; caption with real-model scale; projects plate "Grew from" = `attribution(ctx, p)` (direct logit attribution)
+- [x] Verify: build, screenshots desktop + 390 px, line check 0 (1,347 ends), knob/ablation/steer/open flows; published
 - [ ] Owner content: real neurons per life layer, real projects (name, line, stack, status, year, url) and each one's unembedding direction in `mind/model.mjs`; name, links, travel list in `CONFIG`
 - [ ] Later: light theme; audit for cables (`kit/audit.mjs`); deploy `index.html` (Netlify/Vercel/GitHub Pages)
+
+## Next ideas (not started)
+
+- A "logit lens" readout: show which project each block's vector would predict if decoding stopped there.
+- Let visitors type their own context word (embed it as a mix of the 8 features).
+- More blocks' attention (currently only block 1 has a head).
+- Light theme; run `kit/audit.mjs` over the cables.
