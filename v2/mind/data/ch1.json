@@ -1,0 +1,344 @@
+[
+  {
+    "chapter": 0,
+    "name": "Berlin Wall Birth Year",
+    "year": "1989",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Born in 1989 as the Berlin Wall collapsed, anchoring an early fascination with how regimes crack and history pivots overnight.",
+    "vec": [0.55, 0.2, 0.0, 0.0, 0.1, 0.2, 0.1, 0.95, 0.15, 0.45, 0.0, 0.0]
+  },
+  {
+    "chapter": 0,
+    "name": "Oil-Boom Middle Class",
+    "year": "1993",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Grew up in a prosperous, oil-rich Venezuela where middle-class stability, private enterprise, and upward mobility felt like the natural baseline.",
+    "vec": [0.3, -0.1, 0.05, 0.25, 0.15, 0.0, 0.2, 0.5, 0.0, 0.15, 0.0, -0.1]
+  },
+  {
+    "chapter": 0,
+    "name": "American School Classrooms",
+    "year": "1995",
+    "kind": "event",
+    "cluster": 3,
+    "story": "Attended an American private school from an early age, growing up fluent in English inside an international academic enclave.",
+    "vec": [0.1, 0.25, 0.15, 0.3, 0.85, 0.1, 0.45, 0.35, 0.0, 0.5, 0.1, 0.0]
+  },
+  {
+    "chapter": 0,
+    "name": "Multinational Engineering Home",
+    "year": "1996",
+    "kind": "event",
+    "cluster": 2,
+    "story": "Watching his father work as an engineer for multinational corporations made industrial scale, technical rigor, and global standards tangible at home.",
+    "vec": [0.1, 0.15, 0.85, 0.15, 0.1, 0.2, 0.45, 0.2, 0.0, 0.4, 0.35, 0.0]
+  },
+  {
+    "chapter": 0,
+    "name": "Private Hospital Baseline",
+    "year": "1997",
+    "kind": "event",
+    "cluster": 3,
+    "story": "His mother's work at a private hospital grounded daily life in operational discipline, service, and functioning private institutions.",
+    "vec": [0.3, 0.05, 0.2, 0.1, 0.45, 0.0, 0.25, 0.05, 0.15, 0.1, 0.35, 0.2]
+  },
+  {
+    "chapter": 0,
+    "name": "The 1999 Regime Shift",
+    "year": "1999",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Hugo Chávez took power and his family and circles stood in opposition from day one, recognizing the ideological trajectory before it hardened.",
+    "vec": [0.95, 0.3, 0.0, 0.0, 0.15, 0.75, 0.1, 0.9, 0.55, 0.0, 0.0, 0.35]
+  },
+  {
+    "chapter": 0,
+    "name": "National Strikes & Rupture",
+    "year": "2002",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Civic strikes, mass marches, and open political polarization turned institutional breakdown from background news into the defining air of adolescence.",
+    "vec": [0.9, 0.25, 0.0, 0.0, 0.25, 0.45, 0.05, 0.85, 0.4, 0.0, 0.0, 0.7]
+  },
+  {
+    "chapter": 0,
+    "name": "Street Protests & Violence",
+    "year": "2004",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Witnessing street protests met with violence shattered any remaining illusion that peaceful dissent alone could restrain an entrenched state.",
+    "vec": [0.85, 0.55, 0.0, 0.0, 0.15, 0.4, 0.1, 0.65, 0.5, 0.0, 0.0, 0.92]
+  },
+  {
+    "chapter": 0,
+    "name": "Rising Crime & Contraction",
+    "year": "2006",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Escalating street crime and rapidly diminishing living standards turned ordinary routines into daily exercises in vigilance and contraction.",
+    "vec": [0.75, 0.65, 0.0, -0.1, 0.0, 0.25, 0.2, 0.4, 0.55, 0.0, 0.1, 0.95]
+  },
+  {
+    "chapter": 0,
+    "name": "The 2008 Departure",
+    "year": "2008",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Shortly after finishing high school, he joined an exodus of his generation and left Venezuela rather than wait for a turnaround that was not coming.",
+    "vec": [0.55, 0.98, 0.0, 0.0, 0.15, 0.5, 0.75, 0.45, 0.4, 0.55, 0.65, 0.85]
+  },
+  {
+    "chapter": 0,
+    "name": "Prosperity Is Fragile",
+    "year": "1999",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Wealthy, modern societies are never permanent; a single decade of broken incentives can unravel generations of accumulated living standards.",
+    "vec": [0.9, 0.45, 0.1, 0.0, 0.05, 0.65, 0.45, 0.85, 0.4, 0.05, 0.0, 0.5]
+  },
+  {
+    "chapter": 0,
+    "name": "Institutions Rot From Within",
+    "year": "2001",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Rule of law rarely collapses in one dramatic night; courts, agencies, and checks are hollowed out incrementally under legalistic cover.",
+    "vec": [0.98, 0.3, 0.15, 0.0, 0.1, 0.7, 0.1, 0.8, 0.75, 0.0, 0.0, 0.25]
+  },
+  {
+    "chapter": 0,
+    "name": "Freedom Is Non-Negotiable",
+    "year": "2002",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "Personal and economic liberty stopped being an abstract textbook concept and became the non-negotiable floor for safety, agency, and dignity.",
+    "vec": [0.85, 0.92, 0.0, 0.0, 0.15, 0.7, 0.4, 0.5, 0.8, 0.1, 0.1, 0.6]
+  },
+  {
+    "chapter": 0,
+    "name": "Early-Warning Pattern Radar",
+    "year": "2000",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Seeing populist rhetoric harden into authoritarian capture once installed a permanent radar for institutional red flags long before consensus reacts.",
+    "vec": [0.92, 0.4, 0.1, 0.0, 0.1, 0.9, 0.25, 0.8, 0.6, 0.2, 0.0, 0.3]
+  },
+  {
+    "chapter": 0,
+    "name": "Bilingual Cognitive Switching",
+    "year": "1996",
+    "kind": "prior",
+    "cluster": 3,
+    "story": "Thinking natively in both Spanish and English from childhood wired an instinct to hold two cultural frames at once without losing nuance.",
+    "vec": [0.0, 0.2, 0.15, 0.3, 0.95, 0.25, 0.2, 0.35, 0.0, 0.55, 0.1, 0.0]
+  },
+  {
+    "chapter": 0,
+    "name": "State Capture Breaks Incentives",
+    "year": "2003",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Watching state monopoly displace private enterprise cemented a lasting conviction that centralized gatekeepers corrupt every system they touch.",
+    "vec": [0.9, 0.35, 0.2, 0.0, 0.05, 0.75, 0.3, 0.6, 0.95, 0.05, 0.1, 0.2]
+  },
+  {
+    "chapter": 0,
+    "name": "Exit Beats Waiting",
+    "year": "2007",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "When a system is structurally captured, sovereign exit preserves more agency than waiting indefinitely for internal reform.",
+    "vec": [0.65, 0.98, 0.0, 0.0, 0.0, 0.8, 0.65, 0.45, 0.6, 0.2, 0.45, 0.55]
+  },
+  {
+    "chapter": 0,
+    "name": "History Moves in Inflections",
+    "year": "1998",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Bookended by 1989 and 1999, he internalized that long plateaus end abruptly and geopolitical inflection points rewrite individual lives.",
+    "vec": [0.55, 0.3, 0.05, 0.0, 0.15, 0.55, 0.2, 0.98, 0.2, 0.45, 0.0, 0.2]
+  },
+  {
+    "chapter": 0,
+    "name": "Merit Over Political Loyalty",
+    "year": "2004",
+    "kind": "prior",
+    "cluster": 2,
+    "story": "Watching competence purged in favor of ideological loyalty forged an allergic reaction to patronage and a deep respect for verifiable craft.",
+    "vec": [0.7, 0.35, 0.55, 0.2, 0.05, 0.65, 0.75, 0.3, 0.5, 0.15, 0.45, 0.25]
+  },
+  {
+    "chapter": 0,
+    "name": "Monetary Decay Is Political",
+    "year": "2005",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Living through controls, scarcity, and eroding purchasing power planted an intuitive grasp that currency collapse is a symptom of political capture.",
+    "vec": [0.85, 0.55, 0.2, 0.0, 0.0, 0.65, 0.2, 0.7, 0.92, 0.1, 0.0, 0.35]
+  },
+  {
+    "chapter": 0,
+    "name": "Normalcy Bias Is Fatal",
+    "year": "2003",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "Watching smart people insist 'it cannot get worse here' taught him to trust empirical deterioration over comforting narratives.",
+    "vec": [0.75, 0.7, 0.05, 0.0, 0.1, 0.95, 0.45, 0.55, 0.45, 0.1, 0.2, 0.55]
+  },
+  {
+    "chapter": 0,
+    "name": "Global Horizon From Home",
+    "year": "1998",
+    "kind": "prior",
+    "cluster": 3,
+    "story": "An American education inside Latin America made the wider world feel legible, navigable, and open rather than distant or out of reach.",
+    "vec": [0.05, 0.6, 0.05, 0.2, 0.7, 0.2, 0.65, 0.55, 0.0, 0.85, 0.2, 0.0]
+  },
+  {
+    "chapter": 0,
+    "name": "Bilingual Code-Switching",
+    "year": "1997",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Effortlessly shifting between Spanish and English registers, humor, and idioms—an early foundation for bridging international communities.",
+    "vec": [0.0, 0.25, 0.05, 0.25, 0.98, 0.15, 0.25, 0.3, 0.0, 0.4, 0.2, 0.0]
+  },
+  {
+    "chapter": 0,
+    "name": "Engineering Literacy at Home",
+    "year": "1998",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Absorbed practical systems vocabulary, structured troubleshooting, and technical curiosity from his father's multinational engineering world.",
+    "vec": [0.05, 0.1, 0.9, 0.15, 0.15, 0.3, 0.35, 0.1, 0.0, 0.55, 0.4, 0.0]
+  },
+  {
+    "chapter": 0,
+    "name": "Reading Political Incentives",
+    "year": "2002",
+    "kind": "skill",
+    "cluster": 0,
+    "story": "Learned early to ignore official speeches and trace who holds leverage, who controls rents, and what actors actually optimize for.",
+    "vec": [0.92, 0.3, 0.15, 0.0, 0.2, 0.85, 0.2, 0.85, 0.65, 0.15, 0.05, 0.25]
+  },
+  {
+    "chapter": 0,
+    "name": "Instability Risk Assessment",
+    "year": "2006",
+    "kind": "skill",
+    "cluster": 1,
+    "story": "Growing up amid rising crime and street violence trained constant situational awareness and rapid downside estimation in volatile environments.",
+    "vec": [0.45, 0.75, 0.15, 0.0, 0.0, 0.45, 0.2, 0.3, 0.45, 0.05, 0.35, 0.9]
+  },
+  {
+    "chapter": 0,
+    "name": "Cross-Cultural Translation",
+    "year": "2001",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Moving daily between American school norms and Venezuelan reality built a knack for translating context between worlds that misread each other.",
+    "vec": [0.15, 0.25, 0.0, 0.25, 0.95, 0.35, 0.25, 0.55, 0.0, 0.45, 0.15, 0.15]
+  },
+  {
+    "chapter": 0,
+    "name": "Systems Failure Diagnostics",
+    "year": "2005",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Watching utilities, supply chains, and civic services degrade taught how complex systems cascade into failure—and where single points of failure hide.",
+    "vec": [0.65, 0.2, 0.82, 0.0, 0.05, 0.6, 0.15, 0.4, 0.55, 0.25, 0.2, 0.3]
+  },
+  {
+    "chapter": 0,
+    "name": "Propaganda Signal Filtering",
+    "year": "2004",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Living through state narratives and fierce polarization honed the habit of cross-checking claims and separating empirical signal from political theater.",
+    "vec": [0.8, 0.2, 0.1, 0.0, 0.7, 0.8, 0.1, 0.65, 0.45, 0.2, 0.1, 0.25]
+  },
+  {
+    "chapter": 0,
+    "name": "Operational Self-Reliance",
+    "year": "2007",
+    "kind": "skill",
+    "cluster": 1,
+    "story": "When public services and baseline predictability vanished, he internalized the habit of building personal contingencies instead of waiting on authorities.",
+    "vec": [0.55, 0.9, 0.2, 0.0, 0.05, 0.45, 0.55, 0.15, 0.75, 0.1, 0.65, 0.75]
+  },
+  {
+    "chapter": 0,
+    "name": "The Cassandra Frustration",
+    "year": "2003",
+    "kind": "tension",
+    "cluster": 0,
+    "story": "Deep, grinding frustration watching everything his family and circles warned about unfold in slow motion while outsiders dismissed the trajectory.",
+    "vec": [0.9, 0.35, 0.0, 0.0, 0.3, 0.88, 0.2, 0.75, 0.45, 0.0, -0.1, 0.85]
+  },
+  {
+    "chapter": 0,
+    "name": "Grief of Slow Decay",
+    "year": "2005",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "The quiet heartbreak of watching a prosperous childhood home lose its safety, middle class, and sense of future year after year.",
+    "vec": [0.6, 0.45, 0.0, 0.1, 0.2, 0.2, 0.15, 0.55, 0.2, 0.0, -0.1, 0.95]
+  },
+  {
+    "chapter": 0,
+    "name": "Inside-Outside Duality",
+    "year": "2000",
+    "kind": "tension",
+    "cluster": 3,
+    "story": "Sitting inside an American private school while the country outside polarized created an acute awareness of belonging to two overlapping worlds.",
+    "vec": [0.3, 0.35, 0.0, 0.15, 0.8, 0.45, 0.25, 0.5, 0.0, 0.3, 0.0, 0.45]
+  },
+  {
+    "chapter": 0,
+    "name": "Protest Without Leverage",
+    "year": "2004",
+    "kind": "tension",
+    "cluster": 0,
+    "story": "Opposing from day one yet watching state power consolidate anyway bred a sober impatience with performative resistance that lacks real leverage.",
+    "vec": [0.85, 0.6, 0.0, 0.0, 0.15, 0.7, 0.35, 0.65, 0.55, 0.0, -0.15, 0.85]
+  },
+  {
+    "chapter": 0,
+    "name": "Staying vs. Leaving",
+    "year": "2007",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "The heavy late-teenage calculus between loyalty to home and refusing to forfeit an entire adulthood to a structurally collapsing system.",
+    "vec": [0.5, 0.92, 0.0, 0.0, 0.15, 0.55, 0.6, 0.4, 0.3, 0.25, 0.2, 0.92]
+  },
+  {
+    "chapter": 0,
+    "name": "Generational Exodus",
+    "year": "2008",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Leaving alongside most of his generation turned a personal milestone into a collective rupture, scattering friends and classmates across continents.",
+    "vec": [0.45, 0.85, 0.0, 0.0, 0.35, 0.25, 0.5, 0.6, 0.25, 0.35, 0.25, 0.9]
+  },
+  {
+    "chapter": 0,
+    "name": "Idealism vs. Hard Reality",
+    "year": "2006",
+    "kind": "tension",
+    "cluster": 0,
+    "story": "Youthful optimism colliding with impunity, daily insecurity, and shrinking horizons burned away political naivety far earlier than usual.",
+    "vec": [0.85, 0.4, 0.0, 0.0, 0.1, 0.75, 0.3, 0.6, 0.5, 0.0, 0.05, 0.88]
+  },
+  {
+    "chapter": 0,
+    "name": "Borrowed Time in High School",
+    "year": "2008",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Finishing high school knowing his real adult chapter had to start elsewhere charged those final months with restlessness and anti-complacency.",
+    "vec": [0.35, 0.88, 0.0, 0.0, 0.1, 0.4, 0.9, 0.35, 0.2, 0.55, 0.5, 0.75]
+  }
+]

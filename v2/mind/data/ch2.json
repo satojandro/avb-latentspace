@@ -1,0 +1,344 @@
+[
+  {
+    "chapter": 1,
+    "name": "Solo Touchdown in Melbourne",
+    "year": "2008",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Arrived in Australia completely alone after leaving Venezuela, landing in a new hemisphere with no family safety net or familiar shorthand. Starting from zero turned self-reliance from an abstract ideal into daily logistics.",
+    "vec": [0.15, 0.95, 0.0, 0.0, 0.1, 0.2, 0.65, 0.35, 0.1, 0.55, 0.6, 0.95]
+  },
+  {
+    "chapter": 1,
+    "name": "First Lease, First Bank",
+    "year": "2008",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Navigating visas, rental contracts, and everyday Australian bureaucracy solo showed how much friction vanishes when administrative rules are predictable. Routine transactions stopped feeling like negotiations with arbitrary power.",
+    "vec": [0.75, 0.7, 0.15, 0.05, 0.0, 0.1, 0.25, 0.2, 0.1, 0.15, 0.75, 0.5]
+  },
+  {
+    "chapter": 1,
+    "name": "Monash Arts Lecture Halls",
+    "year": "2008",
+    "kind": "event",
+    "cluster": 3,
+    "story": "Enrolled in Politics, International Studies, and History at Monash University, trading lived political volatility for structured academic inquiry. Found early footing comparing historical statecraft against firsthand memory.",
+    "vec": [0.45, 0.1, 0.05, 0.1, 0.6, 0.35, 0.25, 0.9, 0.0, 0.75, 0.2, 0.15]
+  },
+  {
+    "chapter": 1,
+    "name": "First Common Law Casebook",
+    "year": "2009",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Opened foundational torts and constitutional texts at Monash Law and felt genuine fascination watching precedent actually bind outcomes. For the first time, the law looked like working machinery rather than decorative theater.",
+    "vec": [0.95, 0.05, 0.55, 0.1, 0.15, 0.2, 0.2, 0.35, 0.1, 0.7, 0.15, 0.05]
+  },
+  {
+    "chapter": 1,
+    "name": "Socialist Stall Confrontations",
+    "year": "2009",
+    "kind": "event",
+    "cluster": 3,
+    "story": "Encountered campus activist groups on Monash walkways praising Chavismo and Latin American socialism. Standing inches from students romanticizing the system he had just fled created an immediate epistemic rift.",
+    "vec": [0.7, 0.35, 0.0, 0.0, 0.55, 0.9, 0.2, 0.8, 0.25, 0.05, 0.0, 0.8]
+  },
+  {
+    "chapter": 1,
+    "name": "Constitutional Law Seminar",
+    "year": "2010",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Studied separation of powers, judicial review, and federalism in a jurisdiction where courts routinely checked executive overreach. Saw firsthand how durable institutions protect ordinary citizens before crisis ever arrives.",
+    "vec": [0.98, 0.15, 0.5, 0.05, 0.15, 0.25, 0.15, 0.7, 0.2, 0.55, 0.1, 0.05]
+  },
+  {
+    "chapter": 1,
+    "name": "Moot Court Oral Advocacy",
+    "year": "2011",
+    "kind": "event",
+    "cluster": 2,
+    "story": "Argued hypothetical appellate briefs before mock benches, learning to strip rhetoric down to precedent, statutory text, and airtight logic. Precision under questioning proved far more persuasive than volume.",
+    "vec": [0.65, 0.1, 0.65, 0.2, 0.75, 0.4, 0.55, 0.1, 0.0, 0.3, 0.65, 0.25]
+  },
+  {
+    "chapter": 1,
+    "name": "Cold War History Seminars",
+    "year": "2011",
+    "kind": "event",
+    "cluster": 3,
+    "story": "Traced twentieth-century ideological collapses across Europe, Asia, and Latin America in upper-level history and international studies courses. The archive confirmed that command economies fail by recurring structural design, not bad luck.",
+    "vec": [0.6, 0.1, 0.15, 0.0, 0.35, 0.65, 0.1, 0.98, 0.3, 0.6, 0.05, 0.2]
+  },
+  {
+    "chapter": 1,
+    "name": "Monash LLB–LLM Track",
+    "year": "2013",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Extended legal study through the postgraduate law track at Monash, diving into commercial frameworks, contracts, and cross-border legal structures. Legal architecture began to read like code for coordinating strangers at scale.",
+    "vec": [0.85, 0.1, 0.8, 0.15, 0.1, 0.2, 0.6, 0.35, 0.25, 0.5, 0.55, 0.1]
+  },
+  {
+    "chapter": 1,
+    "name": "Dual-Degree Graduation",
+    "year": "2014",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Completed the combined Arts and Law degrees at Monash University after six years of building a life from scratch abroad. Left campus with formal credentials, sharper skepticism, and an itch for a faster arena.",
+    "vec": [0.4, 0.65, 0.2, 0.05, 0.2, 0.15, 0.75, 0.25, 0.0, 0.4, 0.85, 0.65]
+  },
+  {
+    "chapter": 1,
+    "name": "Rule of Law Infrastructure",
+    "year": "2009",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Functional courts and enforceable contracts are invisible infrastructure—taken for granted by natives, immediately obvious to anyone arriving from institutional collapse. Prosperity rests on boring predictability more than natural resources.",
+    "vec": [0.98, 0.2, 0.6, 0.05, 0.15, 0.45, 0.15, 0.75, 0.2, 0.25, 0.1, 0.2]
+  },
+  {
+    "chapter": 1,
+    "name": "Lived Reality Over Theory",
+    "year": "2009",
+    "kind": "prior",
+    "cluster": 3,
+    "story": "When classroom ideology collides with firsthand experience of shortages and state capture, lived reality wins every time. Abstract models that ignore human incentives are dangerous precisely because they sound noble on paper.",
+    "vec": [0.65, 0.25, 0.1, 0.0, 0.45, 0.95, 0.2, 0.7, 0.3, 0.15, 0.1, 0.85]
+  },
+  {
+    "chapter": 1,
+    "name": "Freedom-First Cultural Compass",
+    "year": "2010",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "Discovered a deeper affinity for American ideals of individual liberty, merit, and upward mobility than for collectivist safety blankets. Open opportunity mattered more than guaranteed comfort.",
+    "vec": [0.55, 0.9, 0.0, 0.05, 0.2, 0.65, 0.9, 0.5, 0.55, 0.4, 0.35, 0.3]
+  },
+  {
+    "chapter": 1,
+    "name": "Rejecting Tall Poppy Syndrome",
+    "year": "2011",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "Refused the unspoken social norm of shrinking ambition to avoid standing out from the crowd. Cutting down high performers does not produce fairness; it just normalizes mediocrity.",
+    "vec": [0.1, 0.75, 0.0, 0.05, 0.2, 0.85, 0.98, 0.2, 0.15, 0.3, 0.45, 0.4]
+  },
+  {
+    "chapter": 1,
+    "name": "Anti-Complacency Reflex",
+    "year": "2011",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "Comfort can quietly dull urgency until an entire generation forgets what it takes to build or defend anything hard. Having seen stability evaporate once, treating it as permanent felt reckless.",
+    "vec": [0.35, 0.65, 0.0, 0.0, 0.1, 0.6, 0.95, 0.4, 0.15, 0.35, 0.65, 0.75]
+  },
+  {
+    "chapter": 1,
+    "name": "Incentives Over Intentions",
+    "year": "2010",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Studying both politics and law reinforced a simple rule: judge policies and institutions by the incentives they create, not the slogans printed on their cover. Good intentions routinely produce perverse equilibria.",
+    "vec": [0.85, 0.2, 0.55, 0.0, 0.15, 0.85, 0.2, 0.65, 0.5, 0.35, 0.1, 0.1]
+  },
+  {
+    "chapter": 1,
+    "name": "Precedent as Compiled Memory",
+    "year": "2012",
+    "kind": "prior",
+    "cluster": 2,
+    "story": "Common law operates like an iterative codebase refined over centuries of edge cases and disputes. Studying how doctrines evolve revealed the value of battle-tested protocols over top-down decrees.",
+    "vec": [0.8, 0.05, 0.85, 0.2, 0.15, 0.4, 0.1, 0.55, 0.35, 0.65, 0.15, 0.0]
+  },
+  {
+    "chapter": 1,
+    "name": "Exit Beats Endless Debate",
+    "year": "2012",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "Watching ideological arguments loop endlessly without changing minds clarified that mobility is the ultimate vote. Choosing where to build and live carries more weight than winning a campus argument.",
+    "vec": [0.35, 0.98, 0.05, 0.0, -0.1, 0.7, 0.65, 0.3, 0.6, 0.25, 0.55, 0.45]
+  },
+  {
+    "chapter": 1,
+    "name": "History Rhymes Structurally",
+    "year": "2012",
+    "kind": "prior",
+    "cluster": 3,
+    "story": "Reading comparative history made political cycles legible across eras and continents. Populist promises, institutional erosion, and capital flight follow recognizable scripts long before headlines catch up.",
+    "vec": [0.7, 0.2, 0.3, 0.0, 0.35, 0.6, 0.1, 0.98, 0.2, 0.55, 0.0, 0.2]
+  },
+  {
+    "chapter": 1,
+    "name": "Merit Needs Open Arenas",
+    "year": "2013",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "Talent compounds fastest in environments that reward initiative rather than credentials or seniority alone. A society that penalizes visible drive quietly pushes its most restless builders elsewhere.",
+    "vec": [0.25, 0.7, 0.1, 0.05, 0.15, 0.6, 0.95, 0.25, 0.45, 0.5, 0.6, 0.25]
+  },
+  {
+    "chapter": 1,
+    "name": "Property Rights Anchor Trust",
+    "year": "2013",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Clear title, enforceable agreements, and predictable remedies allow strangers to cooperate without personal loyalty or political patronage. Without them, every transaction collapses back into tribalism.",
+    "vec": [0.95, 0.45, 0.45, 0.0, 0.1, 0.45, 0.2, 0.6, 0.75, 0.2, 0.1, 0.1]
+  },
+  {
+    "chapter": 1,
+    "name": "Institutional Fragility Awareness",
+    "year": "2014",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Even healthy democracies are maintained by fragile norms and active stewardship, not autopilot. Seeing a working system up close alongside memories of a broken one made the boundary between them feel thinner than peers assumed.",
+    "vec": [0.92, 0.35, 0.25, 0.0, 0.2, 0.65, 0.2, 0.85, 0.3, 0.2, 0.0, 0.55]
+  },
+  {
+    "chapter": 1,
+    "name": "Statutory & Contract Parsing",
+    "year": "2010",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Trained to read dense statutes, clauses, and case holdings line by line for edge cases, ambiguities, and hidden obligations. Developed an instinct for spotting where rules break under adversarial pressure.",
+    "vec": [0.75, 0.05, 0.92, 0.15, 0.15, 0.3, 0.25, 0.1, 0.25, 0.35, 0.5, 0.05]
+  },
+  {
+    "chapter": 1,
+    "name": "Structured Legal Reasoning",
+    "year": "2010",
+    "kind": "skill",
+    "cluster": 0,
+    "story": "Learned to map messy real-world disputes into issue, rule, application, and conclusion without losing the thread. Disciplined legal framing turned raw intuition into defensible, repeatable analysis.",
+    "vec": [0.85, 0.05, 0.8, 0.15, 0.4, 0.35, 0.25, 0.15, 0.1, 0.3, 0.45, 0.05]
+  },
+  {
+    "chapter": 1,
+    "name": "Calm Counter-Consensus Debate",
+    "year": "2011",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Practiced holding unpopular positions in seminar rooms without losing composure or resorting to personal attacks. Letting facts and concrete counterexamples do the work proved stronger than matching emotional volume.",
+    "vec": [0.35, 0.3, 0.1, 0.05, 0.85, 0.9, 0.35, 0.55, 0.1, 0.2, 0.2, 0.65]
+  },
+  {
+    "chapter": 1,
+    "name": "Historical Pattern Synthesis",
+    "year": "2011",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Built the habit of cross-referencing modern political shifts against historical precedents from Europe, the Americas, and the Asia-Pacific. Connecting distant timelines sharpened judgment on where current events were heading.",
+    "vec": [0.55, 0.1, 0.35, 0.1, 0.65, 0.55, 0.15, 0.96, 0.1, 0.7, 0.15, 0.1]
+  },
+  {
+    "chapter": 1,
+    "name": "Cross-Cultural Calibration",
+    "year": "2012",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Navigating between Venezuelan roots, Australian norms, and an American-leaning ethos built fluency in reading unspoken cultural codes. Learned to translate ideas across audiences with completely different baselines.",
+    "vec": [0.15, 0.45, 0.05, 0.3, 0.92, 0.3, 0.3, 0.7, 0.0, 0.6, 0.25, 0.4]
+  },
+  {
+    "chapter": 1,
+    "name": "Steelmanning Opposing Frames",
+    "year": "2012",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Legal training and ideological friction forced the discipline of articulating the strongest version of an opponent's argument before dismantling it. Weak strawmen never survived either a moot bench or a sharp seminar.",
+    "vec": [0.45, 0.1, 0.4, 0.1, 0.8, 0.8, 0.2, 0.4, 0.05, 0.55, 0.2, 0.2]
+  },
+  {
+    "chapter": 1,
+    "name": "Jurisdictional Comparison",
+    "year": "2013",
+    "kind": "skill",
+    "cluster": 0,
+    "story": "Analyzed how different legal systems—common law, civil law, and authoritarian capture—handle property, speech, and commercial disputes. Comparing rulebooks across borders became a lens for evaluating entire societies.",
+    "vec": [0.95, 0.4, 0.65, 0.05, 0.25, 0.4, 0.2, 0.88, 0.35, 0.6, 0.15, 0.1]
+  },
+  {
+    "chapter": 1,
+    "name": "Solo Relocation Execution",
+    "year": "2008",
+    "kind": "skill",
+    "cluster": 1,
+    "story": "Managed housing, finances, study loads, and immigration compliance independently in a new country at a young age. Operating without local backup forged practical self-sufficiency under ambiguity.",
+    "vec": [0.2, 0.9, 0.15, 0.0, 0.15, 0.15, 0.6, 0.15, 0.2, 0.35, 0.92, 0.85]
+  },
+  {
+    "chapter": 1,
+    "name": "Debating Romanticized Trauma",
+    "year": "2009",
+    "kind": "tension",
+    "cluster": 3,
+    "story": "Arguing with sheltered campus activists who idolized the exact regime that dismantled his home country created surreal emotional friction. It felt absurd having to cite textbooks to prove what he had just lived through.",
+    "vec": [0.65, 0.25, 0.0, 0.0, 0.5, 0.88, 0.15, 0.8, 0.2, -0.1, 0.0, 0.95]
+  },
+  {
+    "chapter": 1,
+    "name": "Comfort vs. Hunger",
+    "year": "2010",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Melbourne offered safety, high wages, and an easygoing lifestyle, yet that very comfort often felt sedating. Wanted a higher-voltage arena where urgency and outsized goals were not treated as eccentric.",
+    "vec": [0.1, 0.65, 0.0, 0.1, 0.1, 0.55, 0.96, 0.2, 0.1, 0.55, 0.5, 0.55]
+  },
+  {
+    "chapter": 1,
+    "name": "Tall Poppy Friction",
+    "year": "2011",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Expressing bold ambition openly in Australia frequently met subtle social leveling or ironic deflation. Navigating the gap between staying likable and refusing to play small became a recurring quiet tax.",
+    "vec": [0.05, 0.6, 0.0, 0.05, 0.3, 0.78, 0.95, 0.15, 0.1, 0.25, 0.35, 0.6]
+  },
+  {
+    "chapter": 1,
+    "name": "Outsider Clarity, Insider Distance",
+    "year": "2011",
+    "kind": "tension",
+    "cluster": 3,
+    "story": "Being an immigrant gave sharp X-ray vision into Australian blind spots, but the same distance made full belonging elusive. Seeing the water everyone else swam in meant rarely feeling completely at home in it.",
+    "vec": [0.35, 0.55, 0.0, 0.1, 0.55, 0.75, 0.3, 0.65, 0.1, 0.4, 0.0, 0.8]
+  },
+  {
+    "chapter": 1,
+    "name": "Admiring Law, Distrusting States",
+    "year": "2012",
+    "kind": "tension",
+    "cluster": 0,
+    "story": "Genuinely loved studying a functioning common-law system while retaining deep instinctive skepticism of state power. Holding both truths at once prevented naive cynicism and naive trust alike.",
+    "vec": [0.95, 0.4, 0.35, 0.0, 0.15, 0.75, 0.1, 0.65, 0.7, 0.3, 0.0, 0.25]
+  },
+  {
+    "chapter": 1,
+    "name": "Ivory Tower vs. Reality",
+    "year": "2012",
+    "kind": "tension",
+    "cluster": 3,
+    "story": "Academic discussions often rewarded theoretical elegance over empirical contact with reality. Sitting through tidy lectures about revolutions that wrecked real lives highlighted the cost of consequence-free ideas.",
+    "vec": [0.55, 0.15, 0.1, -0.1, 0.45, 0.92, 0.25, 0.75, 0.2, 0.2, 0.15, 0.7]
+  },
+  {
+    "chapter": 1,
+    "name": "Law Track vs. Builder Itch",
+    "year": "2013",
+    "kind": "tension",
+    "cluster": 2,
+    "story": "Finishing a prestigious dual degree opened a clear path into conventional Melbourne law firms, yet the rigid partner-track ladder felt too slow. Formal training sharpened the mind while making traditional scripts feel cramped.",
+    "vec": [0.3, 0.7, 0.45, 0.15, 0.1, 0.6, 0.88, 0.05, 0.3, 0.75, 0.7, 0.3]
+  },
+  {
+    "chapter": 1,
+    "name": "Australian Calm, American Pulse",
+    "year": "2014",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Appreciated Australia's stability and fairness even as his cultural center of gravity pulled steadily toward American meritocracy and frontier energy. Gratitude for a safe harbor coexisted with the certainty it was not the final stop.",
+    "vec": [0.4, 0.85, 0.0, 0.1, 0.25, 0.5, 0.9, 0.55, 0.25, 0.7, 0.35, 0.45]
+  }
+]

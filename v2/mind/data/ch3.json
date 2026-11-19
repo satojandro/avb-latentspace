@@ -1,0 +1,272 @@
+[
+  {
+    "chapter": 2,
+    "name": "Zero Grad Applications",
+    "year": "2015",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Sat out the entire Sydney law-firm graduate recruitment cycle without submitting a single clerkship or grad-program form. Treated the standard pipeline as a filter optimized for conformity rather than fit.",
+    "vec": [0.6, 0.9, 0.0, 0.0, 0.0, 0.9, 0.7, 0.0, 0.4, 0.2, 0.1, 0.5]
+  },
+  {
+    "chapter": 2,
+    "name": "Identifying the One Partner",
+    "year": "2015",
+    "kind": "event",
+    "cluster": 2,
+    "story": "Narrowed the entire Australian legal market down to the single partner doing substantive work in cryptocurrency law. Replaced spray-and-pray volume with a sample size of one.",
+    "vec": [0.2, 0.6, 0.3, 0.0, 0.1, 0.8, 0.7, 0.1, 0.2, 0.8, 0.5, 0.0]
+  },
+  {
+    "chapter": 2,
+    "name": "The Cold Email",
+    "year": "2015",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Wrote directly to Australia's foremost crypto law partner with no warm intro, no HR portal, and no template cover letter. Led with genuine fluency in how protocols worked rather than GPA or firm flattery.",
+    "vec": [0.3, 0.9, 0.2, 0.1, 0.7, 0.7, 0.8, 0.0, 0.5, 0.5, 0.8, 0.4]
+  },
+  {
+    "chapter": 2,
+    "name": "Hired for Crypto Obsession",
+    "year": "2015",
+    "kind": "event",
+    "cluster": 3,
+    "story": "The partner bypassed conventional graduate intake and brought him into the Sydney firm specifically because his early interest in crypto was unmistakably real. Proof that authentic signal outperforms polished credentials.",
+    "vec": [0.2, 0.7, 0.3, 0.0, 0.6, 0.6, 0.5, 0.0, 0.4, 0.9, 0.3, 0.2]
+  },
+  {
+    "chapter": 2,
+    "name": "Sydney Grad Lawyer Seat",
+    "year": "2016",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Entered a Sydney law firm as a graduate lawyer, stepping inside the machinery of commercial legal practice. Experienced first-hand how statutes, precedents, and risk memos govern institutional capital.",
+    "vec": [0.8, 0.1, 0.2, 0.0, 0.3, 0.1, 0.3, 0.3, -0.1, 0.2, 0.3, 0.3]
+  },
+  {
+    "chapter": 2,
+    "name": "Crypto Law in Practice",
+    "year": "2016",
+    "kind": "event",
+    "cluster": 2,
+    "story": "Worked on crypto-adjacent legal matters before regulators or major firms had coherent playbooks for digital assets. Watched legacy legal categories bend awkwardly around permissionless networks.",
+    "vec": [0.8, 0.2, 0.7, 0.0, 0.6, 0.5, 0.2, 0.4, 0.6, 0.8, 0.2, 0.0]
+  },
+  {
+    "chapter": 2,
+    "name": "Formal Admission to Practice",
+    "year": "2017",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Completed the minimum supervised practice required to be formally admitted as a lawyer in Australia. Locked in the professional credential cleanly before ever letting the career track calcify.",
+    "vec": [0.7, 0.5, 0.0, 0.0, 0.2, 0.1, 0.4, 0.1, 0.0, 0.0, 0.6, 0.6]
+  },
+  {
+    "chapter": 2,
+    "name": "Walking Out to Tech",
+    "year": "2017",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Left traditional legal practice almost immediately after admission, pivoting straight into the tech and crypto arena. Chose the uncertainty of building on the frontier over the predictable ladder of private practice.",
+    "vec": [0.3, 1.0, 0.4, 0.0, 0.1, 0.7, 0.9, 0.0, 0.5, 0.8, 0.7, 0.6]
+  },
+  {
+    "chapter": 2,
+    "name": "Gatekeepers Are Optional",
+    "year": "2015",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "Graduate HR pipelines, recruiting portals, and formal intake seasons exist to filter averages, not exceptions. Walking around the velvet rope is usually faster than waiting in line.",
+    "vec": [0.5, 0.9, 0.0, 0.0, 0.1, 0.9, 0.6, 0.0, 0.8, 0.2, 0.4, 0.2]
+  },
+  {
+    "chapter": 2,
+    "name": "Asymmetric Cold Outreach",
+    "year": "2015",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "One sharply targeted message to the exact decision-maker has bounded downside and unbounded upside. Most people self-select out of sending it before rejection ever happens.",
+    "vec": [0.0, 0.8, 0.0, 0.1, 0.7, 0.7, 0.7, 0.0, 0.3, 0.3, 0.8, 0.4]
+  },
+  {
+    "chapter": 2,
+    "name": "Obsession Beats Polish",
+    "year": "2015",
+    "kind": "prior",
+    "cluster": 2,
+    "story": "Real time spent down a niche rabbit hole reads immediately to anyone who actually knows the field. Manufactured enthusiasm and rehearsed interview answers collapse on first contact with an expert.",
+    "vec": [0.1, 0.3, 0.5, 0.1, 0.5, 0.6, 0.4, 0.0, 0.2, 0.9, 0.2, 0.2]
+  },
+  {
+    "chapter": 2,
+    "name": "Credentials as Launchpads",
+    "year": "2017",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "A law admission is useful as a permanent mental model and a portable signal, never as an identity prison. Treat institutional stamps as springboards rather than life sentences.",
+    "vec": [0.6, 0.9, 0.0, 0.0, 0.2, 0.7, 0.6, 0.1, 0.3, 0.1, 0.3, 0.2]
+  },
+  {
+    "chapter": 2,
+    "name": "Law Trails Technology",
+    "year": "2016",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Regulatory frameworks always arrive years after protocols ship and users adopt them. Understanding the lag between code and statute is a structural edge in emerging markets.",
+    "vec": [0.9, 0.2, 0.6, 0.0, 0.3, 0.6, 0.1, 0.7, 0.6, 0.6, 0.1, 0.0]
+  },
+  {
+    "chapter": 2,
+    "name": "Incentives Explain Institutions",
+    "year": "2016",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Inside a law firm, six-minute billing increments quietly dictate how problems get framed and how slowly risk gets resolved. Once you see the economic engine, institutional behavior stops feeling mysterious.",
+    "vec": [0.9, 0.3, 0.3, 0.0, 0.1, 0.8, 0.3, 0.4, 0.5, 0.2, 0.0, 0.1]
+  },
+  {
+    "chapter": 2,
+    "name": "Know When to Exit",
+    "year": "2017",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "Staying past the point of steep learning turns a strategic stint into gilded inertia. The best time to leave a prestige track is right after extracting its core value, before lifestyle creep locks the door.",
+    "vec": [0.2, 1.0, 0.0, 0.0, 0.0, 0.6, 0.8, 0.0, 0.2, 0.3, 0.5, 0.5]
+  },
+  {
+    "chapter": 2,
+    "name": "Small Surface, High Signal",
+    "year": "2015",
+    "kind": "prior",
+    "cluster": 3,
+    "story": "In a tiny, early-stage domain like 2015 crypto, being genuinely curious puts you in the top percentile overnight. Frontier niches reward depth far sooner than mature industries ever will.",
+    "vec": [0.0, 0.4, 0.4, 0.0, 0.5, 0.7, 0.5, 0.2, 0.3, 0.9, 0.3, 0.0]
+  },
+  {
+    "chapter": 2,
+    "name": "Advising vs. Building",
+    "year": "2016",
+    "kind": "prior",
+    "cluster": 2,
+    "story": "Lawyers write opinions about other people's risk; builders ship the systems that create new reality. Seeing the gap from the advisory side clarified which side of the table mattered more.",
+    "vec": [0.3, 0.7, 0.5, 0.1, 0.1, 0.5, 0.8, 0.0, 0.3, 0.5, 0.9, 0.2]
+  },
+  {
+    "chapter": 2,
+    "name": "Precision Cold Writing",
+    "year": "2015",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Distilling genuine domain interest and clear intent into a short email that a busy senior partner actually reads and answers. Zero fluff, high signal-to-noise, immediate credibility.",
+    "vec": [0.0, 0.5, 0.1, 0.4, 0.9, 0.4, 0.5, 0.0, 0.1, 0.2, 0.8, 0.1]
+  },
+  {
+    "chapter": 2,
+    "name": "Legal-to-Tech Translation",
+    "year": "2016",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Moving fluidly between statutory definitions, contract structures, and how decentralized protocols actually execute. Able to explain cryptographic mechanics to lawyers and regulatory boundaries to engineers.",
+    "vec": [0.6, 0.0, 0.8, 0.1, 1.0, 0.3, 0.2, 0.2, 0.3, 0.5, 0.3, 0.0]
+  },
+  {
+    "chapter": 2,
+    "name": "Regulatory Pattern Reading",
+    "year": "2016",
+    "kind": "skill",
+    "cluster": 0,
+    "story": "Reading how agencies, courts, and legal doctrines classify novel financial primitives before explicit rules exist. Spotting where compliance friction will land and where genuine grey space remains.",
+    "vec": [0.9, 0.1, 0.5, 0.0, 0.4, 0.5, 0.2, 0.6, 0.4, 0.5, 0.2, 0.0]
+  },
+  {
+    "chapter": 2,
+    "name": "Early Niche Scouting",
+    "year": "2015",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Detecting emerging sub-fields and their quiet key practitioners long before institutions formalize departments around them. Knowing who actually matters in a nascent space rather than who holds the loudest title.",
+    "vec": [0.1, 0.4, 0.4, 0.0, 0.3, 0.7, 0.6, 0.3, 0.2, 0.9, 0.5, 0.0]
+  },
+  {
+    "chapter": 2,
+    "name": "Navigating Senior Principals",
+    "year": "2016",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Communicating directly with partner-level decision-makers as a peer on substance rather than hiding behind junior hierarchy. Earning trust through preparation and candor rather than deference.",
+    "vec": [0.1, 0.5, 0.1, 0.1, 0.8, 0.3, 0.6, 0.1, 0.2, 0.2, 0.5, 0.3]
+  },
+  {
+    "chapter": 2,
+    "name": "Adversarial Edge-Case Thinking",
+    "year": "2016",
+    "kind": "skill",
+    "cluster": 0,
+    "story": "Legal training sharpened the habit of stress-testing agreements and systems for failure modes, loopholes, and misaligned incentives. A mental reflex that transferred cleanly into protocol design and tech strategy.",
+    "vec": [0.8, 0.1, 0.7, 0.0, 0.2, 0.6, 0.2, 0.2, 0.5, 0.4, 0.3, 0.0]
+  },
+  {
+    "chapter": 2,
+    "name": "Structured Risk Framing",
+    "year": "2016",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Separating real existential legal hazards from theatrical boilerplate so teams can make clear-eyed decisions. Turning ambiguous regulatory fog into concrete options and trade-offs.",
+    "vec": [0.7, 0.2, 0.4, 0.2, 0.8, 0.4, 0.2, 0.3, 0.1, 0.2, 0.6, 0.0]
+  },
+  {
+    "chapter": 2,
+    "name": "Billable Hours vs. Velocity",
+    "year": "2016",
+    "kind": "tension",
+    "cluster": 2,
+    "story": "Law firms monetize time spent hedging every caveat, while tech rewards rapid iteration and shipping. Sitting inside six-minute billing increments made the pace gap impossible to ignore.",
+    "vec": [0.5, 0.5, 0.3, 0.1, 0.0, 0.5, 0.7, 0.0, 0.2, 0.3, 0.9, 0.4]
+  },
+  {
+    "chapter": 2,
+    "name": "Admission for Pure Optionality",
+    "year": "2017",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Grinding through the final stretch of supervised practice solely to secure formal admission, already knowing he would not stay. Balancing strategic patience against the itch to leave immediately.",
+    "vec": [0.4, 0.7, 0.0, 0.0, 0.0, 0.3, 0.5, 0.0, 0.0, -0.1, 0.3, 0.8]
+  },
+  {
+    "chapter": 2,
+    "name": "Prestige Track vs. Frontier",
+    "year": "2017",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Walking away from a legible, socially validated Sydney legal career for an immature crypto industry most peers dismissed as fringe. Trading predictable status for asymmetric upside and real autonomy.",
+    "vec": [0.3, 0.9, 0.2, 0.0, -0.1, 0.8, 0.9, 0.1, 0.4, 0.7, 0.3, 0.7]
+  },
+  {
+    "chapter": 2,
+    "name": "Code Speed vs. Statute Speed",
+    "year": "2016",
+    "kind": "tension",
+    "cluster": 0,
+    "story": "Watching open-source protocols evolve weekly while legal interpretations took months of cautious committee memos. The mismatch between permissionless software and permissioned law felt increasingly irreconcilable.",
+    "vec": [0.8, 0.3, 0.7, 0.0, 0.2, 0.5, 0.4, 0.4, 0.8, 0.6, 0.6, 0.2]
+  },
+  {
+    "chapter": 2,
+    "name": "Loyalty vs. Trajectory",
+    "year": "2017",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Leaving a mentor-partner who had genuinely bet on him outside the usual rules was not a bloodless decision. Navigating gratitude without letting obligation dictate the next decade.",
+    "vec": [0.0, 0.8, 0.0, 0.0, 0.3, 0.2, 0.6, 0.0, 0.0, 0.1, 0.2, 0.9]
+  },
+  {
+    "chapter": 2,
+    "name": "Observer vs. Participant",
+    "year": "2016",
+    "kind": "tension",
+    "cluster": 2,
+    "story": "Advising crypto projects from the sideline meant seeing the frontier up close without having skin in the game. The closer he sat to builders, the less tolerable remaining an outside counsel became.",
+    "vec": [0.2, 0.7, 0.4, 0.0, 0.2, 0.4, 0.8, 0.0, 0.3, 0.7, 0.8, 0.5]
+  }
+]

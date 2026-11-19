@@ -153,7 +153,6 @@ body.iso[data-theme="light"] {
   overflow: hidden;
 }
 
-/* Full-bleed edge-to-edge 3D galaxy cube */
 .lc-stage {
   position: absolute;
   inset: 0;
@@ -288,15 +287,15 @@ body.iso[data-theme="light"] {
 /* Right-side Story Inspector */
 .hud-panel {
   position: relative;
-  flex: 0 0 364px;
+  flex: 0 0 374px;
   height: 100vh;
   background: rgba(12, 15, 22, 0.88);
   border-left: 1px solid rgba(255, 255, 255, 0.09);
   backdrop-filter: blur(14px);
-  padding: 15px 18px;
+  padding: 14px 18px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 11px;
   overflow-y: auto;
   z-index: 20;
   transition: flex-basis 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
@@ -334,9 +333,8 @@ body.iso[data-theme="light"] {
   background: rgba(255, 255, 255, 0.84);
   border-color: rgba(15, 25, 40, 0.16);
 }
-.hud-panel:not(.collapsed) ~ .panel-toggle-btn { right: 378px; }
+.hud-panel:not(.collapsed) ~ .panel-toggle-btn { right: 388px; }
 
-/* Mode Tabs (Timeline | Lenses) */
 .mode-tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -374,9 +372,37 @@ body.iso[data-theme="light"] {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
+/* Kind Filter Pills (All | Events | Priors | Skills | Tensions) */
+.kind-bar {
+  display: flex;
+  gap: 4px;
+}
+.kind-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 4.5px 4px;
+  font: 9.5px/1 ui-monospace, monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.68;
+}
+.kind-btn:hover { opacity: 1; }
+.kind-btn.active {
+  background: rgba(96, 178, 255, 0.18);
+  border-color: rgba(130, 200, 255, 0.5);
+  opacity: 1;
+  font-weight: 700;
+}
+.iso[data-theme="light"] .kind-btn { background: rgba(15, 25, 40, 0.03); border-color: rgba(15, 25, 40, 0.10); }
+.iso[data-theme="light"] .kind-btn.active { background: rgba(20, 96, 178, 0.12); border-color: rgba(20, 96, 178, 0.45); }
+
 .hud-section {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 10px;
+  padding-top: 9px;
 }
 .hud-section:first-child { border-top: none; padding-top: 0; }
 .iso[data-theme="light"] .hud-section { border-top-color: rgba(15, 25, 40, 0.10); }
@@ -386,10 +412,10 @@ body.iso[data-theme="light"] {
   justify-content: space-between;
   align-items: center;
   font: 9.5px/1 ui-monospace, monospace;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
   opacity: 0.56;
-  margin-bottom: 7px;
+  margin-bottom: 6px;
 }
 
 .chap-list { display: flex; flex-direction: column; gap: 4px; }
@@ -402,8 +428,8 @@ body.iso[data-theme="light"] {
   color: inherit;
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 5px;
-  padding: 6px 9px;
-  font-size: 12px;
+  padding: 5.5px 9px;
+  font-size: 11.8px;
   cursor: pointer;
   transition: background 0.14s, border-color 0.14s;
 }
@@ -413,22 +439,13 @@ body.iso[data-theme="light"] {
   border-color: rgba(255, 214, 112, 0.45);
   font-weight: 600;
 }
-.chap-yr {
-  font: 9.5px/1 ui-monospace, monospace;
-  opacity: 0.58;
-}
-.iso[data-theme="light"] .chap-btn {
-  background: rgba(15, 25, 40, 0.03);
-  border-color: rgba(15, 25, 40, 0.09);
-}
-.iso[data-theme="light"] .chap-btn.active {
-  background: rgba(184, 58, 20, 0.09);
-  border-color: rgba(184, 58, 20, 0.38);
-}
+.chap-yr { font: 9.5px/1 ui-monospace, monospace; opacity: 0.58; }
+.iso[data-theme="light"] .chap-btn { background: rgba(15, 25, 40, 0.03); border-color: rgba(15, 25, 40, 0.09); }
+.iso[data-theme="light"] .chap-btn.active { background: rgba(184, 58, 20, 0.09); border-color: rgba(184, 58, 20, 0.38); }
 
 input[type="range"].hud-slider {
   width: 100%;
-  margin: 8px 0 6px;
+  margin: 7px 0 6px;
   accent-color: #ffd875;
   cursor: pointer;
 }
@@ -441,7 +458,7 @@ input[type="range"].hud-slider {
   color: inherit;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 4px;
-  padding: 5.5px 6px;
+  padding: 5px 6px;
   font: 10px/1 ui-monospace, monospace;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -450,14 +467,13 @@ input[type="range"].hud-slider {
 .hud-btn.active { background: rgba(96, 178, 255, 0.18); border-color: rgba(130, 200, 255, 0.45); }
 .iso[data-theme="light"] .hud-btn { background: rgba(15, 25, 40, 0.05); border-color: rgba(15, 25, 40, 0.14); }
 
-/* Chapter Narrative + Echo Box */
-.story-title { font-size: 13.5px; font-weight: 700; margin-bottom: 5px; }
-.story-text { font-size: 12px; line-height: 1.5; opacity: 0.86; }
+.story-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.story-text { font-size: 11.8px; line-height: 1.48; opacity: 0.86; }
 .echo-box {
-  margin-top: 8px;
-  font-size: 11px;
-  line-height: 1.42;
-  padding: 7px 9px;
+  margin-top: 7px;
+  font-size: 10.8px;
+  line-height: 1.4;
+  padding: 6.5px 9px;
   border-radius: 5px;
   background: rgba(255, 214, 112, 0.09);
   border-left: 2px solid #ffd875;
@@ -476,22 +492,30 @@ input[type="range"].hud-slider {
   border-radius: 7px;
   padding: 10px 11px;
 }
-.iso[data-theme="light"] .node-card {
-  background: #ffffff;
-  border-color: rgba(15, 25, 40, 0.12);
-}
+.iso[data-theme="light"] .node-card { background: #ffffff; border-color: rgba(15, 25, 40, 0.12); }
 .node-card-empty { font-size: 11.5px; opacity: 0.55; line-height: 1.45; }
 .nc-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
 .nc-meta {
-  display: flex; align-items: center; gap: 5px;
-  font: 9.5px/1 ui-monospace, monospace;
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  font: 9px/1.2 ui-monospace, monospace;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   opacity: 0.65;
 }
 .nc-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .nc-title { font-size: 13px; font-weight: 700; margin-top: 4px; }
-.nc-story { font-size: 11.8px; line-height: 1.48; opacity: 0.88; margin-top: 6px; }
+.nc-story { font-size: 11.6px; line-height: 1.46; opacity: 0.88; margin-top: 6px; }
+.nc-dims {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px;
+}
+.nc-dims span {
+  font: 9px/1 ui-monospace, monospace;
+  padding: 2.5px 6px;
+  border-radius: 3px;
+  background: rgba(96, 178, 255, 0.12);
+  color: #9ed4ff;
+}
+.iso[data-theme="light"] .nc-dims span { background: rgba(20, 96, 178, 0.09); color: #104e96; }
 .nc-mute-btn {
   background: transparent;
   color: inherit;
@@ -511,9 +535,9 @@ input[type="range"].hud-slider {
 
 .nc-links-block { margin-top: 8px; }
 .nc-links-hdr {
-  font: 9px/1 ui-monospace, monospace;
+  font: 8.8px/1 ui-monospace, monospace;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
   opacity: 0.52;
   margin-bottom: 4px;
 }
@@ -524,7 +548,7 @@ input[type="range"].hud-slider {
   border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 4px;
   padding: 3.5px 6px;
-  font-size: 10.5px;
+  font-size: 10.2px;
   cursor: pointer;
   text-align: left;
 }
@@ -533,11 +557,10 @@ input[type="range"].hud-slider {
   border-color: rgba(255, 214, 112, 0.42);
   background: rgba(255, 214, 112, 0.10);
 }
-.nc-chip-yr { font: 9px/1 ui-monospace, monospace; opacity: 0.58; margin-left: 3px; }
+.nc-chip-yr { font: 8.8px/1 ui-monospace, monospace; opacity: 0.62; margin-left: 3px; }
 .iso[data-theme="light"] .nc-chip { background: rgba(15, 25, 40, 0.04); border-color: rgba(15, 25, 40, 0.12); }
 .iso[data-theme="light"] .nc-chip.is-bridge { background: rgba(184, 58, 20, 0.08); border-color: rgba(184, 58, 20, 0.32); }
 
-/* Resonating Now list */
 .act-list { display: flex; flex-direction: column; gap: 3px; }
 .act-row {
   display: grid;
@@ -548,8 +571,8 @@ input[type="range"].hud-slider {
   color: inherit;
   border: 1px solid transparent;
   border-radius: 4px;
-  padding: 4px 5px;
-  font-size: 11.5px;
+  padding: 3.5px 5px;
+  font-size: 11.2px;
   text-align: left;
   cursor: pointer;
 }
@@ -558,9 +581,8 @@ input[type="range"].hud-slider {
 .iso[data-theme="light"] .act-row:hover { background: rgba(15, 25, 40, 0.05); }
 .hud-dot { width: 6px; height: 6px; border-radius: 50%; }
 .act-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.act-tag { font: 9.5px/1 ui-monospace, monospace; opacity: 0.58; }
+.act-tag { font: 9px/1 ui-monospace, monospace; opacity: 0.58; }
 
-/* Emergent Clusters legend */
 .cl-list { display: flex; flex-direction: column; gap: 5px; }
 .cl-row {
   display: grid;
@@ -599,7 +621,7 @@ input[type="range"].hud-slider {
     <div class="top-badge">
       <div class="kicker">Personal Latent Space · 1989 → Today</div>
       <div class="title">The Nonlinear Mind</div>
-      <div class="sub">5 Chapters · 42 Deconstructed Priors · 4 Emergent Facets · Retroactive Cross-Era Bridges</div>
+      <div class="sub" data-stats-sub>5 Chapters · 186 Enriched Nodes · 12-D Emergent Interlinking</div>
     </div>
 
     <div class="lc-stage" tabindex="0">
@@ -621,9 +643,9 @@ input[type="range"].hud-slider {
       </div>
       <div class="cam-group">
         <button class="cam-btn" data-cam-spin title="Toggle slow cosmic orbit">Spin</button>
-        <button class="cam-btn" data-cam-reset title="Reset camera & counterfactuals (R)">Reset</button>
+        <button class="cam-btn" data-cam-reset title="Reset camera, filters & counterfactuals (R)">Reset</button>
       </div>
-      <span class="cam-hint">DRAG ORBIT · SCROLL ZOOM · CLICK ANY STAR TO READ ITS STORY & BRIDGES</span>
+      <span class="cam-hint">DRAG ORBIT · SCROLL ZOOM · CLICK ANY OF 186 STARS FOR EMERGENT BRIDGES</span>
     </div>
   </main>
 
@@ -633,6 +655,14 @@ input[type="range"].hud-slider {
       <button class="mode-tab" data-tab-lens>Synthesis Lenses</button>
     </div>
 
+    <div class="kind-bar">
+      <button class="kind-btn active" data-kind-btn="all">All</button>
+      <button class="kind-btn" data-kind-btn="event">Events</button>
+      <button class="kind-btn" data-kind-btn="prior">Priors</button>
+      <button class="kind-btn" data-kind-btn="skill">Skills</button>
+      <button class="kind-btn" data-kind-btn="tension">Tensions</button>
+    </div>
+
     <div class="hud-section" data-pane-timeline>
       <div class="hud-label"><span>Life Chapters (4th Dim)</span><span data-time-val>Ch.5 · 2023 – Today</span></div>
       <div class="chap-list"><button class="chap-btn" data-chapter-btn="0"><span>1. Venezuela</span><span class="chap-yr">1989 – 2008</span></button>
@@ -640,7 +670,7 @@ input[type="range"].hud-slider {
 <button class="chap-btn" data-chapter-btn="2"><span>3. Crypto Law · The Pivot</span><span class="chap-yr">2015 – 2017</span></button>
 <button class="chap-btn" data-chapter-btn="3"><span>4. Crypto & NEAR Ecosystem</span><span class="chap-yr">2013 – 2023</span></button>
 <button class="chap-btn active" data-chapter-btn="4"><span>5. AI Builder Mode</span><span class="chap-yr">2023 – Today</span></button></div>
-      <input type="range" class="hud-slider" data-time-slider min="0.1" max="5" step="0.02" value="4.95"/>
+      <input type="range" class="hud-slider" data-time-slider min="0.1" max="5" step="0.02" value="4.98"/>
       <div class="hud-controls">
         <button class="hud-btn" data-play-btn>Play Arc</button>
         <button class="hud-btn active" data-labels-btn>Labels</button>
@@ -649,11 +679,11 @@ input[type="range"].hud-slider {
     </div>
 
     <div class="hud-section" data-pane-lens style="display:none">
-      <div class="hud-label"><span>Ask the Constellation</span><span>4 Lenses</span></div>
+      <div class="hud-label"><span>12-D Semantic Query Lenses</span><span>Cosine Match</span></div>
       <div class="chap-list"><button class="chap-btn active" data-lens-btn="0"><span>Why did crypto click instantly?</span></button>
 <button class="chap-btn" data-lens-btn="1"><span>How did a lawyer become an AI builder?</span></button>
 <button class="chap-btn" data-lens-btn="2"><span>What drives the refusal to settle?</span></button>
-<button class="chap-btn" data-lens-btn="3"><span>How do all 5 chapters connect today?</span></button></div>
+<button class="chap-btn" data-lens-btn="3"><span>What is the nonlinear communicator's edge?</span></button></div>
     </div>
 
     <div class="hud-section">
@@ -663,7 +693,7 @@ input[type="range"].hud-slider {
     </div>
 
     <div class="hud-section">
-      <div class="hud-label"><span>Selected Memory / Prior</span><span>Click any star</span></div>
+      <div class="hud-label"><span>Selected Node & Emergent Bridges</span><span>Click any star</span></div>
       <div class="node-card" data-node-card></div>
     </div>
 
@@ -684,13 +714,29 @@ input[type="range"].hud-slider {
 
   <button class="panel-toggle-btn" data-panel-toggle>Hide</button>
 </div>
-</main><script type="module">// Personal Latent Space Model — Nonlinear Career & Lived Experience
-// 5 Chronological Chapters (1989 -> Today) deconstructed into 42 atomic events & mental models
-// organized organically across 4 emergent latent clusters in R^8 -> PCA 3D,
-// with cross-era retroactive bridges, 4 synthesis lenses, and 1,600 time-accumulating background stars.
+</main><script type="module">// Personal Latent Space Model (Enriched 12-D Edition)
+// 5 Chronological Chapters (1989 -> Today) deconstructed via 5 parallel enrichment passes
+// into 186 distinct atomic nodes (events, priors, skills, tensions) in R^12 -> PCA 3D,
+// with mathematically emergent cross-era bridges (cosine similarity + shared cognitive dimensions),
+// 12-D semantic synthesis lenses, and 1,600 time-accumulating background lived-experience stars.
 
-const D_MODEL = 8;
+const D_MODEL = 12;
 const N_CHAPTERS = 5;
+
+const DIM_NAMES = [
+  "Institutional Skepticism",
+  "Sovereign Agency",
+  "Systems & Tech Depth",
+  "UX & Aesthetic Taste",
+  "Narrative & Translation",
+  "Contrarian First-Principles",
+  "Ambition & Drive",
+  "Geopolitical Awareness",
+  "Anti-Middleman Ethos",
+  "Frontier Curiosity",
+  "Execution Velocity",
+  "Lived Grit",
+];
 
 function dot(a, b) {
   let s = 0;
@@ -704,8 +750,8 @@ function unit(a) {
   const n = norm(a);
   return a.map((v) => v / n);
 }
-function add(a, b, scale = 1) {
-  return a.map((v, i) => v + b[i] * scale);
+function cosSim(a, b) {
+  return dot(a, b) / (norm(a) * norm(b));
 }
 
 function mulberry32(seed) {
@@ -719,35 +765,29 @@ function mulberry32(seed) {
   };
 }
 
-// 4 Emergent Latent Clusters (conceptual dimensions, NOT chronological silos)
 const CLUSTERS = [
   {
     id: "systems",
     name: "Systems & Sovereignty",
     desc: "Institutional fragility, rule of law, sound money, and trustless code.",
-    center: unit([1.0, 0.12, 0.2, -0.1, 0.35, 0.0, -0.1, 0.0]),
   },
   {
     id: "agency",
     name: "Agency & Exit",
     desc: "Self-reliance, bypassing gatekeepers, anti-complacency, and contrarian conviction.",
-    center: unit([0.1, 1.0, -0.12, 0.18, 0.0, 0.38, 0.0, -0.1]),
   },
   {
     id: "craft",
     name: "Frontier Tech & Craft",
     desc: "Engineering proximity, UX taste, signal over hype, and AI-powered building.",
-    center: unit([-0.15, 0.1, 1.0, 0.15, 0.0, 0.0, 0.4, 0.12]),
   },
   {
     id: "narrative",
     name: "Narrative & Bridges",
     desc: "Bicultural fluency, history & politics, community building, and translating worlds.",
-    center: unit([0.18, -0.12, 0.12, 1.0, -0.15, 0.0, 0.0, 0.42]),
   },
 ];
 
-// 5 Chronological Chapters (Timeline 4th Dimension: 0.0 -> 5.0)
 const CHAPTERS = [
   {
     id: "venezuela",
@@ -757,8 +797,7 @@ const CHAPTERS = [
     subtitle: "Prosperity, institutional collapse & the instinct to exit",
     summary:
       "Born the year the Berlin Wall fell into a prosperous, oil-rich middle-class home. Bilingual early at an American school with an engineer father — then watching socialism, street protests, and institutional decay unfold in slow motion until leaving solo in 2008.",
-    echoNote: "Origin layer: plants the foundational priors — institutional skepticism, bicultural fluency, and engineering proximity.",
-    anchorIds: [0, 1, 2, 3, 4, 5, 6, 7],
+    echoNote: "Origin layer (38 nodes): plants the foundational priors — institutional skepticism, bicultural fluency, and engineering proximity.",
   },
   {
     id: "australia",
@@ -768,8 +807,7 @@ const CHAPTERS = [
     subtitle: "Solo arrival, systems that work & friction with complacency",
     summary:
       "Landed in Australia alone and studied Politics, International Studies, History, and Law at Monash. Studying a functional legal system sharpened a structural worldview — while debating comfortable idealists hardened a freedom-first, high-ambition stance.",
-    echoNote: "Echoes Ch. 1: lived collapse in Venezuela collides directly with Monash legal theory and campus ideology.",
-    anchorIds: [8, 9, 10, 11, 12, 13, 14, 15],
+    echoNote: "38 new nodes crystallize; emergent bridges fire back to Ch. 1 (institutional fragility, exit reflex, historical awareness).",
   },
   {
     id: "law",
@@ -779,8 +817,7 @@ const CHAPTERS = [
     subtitle: "Skipping the script, cold-emailing the #1 partner & pragmatic exit",
     summary:
       "Bypassed every graduate recruitment pipeline and emailed Australia's top crypto law partner directly. Earned admission as a lawyer in Sydney — and stepped out the moment the credential was complete to move straight into technology.",
-    echoNote: "Echoes Ch. 1 & 2: the same exit instinct that left Venezuela now refuses a conventional legal track.",
-    anchorIds: [16, 17, 18, 19, 20, 21],
+    echoNote: "30 new nodes crystallize; high-agency cold outreach & pragmatic exit bridge Ch. 1–2 directly into the frontier.",
   },
   {
     id: "crypto",
@@ -789,9 +826,8 @@ const CHAPTERS = [
     title: "Crypto & NEAR Ecosystem",
     subtitle: "Cypherpunk conviction, non-technical leadership & latent builder tension",
     summary:
-      "Bitcoin clicked instantly in 2013 through the lens of Venezuelan hyperinflation. From Melbourne Blockchain Centre to becoming a recognized voice in the early NEAR ecosystem across BD, governance, content, and community — surrounded by engineers, full of ideas, always one step from shipping them solo.",
-    echoNote: "Strong retroactive echoes: Ch. 1 hyperinflation + Ch. 2 rule-of-law fuse into cypherpunk trustless code.",
-    anchorIds: [22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+      "Bitcoin clicked instantly in 2013 through Venezuelan hyperinflation. From Melbourne Blockchain Centre to becoming a recognized voice in the early NEAR ecosystem across BD, governance, content, and community — surrounded by engineers, full of ideas, always one step from shipping them solo.",
+    echoNote: "42 new nodes crystallize; strong emergent echoes connect Ch. 1 monetary decay & Ch. 2 rule-of-law into cypherpunk code.",
   },
   {
     id: "ai",
@@ -801,353 +837,147 @@ const CHAPTERS = [
     subtitle: "Removing the last middleman — vibe coding, hackathons & sovereign shipping",
     summary:
       "The moment AI arrived, taught himself to code among the earliest wave of vibe coders. Peak curiosity testing every new model and tool, winning hackathons, and shipping increasingly ambitious projects — finally turning a decade of latent product ideas into real software.",
-    echoNote: "Full-cube synthesis: Ch. 1 engineering proximity + Ch. 3 high agency + Ch. 4 coiled ideas ignite into sovereign execution.",
-    anchorIds: [32, 33, 34, 35, 36, 37, 38, 39, 40, 41],
+    echoNote: "38 new nodes crystallize; full-cube synthesis links legal clarity, gatekeeper bypass, UX taste & cypherpunk ethos into sovereign shipping.",
   },
 ];
 
-// 42 Deconstructed Nodes (events + underlying atomic features/mental models)
-// Each node has a primary cluster + optional secondary cluster pull in R^8 so bridges sit naturally in space.
-const RAW_NODES = [
-  // --- Chapter 1: Venezuela (0..7) ---
-  {
-    name: "Born 1989 · Berlin Wall",
-    chapter: 0, year: "1989", cluster: 3, mix: [0, 0.3], kind: "anchor",
-    story: "Born the year the Berlin Wall fell — an early fascination with geopolitical inflection points and how regimes rise and collapse.",
-  },
-  {
-    name: "Oil-rich prosperity",
-    chapter: 0, year: "1990s", cluster: 0, mix: [3, 0.2], kind: "feature",
-    story: "Grew up in a solid middle-class Venezuela before the decline — knowing firsthand that abundance is never guaranteed.",
-  },
-  {
-    name: "Engineer dad · multinationals",
-    chapter: 0, year: "1990s", cluster: 2, mix: [1, 0.25], kind: "feature",
-    story: "A father working as an engineer for multinational companies and a mother at a private hospital normalized technical competence and global horizons.",
-  },
-  {
-    name: "American school · bilingual",
-    chapter: 0, year: "1995", cluster: 3, mix: [1, 0.3], kind: "anchor",
-    story: "Attending an American private school and becoming bilingual early wired in cross-cultural fluency and an affinity for freedom-oriented values.",
-  },
-  {
-    name: "Rise of Chávez · opposition",
-    chapter: 0, year: "1999", cluster: 0, mix: [1, 0.2], kind: "anchor",
-    story: "Family and circles were opposition from day one — building an early radar for ideological capture and broken incentives.",
-  },
-  {
-    name: "Slow-motion warning signs",
-    chapter: 0, year: "2002–07", cluster: 0, mix: [3, 0.25], kind: "feature",
-    story: "The visceral frustration of watching every warning come true in slow motion — sharpening pattern recognition for systemic decay.",
-  },
-  {
-    name: "Street protests & collapse",
-    chapter: 0, year: "2006–08", cluster: 0, mix: [1, 0.3], kind: "feature",
-    story: "Violence, rising crime, and eroding living standards proved that legal rights mean nothing when institutions fail.",
-  },
-  {
-    name: "Leaving Venezuela (2008)",
-    chapter: 0, year: "2008", cluster: 1, mix: [0, 0.3], kind: "anchor",
-    story: "Right after high school, made the defining call of a generation: exit a broken system to build a future elsewhere.",
-  },
-
-  // --- Chapter 2: Australia + BA/LLM (8..15) ---
-  {
-    name: "Solo arrival in Australia",
-    chapter: 1, year: "2008", cluster: 1, mix: [3, 0.25], kind: "anchor",
-    story: "Arriving in a new country completely alone forged deep self-reliance and comfort operating without a safety net.",
-  },
-  {
-    name: "Politics, History & IR",
-    chapter: 1, year: "2009–12", cluster: 3, mix: [0, 0.35], kind: "feature",
-    story: "Studying Politics, International Studies, and History at Monash gave formal language to the geopolitical forces lived firsthand.",
-  },
-  {
-    name: "Monash Law · working systems",
-    chapter: 1, year: "2009–14", cluster: 0, mix: [3, 0.2], kind: "anchor",
-    story: "Genuine fascination with studying a legal and institutional system that actually works — contrasting sharply with Venezuela.",
-  },
-  {
-    name: "Lived reality vs. ideology",
-    chapter: 1, year: "2010–13", cluster: 1, mix: [0, 0.35], kind: "feature",
-    story: "Confronted on campus by comfortable idealists romanticizing the exact regime just escaped — cementing intellectual independence.",
-  },
-  {
-    name: "American freedom ethos",
-    chapter: 1, year: "2011", cluster: 1, mix: [3, 0.3], kind: "feature",
-    story: "Clear cultural alignment with individual liberty, merit, and building without asking permission.",
-  },
-  {
-    name: "Anti-tall-poppy ambition",
-    chapter: 1, year: "2012", cluster: 1, mix: [2, 0.25], kind: "feature",
-    story: "Pushing back against 'comfortable' complacency and tall poppy syndrome — refusing to shrink ambition to fit in.",
-  },
-  {
-    name: "Structural literacy",
-    chapter: 1, year: "2013", cluster: 0, mix: [2, 0.2], kind: "feature",
-    story: "Learning to read contracts, incentives, and governance rules as executable architectures rather than mere words.",
-  },
-  {
-    name: "Contrarian conviction",
-    chapter: 1, year: "2014", cluster: 1, mix: [0, 0.25], kind: "feature",
-    story: "Willingness to hold an unpopular view early when first-principles reality disagrees with the consensus crowd.",
-  },
-
-  // --- Chapter 3: Law Stint -> Tech Transition (16..21) ---
-  {
-    name: "Bypassing grad programs",
-    chapter: 2, year: "2015", cluster: 1, mix: [2, 0.2], kind: "feature",
-    story: "Never applied to a single traditional graduate recruitment track — rejecting bureaucratic funnels from the start.",
-  },
-  {
-    name: "Cold-emailing #1 crypto partner",
-    chapter: 2, year: "2015", cluster: 1, mix: [0, 0.3], kind: "anchor",
-    story: "Emailed directly the one partner in Australia who was the best in crypto law — and won a seat through genuine early conviction.",
-  },
-  {
-    name: "Sydney law grad stint",
-    chapter: 2, year: "2016", cluster: 0, mix: [3, 0.25], kind: "anchor",
-    story: "Brief, focused stint at a Sydney firm seeing legal practice from the inside while mapping where code would outpace courts.",
-  },
-  {
-    name: "Admitted as a lawyer",
-    chapter: 2, year: "2017", cluster: 0, mix: [1, 0.2], kind: "anchor",
-    story: "Crossed the finish line to legal admission — proving mastery of the traditional system before choosing to step beyond it.",
-  },
-  {
-    name: "Pragmatic exit to tech",
-    chapter: 2, year: "2017", cluster: 1, mix: [2, 0.35], kind: "anchor",
-    story: "Left legal practice the moment the experience was banked — treating credentials as launchpads, never cages.",
-  },
-  {
-    name: "Direct access instinct",
-    chapter: 2, year: "2016", cluster: 3, mix: [1, 0.35], kind: "feature",
-    story: "Reaching straight to the most interesting builders and decision-makers — a habit that later powered ecosystem BD.",
-  },
-
-  // --- Chapter 4: Crypto & NEAR Ecosystem (22..31) ---
-  {
-    name: "Bitcoin clicks instantly (2013)",
-    chapter: 3, year: "2013", cluster: 0, mix: [2, 0.35], kind: "anchor",
-    story: "First heard of Bitcoin in 2013 and understood it immediately — hyperinflation in Venezuela made sound, borderless money self-evident.",
-  },
-  {
-    name: "Melbourne Blockchain Centre",
-    chapter: 3, year: "2015–16", cluster: 3, mix: [2, 0.3], kind: "anchor",
-    story: "Immersed in Melbourne's early crypto meetups, finding a tribe of builders and cypherpunks before the mainstream arrived.",
-  },
-  {
-    name: "Cypherpunk · remove middlemen",
-    chapter: 3, year: "2016", cluster: 0, mix: [1, 0.25], kind: "feature",
-    story: "Core ethos: replace brittle intermediaries and failed legal systems with immutable code that lets strangers trust each other.",
-  },
-  {
-    name: "Cycle immunity · ICO/NFT/Memes",
-    chapter: 3, year: "2017–22", cluster: 0, mix: [2, 0.25], kind: "feature",
-    story: "Watched every speculative wave rise and crash without losing sight of real technology — filtering signal from hype.",
-  },
-  {
-    name: "Early NEAR Protocol",
-    chapter: 3, year: "2020", cluster: 2, mix: [0, 0.25], kind: "anchor",
-    story: "Drawn to NEAR for real engineering ('Ethereum 2.0 delivered') and a rare obsession with consumer-grade UI/UX.",
-  },
-  {
-    name: "UI/UX & tech taste",
-    chapter: 3, year: "2020–22", cluster: 2, mix: [3, 0.3], kind: "feature",
-    story: "Sharpened an instinct for why great infrastructure still fails without intuitive, human-centered interfaces.",
-  },
-  {
-    name: "BD, Content & Governance",
-    chapter: 3, year: "2020–23", cluster: 3, mix: [0, 0.3], kind: "anchor",
-    story: "Wore every non-technical hat — business development, marketing content, protocol governance, and community architecture.",
-  },
-  {
-    name: "Recognized ecosystem voice",
-    chapter: 3, year: "2021–23", cluster: 3, mix: [1, 0.25], kind: "feature",
-    story: "Became widely known across the NEAR ecosystem by bridging technical teams, governance, and narrative.",
-  },
-  {
-    name: "Surrounded by engineers",
-    chapter: 3, year: "2020–23", cluster: 2, mix: [3, 0.25], kind: "feature",
-    story: "Absorbed systems thinking, architecture tradeoffs, and product intuition by working side-by-side with top engineers for years.",
-  },
-  {
-    name: "Latent builder tension",
-    chapter: 3, year: "2022–23", cluster: 2, mix: [1, 0.35], kind: "feature",
-    story: "Overflowing with product ideas yet always one step short of building them solo — a coiled spring waiting for leverage.",
-  },
-
-  // --- Chapter 5: AI Builder Mode (32..41) ---
-  {
-    name: "Self-taught coding with AI",
-    chapter: 4, year: "2023", cluster: 2, mix: [1, 0.3], kind: "anchor",
-    story: "The moment AI arrived, jumped straight in and taught himself to code — closing the final gap between idea and execution.",
-  },
-  {
-    name: "First-gen 'vibe coder'",
-    chapter: 4, year: "2023–24", cluster: 2, mix: [1, 0.25], kind: "anchor",
-    story: "Among the earliest generation building software fluidly in partnership with LLMs — turning taste and clarity into working code.",
-  },
-  {
-    name: "Removing the last middleman",
-    chapter: 4, year: "2024", cluster: 0, mix: [2, 0.45], kind: "feature",
-    story: "The cypherpunk arc completed: first code removed institutional middlemen, now AI removes the execution middleman.",
-  },
-  {
-    name: "Peak frontier curiosity",
-    chapter: 4, year: "2024–25", cluster: 2, mix: [3, 0.2], kind: "feature",
-    story: "Proactively testing every new model, agent, and developer tool the day it drops — staying right at the leading edge.",
-  },
-  {
-    name: "Hackathon wins",
-    chapter: 4, year: "2024–25", cluster: 1, mix: [2, 0.45], kind: "anchor",
-    story: "Turning rapid prototypes into winning hackathon submissions — validating builder instincts under real time pressure.",
-  },
-  {
-    name: "Ambitious side projects",
-    chapter: 4, year: "2025–26", cluster: 2, mix: [3, 0.25], kind: "anchor",
-    story: "A growing portfolio of increasingly deep, technically ambitious projects — including visualizing the very mind behind them.",
-  },
-  {
-    name: "Full-stack synthesis",
-    chapter: 4, year: "2025–26", cluster: 3, mix: [2, 0.4], kind: "feature",
-    story: "Law, geopolitics, crypto governance, UX taste, and AI engineering finally converging into a single sovereign builder stack.",
-  },
-  {
-    name: "Rapid taste-to-ship loop",
-    chapter: 4, year: "2025", cluster: 2, mix: [1, 0.3], kind: "feature",
-    story: "Years of non-technical product judgment now pay compounding dividends when paired with instant AI implementation.",
-  },
-  {
-    name: "Sovereign builder identity",
-    chapter: 4, year: "Today", cluster: 1, mix: [2, 0.35], kind: "anchor",
-    story: "No longer waiting on institutions, grad tracks, or someone else to build — full agency from raw insight to shipped artifact.",
-  },
-  {
-    name: "Nonlinear edge",
-    chapter: 4, year: "Today", cluster: 3, mix: [0, 0.35], kind: "feature",
-    story: "What looked like disconnected chapters on paper turned out to be a rare, uncopyable latent space of connected priors.",
-  },
-];
-
-// Generate deterministic R^8 coordinates anchored to each node's primary + secondary cluster
-const rng = mulberry32(198908);
-const NODES = RAW_NODES.map((n, i) => {
-  const base = CLUSTERS[n.cluster].center;
-  const sec = n.mix ? CLUSTERS[n.mix[0]].center : base;
-  const mixW = n.mix ? n.mix[1] : 0;
-  let v = add(base, sec, mixW);
-  const jitter = Array.from({ length: D_MODEL }, () => (rng() - 0.5) * 0.54);
-  v = unit(add(v, jitter, 1));
-  // Spread bornAt smoothly within each chapter [chapter + 0.08, chapter + 0.92]
-  const chapNodes = RAW_NODES.filter((x) => x.chapter === n.chapter);
-  const idxInChap = chapNodes.indexOf(n);
-  const bornAt = n.chapter + 0.08 + (idxInChap / Math.max(1, chapNodes.length - 1)) * 0.84;
-  return { id: i, ...n, bornAt, dir: v };
-});
-
-const N_NODES = NODES.length;
-
-// Meaningful Connections: [fromId, toId, strength, isCrossEraBridge, note]
-const EDGES = [
-  // Intra-chapter & immediate narrative links
-  [0, 4, 0.8, false, "Geopolitical awareness meets Chávez's rise"],
-  [1, 5, 0.85, false, "Knowing prosperity makes decay unmistakable"],
-  [4, 5, 0.95, false, "Opposition clarity watching warnings come true"],
-  [5, 6, 0.95, false, "Slow warnings erupt into street collapse"],
-  [6, 7, 1.0, false, "Institutional breakdown forces the 2008 exit"],
-  [7, 8, 1.0, true, "Leaving Venezuela → arriving solo in Australia"],
-  [8, 13, 0.85, false, "Solo self-reliance rejects comfortable complacency"],
-  [9, 10, 0.9, false, "Politics & History paired with Monash Law"],
-  [10, 14, 0.95, false, "Studying working law builds structural literacy"],
-  [11, 15, 0.9, false, "Campus ideology friction forges contrarian conviction"],
-  [12, 13, 0.9, false, "American freedom ethos rejects tall poppy syndrome"],
-  [16, 17, 0.98, false, "Skipping grad tracks → cold-emailing the #1 partner"],
-  [17, 18, 0.95, false, "Direct outreach lands the Sydney crypto law seat"],
-  [18, 19, 0.9, false, "Practice completed → admitted as a lawyer"],
-  [19, 20, 0.95, false, "Credential earned → pragmatic exit into tech"],
-  [22, 23, 0.92, false, "Early Bitcoin conviction → Melbourne Blockchain Centre"],
-  [23, 24, 0.95, false, "Community meetups deepen cypherpunk ethos"],
-  [24, 25, 0.85, false, "Cypherpunk principles filter out hype cycles"],
-  [25, 26, 0.9, false, "Tech-first filter leads straight to early NEAR"],
-  [26, 27, 0.95, false, "NEAR's consumer focus sharpens UI/UX taste"],
-  [26, 28, 0.95, false, "Leading BD, content, governance & community"],
-  [28, 29, 0.92, false, "Cross-functional work builds ecosystem recognition"],
-  [26, 30, 0.88, false, "Working closely alongside protocol engineers"],
-  [30, 31, 0.98, false, "Engineering proximity + ideas = coiled builder tension"],
-  [32, 33, 0.98, false, "Self-taught AI coding → first-gen vibe coder"],
-  [33, 35, 0.92, false, "Vibe coding fueled by testing every new model"],
-  [35, 36, 0.95, false, "Frontier tool fluency powers hackathon wins"],
-  [36, 37, 0.98, false, "Hackathon momentum → ambitious side projects"],
-  [37, 40, 0.96, false, "Shipping real products → sovereign builder identity"],
-  [38, 41, 0.95, false, "All worlds converging into a nonlinear edge"],
-
-  // *** NON-OBVIOUS LONG-RANGE CROSS-ERA BRIDGES (The Heart of the Latent Space!) ***
-  [5, 22, 1.0, true, "Venezuelan hyperinflation made Bitcoin click immediately in 2013"],
-  [6, 24, 1.0, true, "Failed legal systems in Venezuela → immutable code replacing middlemen"],
-  [10, 24, 0.92, true, "Monash rule-of-law study → understanding code as enforceable trust"],
-  [14, 28, 0.88, true, "Legal structural literacy → crypto protocol governance design"],
-  [3, 12, 0.92, true, "American school in Venezuela → cultural alignment with freedom & ambition"],
-  [3, 29, 0.85, true, "Early bicultural fluency → translating across global crypto communities"],
-  [7, 20, 0.9, true, "Exiting Venezuela in 2008 → exiting traditional law once admitted"],
-  [11, 25, 0.86, true, "Resisting campus dogma → resisting ICO/NFT/memecoin hype cycles"],
-  [13, 16, 0.92, true, "Rejecting complacency → bypassing every traditional grad program"],
-  [17, 21, 0.9, true, "Cold-emailing the #1 partner → direct-access habit in crypto BD"],
-  [21, 28, 0.86, true, "Direct-access instinct → high-leverage ecosystem business development"],
-  [2, 30, 0.85, true, "Engineer dad at multinationals → effortless rapport with engineers"],
-  [2, 32, 0.88, true, "Childhood engineering proximity → finally stepping into code with AI"],
-  [31, 32, 1.0, true, "Years of coiled product ideas → explosive AI self-teaching in 2023"],
-  [24, 34, 1.0, true, "Cypherpunk 'remove middlemen' → AI removes the last execution middleman"],
-  [27, 39, 0.95, true, "NEAR UI/UX taste → rapid taste-to-ship loop in AI builder mode"],
-  [13, 36, 0.9, true, "High-agency ambition → competing and winning in AI hackathons"],
-  [15, 33, 0.86, true, "Contrarian early adoption → first-generation vibe coder"],
-  [9, 38, 0.84, true, "History & Politics lens → synthesizing culture, law, and technology"],
-  [20, 40, 0.92, true, "Pragmatic exit from law → sovereign builder identity today"],
-  [29, 41, 0.88, true, "Cross-functional ecosystem voice → compounding nonlinear edge"],
-];
-
-// 4 Synthesis Lenses (Prompt Mode — cross-era constellations firing all at once)
+// 4 Semantic Synthesis Lenses defined as real 12-D query vectors (evaluated via cosine similarity!)
+// Dims: [0:InstSkep, 1:Agency, 2:Tech, 3:UX, 4:Narrative, 5:Contrarian, 6:Ambition, 7:GeoPol, 8:AntiMid, 9:Curiosity, 10:ExecVel, 11:Grit]
 const LENSES = [
   {
     id: "crypto-click",
     title: "Why did crypto click instantly?",
-    subtitle: "From Venezuelan hyperinflation to trustless code",
+    subtitle: "Emergent resonance: institutional skepticism + anti-middleman ethos + geopolitical memory",
     summary:
       "Bitcoin didn't arrive as an abstract whitepaper — it landed on top of lived hyperinflation, institutional collapse, and a Monash law degree. Immutable code became the logical answer to systems that fail their citizens.",
-    nodes: [4, 5, 6, 10, 14, 17, 22, 23, 24, 25, 26, 34],
-    path: [5, 6, 10, 22, 24, 26, 34],
+    query12: unit([0.95, 0.35, 0.45, 0.0, 0.15, 0.65, 0.2, 0.78, 0.98, 0.35, 0.1, 0.45]),
   },
   {
     id: "builder-arc",
     title: "How did a lawyer become an AI builder?",
-    subtitle: "Removing the final middleman between taste and code",
+    subtitle: "Emergent resonance: systems depth + UX taste + execution velocity + curiosity",
     summary:
-      "Growing up with an engineer father, spending years beside NEAR engineers, and holding sharp UI/UX taste coiled a decade of ideas. When AI arrived, vibe coding removed the last bottleneck — turning latent vision into hackathon wins and shipped software.",
-    nodes: [2, 20, 26, 27, 30, 31, 32, 33, 34, 35, 36, 37, 39, 40],
-    path: [2, 20, 27, 30, 31, 32, 33, 36, 37, 40],
+      "Growing up with an engineer father, spending years beside NEAR engineers, and holding sharp UX taste coiled a decade of ideas. When AI arrived, vibe coding removed the last bottleneck — turning clarity and taste directly into shipped software.",
+    query12: unit([0.05, 0.45, 0.96, 0.82, 0.25, 0.25, 0.55, 0.0, 0.55, 0.90, 0.98, 0.15]),
   },
   {
     id: "agency-exit",
     title: "What drives the refusal to settle?",
-    subtitle: "High agency, bypassing gatekeepers & sovereign exits",
+    subtitle: "Emergent resonance: sovereign agency + ambition + contrarian conviction + lived grit",
     summary:
-      "Leaving Venezuela solo at 18, rejecting comfortable complacency in Australia, cold-emailing the #1 crypto law partner instead of applying to grad programs, and leaving law the moment admission cleared — one consistent instinct for agency.",
-    nodes: [3, 7, 8, 11, 12, 13, 15, 16, 17, 20, 21, 36, 40],
-    path: [7, 8, 13, 16, 17, 20, 40],
+      "Leaving Venezuela solo at 18, rejecting comfortable complacency in Australia, cold-emailing the #1 crypto law partner instead of applying to grad programs, and leaving law the moment admission cleared — one consistent high-agency vector.",
+    query12: unit([0.4, 0.98, 0.15, 0.05, 0.2, 0.85, 0.95, 0.3, 0.5, 0.3, 0.55, 0.82]),
   },
   {
-    id: "full-synthesis",
-    title: "How do all 5 chapters connect today?",
-    subtitle: "The compounding edge of a nonlinear mind",
+    id: "narrative-edge",
+    title: "What is the nonlinear communicator's edge?",
+    subtitle: "Emergent resonance: narrative translation + UX taste + geopolitical & tech fluency",
     summary:
-      "On paper: Caracas → Melbourne Law → Crypto BD → AI Builder. In latent space: one continuous trajectory of bicultural fluency, institutional literacy, cypherpunk sovereignty, and frontier craft compounding into a rare builder stack.",
-    nodes: [0, 3, 7, 10, 13, 17, 22, 24, 27, 28, 31, 32, 34, 37, 38, 40, 41],
-    path: [3, 7, 10, 17, 22, 28, 31, 32, 38, 41],
+      "Early bilingualism, History & Politics, legal writing, NEAR ecosystem storytelling, and now interactive visual systems — the rare ability to translate complex technical and structural truths so humans can actually feel them.",
+    query12: unit([0.25, 0.25, 0.55, 0.85, 0.98, 0.35, 0.35, 0.65, 0.15, 0.65, 0.45, 0.2]),
   },
 ];
 
+// Injected by build.mjs from v2/mind/data/ch1..ch5.json
+const RAW_NODES = [{"chapter":0,"name":"Berlin Wall Birth Year","year":"1989","kind":"event","cluster":0,"story":"Born in 1989 as the Berlin Wall collapsed, anchoring an early fascination with how regimes crack and history pivots overnight.","vec":[0.55,0.2,0,0,0.1,0.2,0.1,0.95,0.15,0.45,0,0]},{"chapter":0,"name":"Oil-Boom Middle Class","year":"1993","kind":"event","cluster":0,"story":"Grew up in a prosperous, oil-rich Venezuela where middle-class stability, private enterprise, and upward mobility felt like the natural baseline.","vec":[0.3,-0.1,0.05,0.25,0.15,0,0.2,0.5,0,0.15,0,-0.1]},{"chapter":0,"name":"American School Classrooms","year":"1995","kind":"event","cluster":3,"story":"Attended an American private school from an early age, growing up fluent in English inside an international academic enclave.","vec":[0.1,0.25,0.15,0.3,0.85,0.1,0.45,0.35,0,0.5,0.1,0]},{"chapter":0,"name":"Multinational Engineering Home","year":"1996","kind":"event","cluster":2,"story":"Watching his father work as an engineer for multinational corporations made industrial scale, technical rigor, and global standards tangible at home.","vec":[0.1,0.15,0.85,0.15,0.1,0.2,0.45,0.2,0,0.4,0.35,0]},{"chapter":0,"name":"Private Hospital Baseline","year":"1997","kind":"event","cluster":3,"story":"His mother's work at a private hospital grounded daily life in operational discipline, service, and functioning private institutions.","vec":[0.3,0.05,0.2,0.1,0.45,0,0.25,0.05,0.15,0.1,0.35,0.2]},{"chapter":0,"name":"The 1999 Regime Shift","year":"1999","kind":"event","cluster":0,"story":"Hugo Chávez took power and his family and circles stood in opposition from day one, recognizing the ideological trajectory before it hardened.","vec":[0.95,0.3,0,0,0.15,0.75,0.1,0.9,0.55,0,0,0.35]},{"chapter":0,"name":"National Strikes & Rupture","year":"2002","kind":"event","cluster":0,"story":"Civic strikes, mass marches, and open political polarization turned institutional breakdown from background news into the defining air of adolescence.","vec":[0.9,0.25,0,0,0.25,0.45,0.05,0.85,0.4,0,0,0.7]},{"chapter":0,"name":"Street Protests & Violence","year":"2004","kind":"event","cluster":1,"story":"Witnessing street protests met with violence shattered any remaining illusion that peaceful dissent alone could restrain an entrenched state.","vec":[0.85,0.55,0,0,0.15,0.4,0.1,0.65,0.5,0,0,0.92]},{"chapter":0,"name":"Rising Crime & Contraction","year":"2006","kind":"event","cluster":1,"story":"Escalating street crime and rapidly diminishing living standards turned ordinary routines into daily exercises in vigilance and contraction.","vec":[0.75,0.65,0,-0.1,0,0.25,0.2,0.4,0.55,0,0.1,0.95]},{"chapter":0,"name":"The 2008 Departure","year":"2008","kind":"event","cluster":1,"story":"Shortly after finishing high school, he joined an exodus of his generation and left Venezuela rather than wait for a turnaround that was not coming.","vec":[0.55,0.98,0,0,0.15,0.5,0.75,0.45,0.4,0.55,0.65,0.85]},{"chapter":0,"name":"Prosperity Is Fragile","year":"1999","kind":"prior","cluster":0,"story":"Wealthy, modern societies are never permanent; a single decade of broken incentives can unravel generations of accumulated living standards.","vec":[0.9,0.45,0.1,0,0.05,0.65,0.45,0.85,0.4,0.05,0,0.5]},{"chapter":0,"name":"Institutions Rot From Within","year":"2001","kind":"prior","cluster":0,"story":"Rule of law rarely collapses in one dramatic night; courts, agencies, and checks are hollowed out incrementally under legalistic cover.","vec":[0.98,0.3,0.15,0,0.1,0.7,0.1,0.8,0.75,0,0,0.25]},{"chapter":0,"name":"Freedom Is Non-Negotiable","year":"2002","kind":"prior","cluster":1,"story":"Personal and economic liberty stopped being an abstract textbook concept and became the non-negotiable floor for safety, agency, and dignity.","vec":[0.85,0.92,0,0,0.15,0.7,0.4,0.5,0.8,0.1,0.1,0.6]},{"chapter":0,"name":"Early-Warning Pattern Radar","year":"2000","kind":"prior","cluster":0,"story":"Seeing populist rhetoric harden into authoritarian capture once installed a permanent radar for institutional red flags long before consensus reacts.","vec":[0.92,0.4,0.1,0,0.1,0.9,0.25,0.8,0.6,0.2,0,0.3]},{"chapter":0,"name":"Bilingual Cognitive Switching","year":"1996","kind":"prior","cluster":3,"story":"Thinking natively in both Spanish and English from childhood wired an instinct to hold two cultural frames at once without losing nuance.","vec":[0,0.2,0.15,0.3,0.95,0.25,0.2,0.35,0,0.55,0.1,0]},{"chapter":0,"name":"State Capture Breaks Incentives","year":"2003","kind":"prior","cluster":0,"story":"Watching state monopoly displace private enterprise cemented a lasting conviction that centralized gatekeepers corrupt every system they touch.","vec":[0.9,0.35,0.2,0,0.05,0.75,0.3,0.6,0.95,0.05,0.1,0.2]},{"chapter":0,"name":"Exit Beats Waiting","year":"2007","kind":"prior","cluster":1,"story":"When a system is structurally captured, sovereign exit preserves more agency than waiting indefinitely for internal reform.","vec":[0.65,0.98,0,0,0,0.8,0.65,0.45,0.6,0.2,0.45,0.55]},{"chapter":0,"name":"History Moves in Inflections","year":"1998","kind":"prior","cluster":0,"story":"Bookended by 1989 and 1999, he internalized that long plateaus end abruptly and geopolitical inflection points rewrite individual lives.","vec":[0.55,0.3,0.05,0,0.15,0.55,0.2,0.98,0.2,0.45,0,0.2]},{"chapter":0,"name":"Merit Over Political Loyalty","year":"2004","kind":"prior","cluster":2,"story":"Watching competence purged in favor of ideological loyalty forged an allergic reaction to patronage and a deep respect for verifiable craft.","vec":[0.7,0.35,0.55,0.2,0.05,0.65,0.75,0.3,0.5,0.15,0.45,0.25]},{"chapter":0,"name":"Monetary Decay Is Political","year":"2005","kind":"prior","cluster":0,"story":"Living through controls, scarcity, and eroding purchasing power planted an intuitive grasp that currency collapse is a symptom of political capture.","vec":[0.85,0.55,0.2,0,0,0.65,0.2,0.7,0.92,0.1,0,0.35]},{"chapter":0,"name":"Normalcy Bias Is Fatal","year":"2003","kind":"prior","cluster":1,"story":"Watching smart people insist 'it cannot get worse here' taught him to trust empirical deterioration over comforting narratives.","vec":[0.75,0.7,0.05,0,0.1,0.95,0.45,0.55,0.45,0.1,0.2,0.55]},{"chapter":0,"name":"Global Horizon From Home","year":"1998","kind":"prior","cluster":3,"story":"An American education inside Latin America made the wider world feel legible, navigable, and open rather than distant or out of reach.","vec":[0.05,0.6,0.05,0.2,0.7,0.2,0.65,0.55,0,0.85,0.2,0]},{"chapter":0,"name":"Bilingual Code-Switching","year":"1997","kind":"skill","cluster":3,"story":"Effortlessly shifting between Spanish and English registers, humor, and idioms—an early foundation for bridging international communities.","vec":[0,0.25,0.05,0.25,0.98,0.15,0.25,0.3,0,0.4,0.2,0]},{"chapter":0,"name":"Engineering Literacy at Home","year":"1998","kind":"skill","cluster":2,"story":"Absorbed practical systems vocabulary, structured troubleshooting, and technical curiosity from his father's multinational engineering world.","vec":[0.05,0.1,0.9,0.15,0.15,0.3,0.35,0.1,0,0.55,0.4,0]},{"chapter":0,"name":"Reading Political Incentives","year":"2002","kind":"skill","cluster":0,"story":"Learned early to ignore official speeches and trace who holds leverage, who controls rents, and what actors actually optimize for.","vec":[0.92,0.3,0.15,0,0.2,0.85,0.2,0.85,0.65,0.15,0.05,0.25]},{"chapter":0,"name":"Instability Risk Assessment","year":"2006","kind":"skill","cluster":1,"story":"Growing up amid rising crime and street violence trained constant situational awareness and rapid downside estimation in volatile environments.","vec":[0.45,0.75,0.15,0,0,0.45,0.2,0.3,0.45,0.05,0.35,0.9]},{"chapter":0,"name":"Cross-Cultural Translation","year":"2001","kind":"skill","cluster":3,"story":"Moving daily between American school norms and Venezuelan reality built a knack for translating context between worlds that misread each other.","vec":[0.15,0.25,0,0.25,0.95,0.35,0.25,0.55,0,0.45,0.15,0.15]},{"chapter":0,"name":"Systems Failure Diagnostics","year":"2005","kind":"skill","cluster":2,"story":"Watching utilities, supply chains, and civic services degrade taught how complex systems cascade into failure—and where single points of failure hide.","vec":[0.65,0.2,0.82,0,0.05,0.6,0.15,0.4,0.55,0.25,0.2,0.3]},{"chapter":0,"name":"Propaganda Signal Filtering","year":"2004","kind":"skill","cluster":3,"story":"Living through state narratives and fierce polarization honed the habit of cross-checking claims and separating empirical signal from political theater.","vec":[0.8,0.2,0.1,0,0.7,0.8,0.1,0.65,0.45,0.2,0.1,0.25]},{"chapter":0,"name":"Operational Self-Reliance","year":"2007","kind":"skill","cluster":1,"story":"When public services and baseline predictability vanished, he internalized the habit of building personal contingencies instead of waiting on authorities.","vec":[0.55,0.9,0.2,0,0.05,0.45,0.55,0.15,0.75,0.1,0.65,0.75]},{"chapter":0,"name":"The Cassandra Frustration","year":"2003","kind":"tension","cluster":0,"story":"Deep, grinding frustration watching everything his family and circles warned about unfold in slow motion while outsiders dismissed the trajectory.","vec":[0.9,0.35,0,0,0.3,0.88,0.2,0.75,0.45,0,-0.1,0.85]},{"chapter":0,"name":"Grief of Slow Decay","year":"2005","kind":"tension","cluster":1,"story":"The quiet heartbreak of watching a prosperous childhood home lose its safety, middle class, and sense of future year after year.","vec":[0.6,0.45,0,0.1,0.2,0.2,0.15,0.55,0.2,0,-0.1,0.95]},{"chapter":0,"name":"Inside-Outside Duality","year":"2000","kind":"tension","cluster":3,"story":"Sitting inside an American private school while the country outside polarized created an acute awareness of belonging to two overlapping worlds.","vec":[0.3,0.35,0,0.15,0.8,0.45,0.25,0.5,0,0.3,0,0.45]},{"chapter":0,"name":"Protest Without Leverage","year":"2004","kind":"tension","cluster":0,"story":"Opposing from day one yet watching state power consolidate anyway bred a sober impatience with performative resistance that lacks real leverage.","vec":[0.85,0.6,0,0,0.15,0.7,0.35,0.65,0.55,0,-0.15,0.85]},{"chapter":0,"name":"Staying vs. Leaving","year":"2007","kind":"tension","cluster":1,"story":"The heavy late-teenage calculus between loyalty to home and refusing to forfeit an entire adulthood to a structurally collapsing system.","vec":[0.5,0.92,0,0,0.15,0.55,0.6,0.4,0.3,0.25,0.2,0.92]},{"chapter":0,"name":"Generational Exodus","year":"2008","kind":"tension","cluster":1,"story":"Leaving alongside most of his generation turned a personal milestone into a collective rupture, scattering friends and classmates across continents.","vec":[0.45,0.85,0,0,0.35,0.25,0.5,0.6,0.25,0.35,0.25,0.9]},{"chapter":0,"name":"Idealism vs. Hard Reality","year":"2006","kind":"tension","cluster":0,"story":"Youthful optimism colliding with impunity, daily insecurity, and shrinking horizons burned away political naivety far earlier than usual.","vec":[0.85,0.4,0,0,0.1,0.75,0.3,0.6,0.5,0,0.05,0.88]},{"chapter":0,"name":"Borrowed Time in High School","year":"2008","kind":"tension","cluster":1,"story":"Finishing high school knowing his real adult chapter had to start elsewhere charged those final months with restlessness and anti-complacency.","vec":[0.35,0.88,0,0,0.1,0.4,0.9,0.35,0.2,0.55,0.5,0.75]},{"chapter":1,"name":"Solo Touchdown in Melbourne","year":"2008","kind":"event","cluster":1,"story":"Arrived in Australia completely alone after leaving Venezuela, landing in a new hemisphere with no family safety net or familiar shorthand. Starting from zero turned self-reliance from an abstract ideal into daily logistics.","vec":[0.15,0.95,0,0,0.1,0.2,0.65,0.35,0.1,0.55,0.6,0.95]},{"chapter":1,"name":"First Lease, First Bank","year":"2008","kind":"event","cluster":1,"story":"Navigating visas, rental contracts, and everyday Australian bureaucracy solo showed how much friction vanishes when administrative rules are predictable. Routine transactions stopped feeling like negotiations with arbitrary power.","vec":[0.75,0.7,0.15,0.05,0,0.1,0.25,0.2,0.1,0.15,0.75,0.5]},{"chapter":1,"name":"Monash Arts Lecture Halls","year":"2008","kind":"event","cluster":3,"story":"Enrolled in Politics, International Studies, and History at Monash University, trading lived political volatility for structured academic inquiry. Found early footing comparing historical statecraft against firsthand memory.","vec":[0.45,0.1,0.05,0.1,0.6,0.35,0.25,0.9,0,0.75,0.2,0.15]},{"chapter":1,"name":"First Common Law Casebook","year":"2009","kind":"event","cluster":0,"story":"Opened foundational torts and constitutional texts at Monash Law and felt genuine fascination watching precedent actually bind outcomes. For the first time, the law looked like working machinery rather than decorative theater.","vec":[0.95,0.05,0.55,0.1,0.15,0.2,0.2,0.35,0.1,0.7,0.15,0.05]},{"chapter":1,"name":"Socialist Stall Confrontations","year":"2009","kind":"event","cluster":3,"story":"Encountered campus activist groups on Monash walkways praising Chavismo and Latin American socialism. Standing inches from students romanticizing the system he had just fled created an immediate epistemic rift.","vec":[0.7,0.35,0,0,0.55,0.9,0.2,0.8,0.25,0.05,0,0.8]},{"chapter":1,"name":"Constitutional Law Seminar","year":"2010","kind":"event","cluster":0,"story":"Studied separation of powers, judicial review, and federalism in a jurisdiction where courts routinely checked executive overreach. Saw firsthand how durable institutions protect ordinary citizens before crisis ever arrives.","vec":[0.98,0.15,0.5,0.05,0.15,0.25,0.15,0.7,0.2,0.55,0.1,0.05]},{"chapter":1,"name":"Moot Court Oral Advocacy","year":"2011","kind":"event","cluster":2,"story":"Argued hypothetical appellate briefs before mock benches, learning to strip rhetoric down to precedent, statutory text, and airtight logic. Precision under questioning proved far more persuasive than volume.","vec":[0.65,0.1,0.65,0.2,0.75,0.4,0.55,0.1,0,0.3,0.65,0.25]},{"chapter":1,"name":"Cold War History Seminars","year":"2011","kind":"event","cluster":3,"story":"Traced twentieth-century ideological collapses across Europe, Asia, and Latin America in upper-level history and international studies courses. The archive confirmed that command economies fail by recurring structural design, not bad luck.","vec":[0.6,0.1,0.15,0,0.35,0.65,0.1,0.98,0.3,0.6,0.05,0.2]},{"chapter":1,"name":"Monash LLB–LLM Track","year":"2013","kind":"event","cluster":0,"story":"Extended legal study through the postgraduate law track at Monash, diving into commercial frameworks, contracts, and cross-border legal structures. Legal architecture began to read like code for coordinating strangers at scale.","vec":[0.85,0.1,0.8,0.15,0.1,0.2,0.6,0.35,0.25,0.5,0.55,0.1]},{"chapter":1,"name":"Dual-Degree Graduation","year":"2014","kind":"event","cluster":1,"story":"Completed the combined Arts and Law degrees at Monash University after six years of building a life from scratch abroad. Left campus with formal credentials, sharper skepticism, and an itch for a faster arena.","vec":[0.4,0.65,0.2,0.05,0.2,0.15,0.75,0.25,0,0.4,0.85,0.65]},{"chapter":1,"name":"Rule of Law Infrastructure","year":"2009","kind":"prior","cluster":0,"story":"Functional courts and enforceable contracts are invisible infrastructure—taken for granted by natives, immediately obvious to anyone arriving from institutional collapse. Prosperity rests on boring predictability more than natural resources.","vec":[0.98,0.2,0.6,0.05,0.15,0.45,0.15,0.75,0.2,0.25,0.1,0.2]},{"chapter":1,"name":"Lived Reality Over Theory","year":"2009","kind":"prior","cluster":3,"story":"When classroom ideology collides with firsthand experience of shortages and state capture, lived reality wins every time. Abstract models that ignore human incentives are dangerous precisely because they sound noble on paper.","vec":[0.65,0.25,0.1,0,0.45,0.95,0.2,0.7,0.3,0.15,0.1,0.85]},{"chapter":1,"name":"Freedom-First Cultural Compass","year":"2010","kind":"prior","cluster":1,"story":"Discovered a deeper affinity for American ideals of individual liberty, merit, and upward mobility than for collectivist safety blankets. Open opportunity mattered more than guaranteed comfort.","vec":[0.55,0.9,0,0.05,0.2,0.65,0.9,0.5,0.55,0.4,0.35,0.3]},{"chapter":1,"name":"Rejecting Tall Poppy Syndrome","year":"2011","kind":"prior","cluster":1,"story":"Refused the unspoken social norm of shrinking ambition to avoid standing out from the crowd. Cutting down high performers does not produce fairness; it just normalizes mediocrity.","vec":[0.1,0.75,0,0.05,0.2,0.85,0.98,0.2,0.15,0.3,0.45,0.4]},{"chapter":1,"name":"Anti-Complacency Reflex","year":"2011","kind":"prior","cluster":1,"story":"Comfort can quietly dull urgency until an entire generation forgets what it takes to build or defend anything hard. Having seen stability evaporate once, treating it as permanent felt reckless.","vec":[0.35,0.65,0,0,0.1,0.6,0.95,0.4,0.15,0.35,0.65,0.75]},{"chapter":1,"name":"Incentives Over Intentions","year":"2010","kind":"prior","cluster":0,"story":"Studying both politics and law reinforced a simple rule: judge policies and institutions by the incentives they create, not the slogans printed on their cover. Good intentions routinely produce perverse equilibria.","vec":[0.85,0.2,0.55,0,0.15,0.85,0.2,0.65,0.5,0.35,0.1,0.1]},{"chapter":1,"name":"Precedent as Compiled Memory","year":"2012","kind":"prior","cluster":2,"story":"Common law operates like an iterative codebase refined over centuries of edge cases and disputes. Studying how doctrines evolve revealed the value of battle-tested protocols over top-down decrees.","vec":[0.8,0.05,0.85,0.2,0.15,0.4,0.1,0.55,0.35,0.65,0.15,0]},{"chapter":1,"name":"Exit Beats Endless Debate","year":"2012","kind":"prior","cluster":1,"story":"Watching ideological arguments loop endlessly without changing minds clarified that mobility is the ultimate vote. Choosing where to build and live carries more weight than winning a campus argument.","vec":[0.35,0.98,0.05,0,-0.1,0.7,0.65,0.3,0.6,0.25,0.55,0.45]},{"chapter":1,"name":"History Rhymes Structurally","year":"2012","kind":"prior","cluster":3,"story":"Reading comparative history made political cycles legible across eras and continents. Populist promises, institutional erosion, and capital flight follow recognizable scripts long before headlines catch up.","vec":[0.7,0.2,0.3,0,0.35,0.6,0.1,0.98,0.2,0.55,0,0.2]},{"chapter":1,"name":"Merit Needs Open Arenas","year":"2013","kind":"prior","cluster":1,"story":"Talent compounds fastest in environments that reward initiative rather than credentials or seniority alone. A society that penalizes visible drive quietly pushes its most restless builders elsewhere.","vec":[0.25,0.7,0.1,0.05,0.15,0.6,0.95,0.25,0.45,0.5,0.6,0.25]},{"chapter":1,"name":"Property Rights Anchor Trust","year":"2013","kind":"prior","cluster":0,"story":"Clear title, enforceable agreements, and predictable remedies allow strangers to cooperate without personal loyalty or political patronage. Without them, every transaction collapses back into tribalism.","vec":[0.95,0.45,0.45,0,0.1,0.45,0.2,0.6,0.75,0.2,0.1,0.1]},{"chapter":1,"name":"Institutional Fragility Awareness","year":"2014","kind":"prior","cluster":0,"story":"Even healthy democracies are maintained by fragile norms and active stewardship, not autopilot. Seeing a working system up close alongside memories of a broken one made the boundary between them feel thinner than peers assumed.","vec":[0.92,0.35,0.25,0,0.2,0.65,0.2,0.85,0.3,0.2,0,0.55]},{"chapter":1,"name":"Statutory & Contract Parsing","year":"2010","kind":"skill","cluster":2,"story":"Trained to read dense statutes, clauses, and case holdings line by line for edge cases, ambiguities, and hidden obligations. Developed an instinct for spotting where rules break under adversarial pressure.","vec":[0.75,0.05,0.92,0.15,0.15,0.3,0.25,0.1,0.25,0.35,0.5,0.05]},{"chapter":1,"name":"Structured Legal Reasoning","year":"2010","kind":"skill","cluster":0,"story":"Learned to map messy real-world disputes into issue, rule, application, and conclusion without losing the thread. Disciplined legal framing turned raw intuition into defensible, repeatable analysis.","vec":[0.85,0.05,0.8,0.15,0.4,0.35,0.25,0.15,0.1,0.3,0.45,0.05]},{"chapter":1,"name":"Calm Counter-Consensus Debate","year":"2011","kind":"skill","cluster":3,"story":"Practiced holding unpopular positions in seminar rooms without losing composure or resorting to personal attacks. Letting facts and concrete counterexamples do the work proved stronger than matching emotional volume.","vec":[0.35,0.3,0.1,0.05,0.85,0.9,0.35,0.55,0.1,0.2,0.2,0.65]},{"chapter":1,"name":"Historical Pattern Synthesis","year":"2011","kind":"skill","cluster":3,"story":"Built the habit of cross-referencing modern political shifts against historical precedents from Europe, the Americas, and the Asia-Pacific. Connecting distant timelines sharpened judgment on where current events were heading.","vec":[0.55,0.1,0.35,0.1,0.65,0.55,0.15,0.96,0.1,0.7,0.15,0.1]},{"chapter":1,"name":"Cross-Cultural Calibration","year":"2012","kind":"skill","cluster":3,"story":"Navigating between Venezuelan roots, Australian norms, and an American-leaning ethos built fluency in reading unspoken cultural codes. Learned to translate ideas across audiences with completely different baselines.","vec":[0.15,0.45,0.05,0.3,0.92,0.3,0.3,0.7,0,0.6,0.25,0.4]},{"chapter":1,"name":"Steelmanning Opposing Frames","year":"2012","kind":"skill","cluster":3,"story":"Legal training and ideological friction forced the discipline of articulating the strongest version of an opponent's argument before dismantling it. Weak strawmen never survived either a moot bench or a sharp seminar.","vec":[0.45,0.1,0.4,0.1,0.8,0.8,0.2,0.4,0.05,0.55,0.2,0.2]},{"chapter":1,"name":"Jurisdictional Comparison","year":"2013","kind":"skill","cluster":0,"story":"Analyzed how different legal systems—common law, civil law, and authoritarian capture—handle property, speech, and commercial disputes. Comparing rulebooks across borders became a lens for evaluating entire societies.","vec":[0.95,0.4,0.65,0.05,0.25,0.4,0.2,0.88,0.35,0.6,0.15,0.1]},{"chapter":1,"name":"Solo Relocation Execution","year":"2008","kind":"skill","cluster":1,"story":"Managed housing, finances, study loads, and immigration compliance independently in a new country at a young age. Operating without local backup forged practical self-sufficiency under ambiguity.","vec":[0.2,0.9,0.15,0,0.15,0.15,0.6,0.15,0.2,0.35,0.92,0.85]},{"chapter":1,"name":"Debating Romanticized Trauma","year":"2009","kind":"tension","cluster":3,"story":"Arguing with sheltered campus activists who idolized the exact regime that dismantled his home country created surreal emotional friction. It felt absurd having to cite textbooks to prove what he had just lived through.","vec":[0.65,0.25,0,0,0.5,0.88,0.15,0.8,0.2,-0.1,0,0.95]},{"chapter":1,"name":"Comfort vs. Hunger","year":"2010","kind":"tension","cluster":1,"story":"Melbourne offered safety, high wages, and an easygoing lifestyle, yet that very comfort often felt sedating. Wanted a higher-voltage arena where urgency and outsized goals were not treated as eccentric.","vec":[0.1,0.65,0,0.1,0.1,0.55,0.96,0.2,0.1,0.55,0.5,0.55]},{"chapter":1,"name":"Tall Poppy Friction","year":"2011","kind":"tension","cluster":1,"story":"Expressing bold ambition openly in Australia frequently met subtle social leveling or ironic deflation. Navigating the gap between staying likable and refusing to play small became a recurring quiet tax.","vec":[0.05,0.6,0,0.05,0.3,0.78,0.95,0.15,0.1,0.25,0.35,0.6]},{"chapter":1,"name":"Outsider Clarity, Insider Distance","year":"2011","kind":"tension","cluster":3,"story":"Being an immigrant gave sharp X-ray vision into Australian blind spots, but the same distance made full belonging elusive. Seeing the water everyone else swam in meant rarely feeling completely at home in it.","vec":[0.35,0.55,0,0.1,0.55,0.75,0.3,0.65,0.1,0.4,0,0.8]},{"chapter":1,"name":"Admiring Law, Distrusting States","year":"2012","kind":"tension","cluster":0,"story":"Genuinely loved studying a functioning common-law system while retaining deep instinctive skepticism of state power. Holding both truths at once prevented naive cynicism and naive trust alike.","vec":[0.95,0.4,0.35,0,0.15,0.75,0.1,0.65,0.7,0.3,0,0.25]},{"chapter":1,"name":"Ivory Tower vs. Reality","year":"2012","kind":"tension","cluster":3,"story":"Academic discussions often rewarded theoretical elegance over empirical contact with reality. Sitting through tidy lectures about revolutions that wrecked real lives highlighted the cost of consequence-free ideas.","vec":[0.55,0.15,0.1,-0.1,0.45,0.92,0.25,0.75,0.2,0.2,0.15,0.7]},{"chapter":1,"name":"Law Track vs. Builder Itch","year":"2013","kind":"tension","cluster":2,"story":"Finishing a prestigious dual degree opened a clear path into conventional Melbourne law firms, yet the rigid partner-track ladder felt too slow. Formal training sharpened the mind while making traditional scripts feel cramped.","vec":[0.3,0.7,0.45,0.15,0.1,0.6,0.88,0.05,0.3,0.75,0.7,0.3]},{"chapter":1,"name":"Australian Calm, American Pulse","year":"2014","kind":"tension","cluster":1,"story":"Appreciated Australia's stability and fairness even as his cultural center of gravity pulled steadily toward American meritocracy and frontier energy. Gratitude for a safe harbor coexisted with the certainty it was not the final stop.","vec":[0.4,0.85,0,0.1,0.25,0.5,0.9,0.55,0.25,0.7,0.35,0.45]},{"chapter":2,"name":"Zero Grad Applications","year":"2015","kind":"event","cluster":1,"story":"Sat out the entire Sydney law-firm graduate recruitment cycle without submitting a single clerkship or grad-program form. Treated the standard pipeline as a filter optimized for conformity rather than fit.","vec":[0.6,0.9,0,0,0,0.9,0.7,0,0.4,0.2,0.1,0.5]},{"chapter":2,"name":"Identifying the One Partner","year":"2015","kind":"event","cluster":2,"story":"Narrowed the entire Australian legal market down to the single partner doing substantive work in cryptocurrency law. Replaced spray-and-pray volume with a sample size of one.","vec":[0.2,0.6,0.3,0,0.1,0.8,0.7,0.1,0.2,0.8,0.5,0]},{"chapter":2,"name":"The Cold Email","year":"2015","kind":"event","cluster":1,"story":"Wrote directly to Australia's foremost crypto law partner with no warm intro, no HR portal, and no template cover letter. Led with genuine fluency in how protocols worked rather than GPA or firm flattery.","vec":[0.3,0.9,0.2,0.1,0.7,0.7,0.8,0,0.5,0.5,0.8,0.4]},{"chapter":2,"name":"Hired for Crypto Obsession","year":"2015","kind":"event","cluster":3,"story":"The partner bypassed conventional graduate intake and brought him into the Sydney firm specifically because his early interest in crypto was unmistakably real. Proof that authentic signal outperforms polished credentials.","vec":[0.2,0.7,0.3,0,0.6,0.6,0.5,0,0.4,0.9,0.3,0.2]},{"chapter":2,"name":"Sydney Grad Lawyer Seat","year":"2016","kind":"event","cluster":0,"story":"Entered a Sydney law firm as a graduate lawyer, stepping inside the machinery of commercial legal practice. Experienced first-hand how statutes, precedents, and risk memos govern institutional capital.","vec":[0.8,0.1,0.2,0,0.3,0.1,0.3,0.3,-0.1,0.2,0.3,0.3]},{"chapter":2,"name":"Crypto Law in Practice","year":"2016","kind":"event","cluster":2,"story":"Worked on crypto-adjacent legal matters before regulators or major firms had coherent playbooks for digital assets. Watched legacy legal categories bend awkwardly around permissionless networks.","vec":[0.8,0.2,0.7,0,0.6,0.5,0.2,0.4,0.6,0.8,0.2,0]},{"chapter":2,"name":"Formal Admission to Practice","year":"2017","kind":"event","cluster":0,"story":"Completed the minimum supervised practice required to be formally admitted as a lawyer in Australia. Locked in the professional credential cleanly before ever letting the career track calcify.","vec":[0.7,0.5,0,0,0.2,0.1,0.4,0.1,0,0,0.6,0.6]},{"chapter":2,"name":"Walking Out to Tech","year":"2017","kind":"event","cluster":1,"story":"Left traditional legal practice almost immediately after admission, pivoting straight into the tech and crypto arena. Chose the uncertainty of building on the frontier over the predictable ladder of private practice.","vec":[0.3,1,0.4,0,0.1,0.7,0.9,0,0.5,0.8,0.7,0.6]},{"chapter":2,"name":"Gatekeepers Are Optional","year":"2015","kind":"prior","cluster":1,"story":"Graduate HR pipelines, recruiting portals, and formal intake seasons exist to filter averages, not exceptions. Walking around the velvet rope is usually faster than waiting in line.","vec":[0.5,0.9,0,0,0.1,0.9,0.6,0,0.8,0.2,0.4,0.2]},{"chapter":2,"name":"Asymmetric Cold Outreach","year":"2015","kind":"prior","cluster":1,"story":"One sharply targeted message to the exact decision-maker has bounded downside and unbounded upside. Most people self-select out of sending it before rejection ever happens.","vec":[0,0.8,0,0.1,0.7,0.7,0.7,0,0.3,0.3,0.8,0.4]},{"chapter":2,"name":"Obsession Beats Polish","year":"2015","kind":"prior","cluster":2,"story":"Real time spent down a niche rabbit hole reads immediately to anyone who actually knows the field. Manufactured enthusiasm and rehearsed interview answers collapse on first contact with an expert.","vec":[0.1,0.3,0.5,0.1,0.5,0.6,0.4,0,0.2,0.9,0.2,0.2]},{"chapter":2,"name":"Credentials as Launchpads","year":"2017","kind":"prior","cluster":1,"story":"A law admission is useful as a permanent mental model and a portable signal, never as an identity prison. Treat institutional stamps as springboards rather than life sentences.","vec":[0.6,0.9,0,0,0.2,0.7,0.6,0.1,0.3,0.1,0.3,0.2]},{"chapter":2,"name":"Law Trails Technology","year":"2016","kind":"prior","cluster":0,"story":"Regulatory frameworks always arrive years after protocols ship and users adopt them. Understanding the lag between code and statute is a structural edge in emerging markets.","vec":[0.9,0.2,0.6,0,0.3,0.6,0.1,0.7,0.6,0.6,0.1,0]},{"chapter":2,"name":"Incentives Explain Institutions","year":"2016","kind":"prior","cluster":0,"story":"Inside a law firm, six-minute billing increments quietly dictate how problems get framed and how slowly risk gets resolved. Once you see the economic engine, institutional behavior stops feeling mysterious.","vec":[0.9,0.3,0.3,0,0.1,0.8,0.3,0.4,0.5,0.2,0,0.1]},{"chapter":2,"name":"Know When to Exit","year":"2017","kind":"prior","cluster":1,"story":"Staying past the point of steep learning turns a strategic stint into gilded inertia. The best time to leave a prestige track is right after extracting its core value, before lifestyle creep locks the door.","vec":[0.2,1,0,0,0,0.6,0.8,0,0.2,0.3,0.5,0.5]},{"chapter":2,"name":"Small Surface, High Signal","year":"2015","kind":"prior","cluster":3,"story":"In a tiny, early-stage domain like 2015 crypto, being genuinely curious puts you in the top percentile overnight. Frontier niches reward depth far sooner than mature industries ever will.","vec":[0,0.4,0.4,0,0.5,0.7,0.5,0.2,0.3,0.9,0.3,0]},{"chapter":2,"name":"Advising vs. Building","year":"2016","kind":"prior","cluster":2,"story":"Lawyers write opinions about other people's risk; builders ship the systems that create new reality. Seeing the gap from the advisory side clarified which side of the table mattered more.","vec":[0.3,0.7,0.5,0.1,0.1,0.5,0.8,0,0.3,0.5,0.9,0.2]},{"chapter":2,"name":"Precision Cold Writing","year":"2015","kind":"skill","cluster":3,"story":"Distilling genuine domain interest and clear intent into a short email that a busy senior partner actually reads and answers. Zero fluff, high signal-to-noise, immediate credibility.","vec":[0,0.5,0.1,0.4,0.9,0.4,0.5,0,0.1,0.2,0.8,0.1]},{"chapter":2,"name":"Legal-to-Tech Translation","year":"2016","kind":"skill","cluster":3,"story":"Moving fluidly between statutory definitions, contract structures, and how decentralized protocols actually execute. Able to explain cryptographic mechanics to lawyers and regulatory boundaries to engineers.","vec":[0.6,0,0.8,0.1,1,0.3,0.2,0.2,0.3,0.5,0.3,0]},{"chapter":2,"name":"Regulatory Pattern Reading","year":"2016","kind":"skill","cluster":0,"story":"Reading how agencies, courts, and legal doctrines classify novel financial primitives before explicit rules exist. Spotting where compliance friction will land and where genuine grey space remains.","vec":[0.9,0.1,0.5,0,0.4,0.5,0.2,0.6,0.4,0.5,0.2,0]},{"chapter":2,"name":"Early Niche Scouting","year":"2015","kind":"skill","cluster":2,"story":"Detecting emerging sub-fields and their quiet key practitioners long before institutions formalize departments around them. Knowing who actually matters in a nascent space rather than who holds the loudest title.","vec":[0.1,0.4,0.4,0,0.3,0.7,0.6,0.3,0.2,0.9,0.5,0]},{"chapter":2,"name":"Navigating Senior Principals","year":"2016","kind":"skill","cluster":3,"story":"Communicating directly with partner-level decision-makers as a peer on substance rather than hiding behind junior hierarchy. Earning trust through preparation and candor rather than deference.","vec":[0.1,0.5,0.1,0.1,0.8,0.3,0.6,0.1,0.2,0.2,0.5,0.3]},{"chapter":2,"name":"Adversarial Edge-Case Thinking","year":"2016","kind":"skill","cluster":0,"story":"Legal training sharpened the habit of stress-testing agreements and systems for failure modes, loopholes, and misaligned incentives. A mental reflex that transferred cleanly into protocol design and tech strategy.","vec":[0.8,0.1,0.7,0,0.2,0.6,0.2,0.2,0.5,0.4,0.3,0]},{"chapter":2,"name":"Structured Risk Framing","year":"2016","kind":"skill","cluster":3,"story":"Separating real existential legal hazards from theatrical boilerplate so teams can make clear-eyed decisions. Turning ambiguous regulatory fog into concrete options and trade-offs.","vec":[0.7,0.2,0.4,0.2,0.8,0.4,0.2,0.3,0.1,0.2,0.6,0]},{"chapter":2,"name":"Billable Hours vs. Velocity","year":"2016","kind":"tension","cluster":2,"story":"Law firms monetize time spent hedging every caveat, while tech rewards rapid iteration and shipping. Sitting inside six-minute billing increments made the pace gap impossible to ignore.","vec":[0.5,0.5,0.3,0.1,0,0.5,0.7,0,0.2,0.3,0.9,0.4]},{"chapter":2,"name":"Admission for Pure Optionality","year":"2017","kind":"tension","cluster":1,"story":"Grinding through the final stretch of supervised practice solely to secure formal admission, already knowing he would not stay. Balancing strategic patience against the itch to leave immediately.","vec":[0.4,0.7,0,0,0,0.3,0.5,0,0,-0.1,0.3,0.8]},{"chapter":2,"name":"Prestige Track vs. Frontier","year":"2017","kind":"tension","cluster":1,"story":"Walking away from a legible, socially validated Sydney legal career for an immature crypto industry most peers dismissed as fringe. Trading predictable status for asymmetric upside and real autonomy.","vec":[0.3,0.9,0.2,0,-0.1,0.8,0.9,0.1,0.4,0.7,0.3,0.7]},{"chapter":2,"name":"Code Speed vs. Statute Speed","year":"2016","kind":"tension","cluster":0,"story":"Watching open-source protocols evolve weekly while legal interpretations took months of cautious committee memos. The mismatch between permissionless software and permissioned law felt increasingly irreconcilable.","vec":[0.8,0.3,0.7,0,0.2,0.5,0.4,0.4,0.8,0.6,0.6,0.2]},{"chapter":2,"name":"Loyalty vs. Trajectory","year":"2017","kind":"tension","cluster":1,"story":"Leaving a mentor-partner who had genuinely bet on him outside the usual rules was not a bloodless decision. Navigating gratitude without letting obligation dictate the next decade.","vec":[0,0.8,0,0,0.3,0.2,0.6,0,0,0.1,0.2,0.9]},{"chapter":2,"name":"Observer vs. Participant","year":"2016","kind":"tension","cluster":2,"story":"Advising crypto projects from the sideline meant seeing the frontier up close without having skin in the game. The closer he sat to builders, the less tolerable remaining an outside counsel became.","vec":[0.2,0.7,0.4,0,0.2,0.4,0.8,0,0.3,0.7,0.8,0.5]},{"chapter":3,"name":"2013 Bitcoin Epiphany","year":"2013","kind":"event","cluster":0,"story":"First encounter with Bitcoin clicks immediately through the lived lens of Venezuelan hyperinflation. Fixed-supply, permissionless money registers not as a novelty, but as an urgent monetary escape hatch.","vec":[0.9,0.9,0.3,0,0.1,0.8,0.4,0.95,0.95,0.8,0.1,0.7]},{"chapter":3,"name":"Blockchain Centre Melbourne","year":"2015","kind":"event","cluster":3,"story":"Begins attending meetups at Melbourne's Blockchain Centre in 2015–16, finding a physical enclave of cypherpunks, early builders, and monetary heretics. Weekly conversations turn abstract curiosity into an active worldview.","vec":[0.5,0.4,0.4,0,0.8,0.5,0.5,0.2,0.7,0.9,0.3,0.2]},{"chapter":3,"name":"2017 ICO Mania","year":"2017","kind":"event","cluster":0,"story":"Watches whitepaper-only token sales raise millions overnight during the 2017 boom. The spectacle teaches an early discipline: separate real protocol engineering from speculative theater.","vec":[0.7,0.1,0.3,0.1,0.3,0.85,0.2,0.4,0.5,0.4,0,0.3]},{"chapter":3,"name":"2018 Crypto Winter","year":"2018","kind":"event","cluster":1,"story":"Stays plugged into the space through the brutal drawdown after speculative tourists vanish. Remaining when token prices collapse confirms that the pull is the underlying technology, not quick windfalls.","vec":[0.4,0.5,0.4,0,0.2,0.75,0.6,0.2,0.6,0.6,0.2,0.9]},{"chapter":3,"name":"DeFi Summer & Composability","year":"2020","kind":"event","cluster":2,"story":"Tracks permissionless lending and automated market makers proving that financial primitives can run without banks. High gas fees and brittle interfaces simultaneously expose how far base-layer UX still has to go.","vec":[0.6,0.5,0.75,0.4,0.2,0.5,0.4,0.1,0.9,0.85,0.2,0.1]},{"chapter":3,"name":"NFT & Memecoin Frenzy","year":"2021","kind":"event","cluster":0,"story":"Observes profile-picture speculation and dog-coin manias flood crypto timelines during the 2020–21 cycle. Staying anchored in infrastructure sharpens the line between cultural noise and durable utility.","vec":[0.6,0.1,0.2,0.3,0.4,0.85,0.2,0.3,0.4,0.3,0,0.4]},{"chapter":3,"name":"Discovering Early NEAR","year":"2020","kind":"event","cluster":2,"story":"Encounters NEAR Protocol in its early days and is immediately drawn to its sharded architecture—framed as Ethereum 2.0 delivered—paired with a rare, genuine obsession with human-readable UX.","vec":[0.2,0.3,0.8,0.9,0.4,0.6,0.7,0.1,0.6,0.95,0.3,0.1]},{"chapter":3,"name":"NEAR Community Stewardship","year":"2021","kind":"event","cluster":3,"story":"Steps into active community leadership across the NEAR ecosystem, turning scattered early adopters into a coherent network of contributors. Consistency and candor build trust faster than any formal title.","vec":[0.2,0.3,0.3,0.3,0.95,0.3,0.6,0.1,0.4,0.5,0.7,0.4]},{"chapter":3,"name":"NEAR Governance Arena","year":"2022","kind":"event","cluster":0,"story":"Takes hands-on roles in DAO and protocol governance inside NEAR, navigating treasury allocation, incentive design, and contentious stakeholder politics. Theory meets the messy reality of decentralized coordination.","vec":[0.85,0.2,0.4,0.1,0.75,0.5,0.5,0.4,0.6,0.4,0.5,0.6]},{"chapter":3,"name":"Ecosystem BD & Partnerships","year":"2022","kind":"event","cluster":3,"story":"Operates across business development and ecosystem growth, onboarding founders, connecting teams, and representing NEAR across partner channels. Becomes a reliable human router inside a fast-moving L1.","vec":[0.1,0.4,0.4,0.2,0.9,0.2,0.75,0.2,0.3,0.5,0.8,0.3]},{"chapter":3,"name":"Recognized NEAR Voice","year":"2023","kind":"event","cluster":3,"story":"Establishes a widely known reputation across the NEAR ecosystem through relentless content, governance participation, and community presence. Proves high-leverage ecosystem influence is possible without an engineering title.","vec":[0.3,0.5,0.4,0.4,0.95,0.5,0.8,0.1,0.4,0.4,0.6,0.5]},{"chapter":3,"name":"Sound Money as Survival","year":"2013","kind":"prior","cluster":1,"story":"Monetary sovereignty is not a libertarian thought experiment. When a state debases its currency and locks capital controls, unconfiscatable hard money is practical survival infrastructure.","vec":[0.95,1,0.2,0,0.1,0.7,0.3,0.95,0.9,0.2,0.1,0.85]},{"chapter":3,"name":"Code Over Failed Courts","year":"2015","kind":"prior","cluster":0,"story":"Immutable code matters most where legal systems are broken or captured. Smart contracts let strangers transact with credible guarantees even when no court or regulator can be trusted.","vec":[1,0.8,0.6,0,0.2,0.75,0.2,0.85,1,0.3,0.1,0.5]},{"chapter":3,"name":"Eliminate the Middleman","year":"2016","kind":"prior","cluster":0,"story":"Every discretionary intermediary is a point of rent extraction, censorship, and failure. Credible neutrality requires replacing gatekeepers with verifiable, open protocols.","vec":[0.9,0.85,0.5,0,0.2,0.8,0.3,0.5,1,0.4,0.1,0.2]},{"chapter":3,"name":"Cypherpunk Signal Over Hype","year":"2017","kind":"prior","cluster":0,"story":"Speculative waves always burn out, leaving only cryptography, open networks, and censorship resistance behind. Staying aligned with first-principles utility filters out ninety percent of industry noise.","vec":[0.75,0.6,0.6,0.1,0.2,0.95,0.4,0.3,0.9,0.5,0.1,0.4]},{"chapter":3,"name":"Infrastructure Fails Without UX","year":"2020","kind":"prior","cluster":2,"story":"Brilliant consensus and sharding mean nothing if onboarding requires seed phrases, hex strings, and gas math. Mainstream adoption is a design problem as much as a cryptography problem.","vec":[0.1,0.2,0.6,1,0.5,0.7,0.5,0,0.3,0.5,0.4,0.2]},{"chapter":3,"name":"Community as Protocol Moat","year":"2021","kind":"prior","cluster":3,"story":"Open-source code can be forked in an afternoon. An aligned, high-trust network of builders, contributors, and advocates is the only durable moat a protocol can build.","vec":[0.2,0.2,0.3,0.2,1,0.5,0.6,0.1,0.4,0.3,0.4,0.3]},{"chapter":3,"name":"Incentives Beat Good Intentions","year":"2022","kind":"prior","cluster":0,"story":"Token systems and DAOs always converge on what their mechanisms reward, never on what their manifestos preach. Sloppy incentive design inevitably invites mercenaries and drains treasuries.","vec":[0.9,0.3,0.5,0,0.3,0.9,0.3,0.5,0.6,0.3,0.2,0.4]},{"chapter":3,"name":"Non-Technical Leverage Is Real","year":"2021","kind":"prior","cluster":3,"story":"Protocols do not win on GitHub commits alone. Narrative clarity, ecosystem coordination, and partner distribution decide whether great engineering ever finds real users.","vec":[0.1,0.4,0.2,0.4,0.95,0.6,0.7,0,0.1,0.3,0.6,0.3]},{"chapter":3,"name":"Human-Readable Crypto Rails","year":"2020","kind":"prior","cluster":2,"story":"Named accounts, progressive onboarding, and abstracted key management are the missing bridge between cypherpunk ideals and everyday software. Sovereignty should not require a systems-engineering degree.","vec":[0.2,0.5,0.65,0.95,0.5,0.6,0.4,0,0.65,0.6,0.3,0.1]},{"chapter":3,"name":"Bear Markets Build Conviction","year":"2018","kind":"prior","cluster":1,"story":"True alignment only reveals itself when prices are down eighty percent and the tourists are gone. The quiet rooms during drawdowns are where real relationships and real conviction form.","vec":[0.3,0.5,0.3,0,0.3,0.85,0.6,0.2,0.5,0.5,0.3,0.95]},{"chapter":3,"name":"Decentralization Is a Spectrum","year":"2022","kind":"prior","cluster":0,"story":"Purity theater paralyzes shipping, while fake decentralization recreates banks with worse interfaces. Durable systems balance pragmatic usability with credible, permissionless exit.","vec":[0.75,0.6,0.65,0.4,0.3,0.85,0.4,0.3,0.75,0.4,0.5,0.2]},{"chapter":3,"name":"Ecosystem Business Development","year":"2022","kind":"skill","cluster":3,"story":"Sourcing, qualifying, and closing partnerships across founders, wallets, and tooling teams in an open ecosystem. Built on credibility, rapid context-switching, and genuine alignment rather than corporate scripts.","vec":[0.1,0.4,0.3,0.2,0.9,0.2,0.75,0.1,0.2,0.4,0.85,0.3]},{"chapter":3,"name":"Technical Content Creation","year":"2021","kind":"skill","cluster":3,"story":"Writing threads, deep dives, and ecosystem explainers that distill sharding, account models, and governance into sharp, readable narratives. Turns dense protocol specs into shareable mental models.","vec":[0.1,0.2,0.65,0.6,1,0.4,0.5,0.1,0.2,0.6,0.75,0.1]},{"chapter":3,"name":"DAO & Protocol Governance","year":"2022","kind":"skill","cluster":0,"story":"Drafting proposals, scrutinizing treasury flows, and navigating decentralized politics where persuasion replaces managerial authority. Demands institutional skepticism paired with diplomatic stamina.","vec":[0.85,0.2,0.4,0.1,0.8,0.5,0.5,0.4,0.65,0.3,0.55,0.5]},{"chapter":3,"name":"High-Signal Community Building","year":"2021","kind":"skill","cluster":3,"story":"Cultivating contributor channels and regional hubs that retain serious builders while filtering out airdrop farmers and mercenary noise. Sets cultural norms through tone, taste, and consistent presence.","vec":[0.3,0.2,0.2,0.4,0.95,0.4,0.6,0.1,0.3,0.4,0.7,0.4]},{"chapter":3,"name":"Absorbing Protocol Architecture","year":"2020","kind":"skill","cluster":2,"story":"Internalizing Nightshade sharding, consensus trade-offs, account abstraction, and gas mechanics through constant proximity to core engineers. Builds deep architectural intuition without writing the Rust.","vec":[0.1,0.2,0.9,0.3,0.3,0.5,0.6,0,0.5,0.95,0.2,0.2]},{"chapter":3,"name":"Translating Deep Tech","year":"2021","kind":"skill","cluster":3,"story":"Operating as the bilingual bridge between protocol researchers speaking in state transitions and founders or users who need to know what actually works. Strips away jargon without losing technical truth.","vec":[0.1,0.1,0.75,0.65,1,0.4,0.5,0,0.2,0.6,0.6,0.1]},{"chapter":3,"name":"Crypto UX Critique","year":"2020","kind":"skill","cluster":2,"story":"Spotting onboarding cliffs, wallet friction, and broken mental models in dApps long before engineering teams see users drop off. Pairs user empathy with an understanding of underlying protocol constraints.","vec":[0.1,0.2,0.6,1,0.5,0.6,0.5,0,0.3,0.5,0.4,0.1]},{"chapter":3,"name":"Token & Narrative Framing","year":"2021","kind":"skill","cluster":3,"story":"Positioning complex infrastructure around clear, sticky mental models so builders and capital immediately grasp the differentiation. Understands how stories move ecosystems without crossing into hollow hype.","vec":[0.2,0.2,0.4,0.6,0.95,0.55,0.65,0.2,0.2,0.4,0.65,0.1]},{"chapter":3,"name":"Stakeholder Alignment","year":"2022","kind":"skill","cluster":3,"story":"Mediating between foundation teams, validators, DAO councils, and app founders with competing incentives and timelines. Keeps coalitions moving when no single party has unilateral control.","vec":[0.5,0.2,0.3,0.1,0.9,0.3,0.5,0.3,0.3,0.2,0.7,0.4]},{"chapter":3,"name":"Cycle Pattern Recognition","year":"2021","kind":"skill","cluster":0,"story":"Reading market reflexivity across ICOs, DeFi, NFTs, and memecoins fast enough to separate structural breakthroughs from short-lived liquidity games. Grounded in lived memory of multiple booms and busts.","vec":[0.7,0.3,0.4,0.1,0.3,0.9,0.4,0.7,0.4,0.5,0.2,0.5]},{"chapter":3,"name":"Product Ideation & Scoping","year":"2022","kind":"skill","cluster":2,"story":"Continuously spotting gaps in wallets, governance tools, and consumer crypto flows and shaping them into crisp product concepts. Combines sharp UX taste with real ecosystem demand.","vec":[0.1,0.4,0.6,0.9,0.4,0.6,0.85,0,0.3,0.8,0.35,0.2]},{"chapter":3,"name":"Surrounded Yet Unable to Ship","year":"2022","kind":"tension","cluster":2,"story":"Spending years immersed among world-class protocol engineers, absorbing how systems work, yet lacking the coding fluency to build and ship personal product ideas solo.","vec":[0,0.5,0.6,0.6,0.1,0.3,0.95,0,0.2,0.6,-0.3,0.9]},{"chapter":3,"name":"Bottled Ideas, Zero Dev Bandwidth","year":"2022","kind":"tension","cluster":1,"story":"Accumulating a notebook full of clear, timely crypto product ideas that stay unbuilt because every capable engineer is already stretched thin on core protocol roadmaps.","vec":[0.1,0.6,0.4,0.7,0.2,0.4,0.95,0,0.1,0.7,-0.25,0.85]},{"chapter":3,"name":"Mercenaries in Cypherpunk Spaces","year":"2021","kind":"tension","cluster":0,"story":"Watching short-term speculators, grifters, and engagement farmers repeatedly hijack movements built for monetary sovereignty and trustless coordination. Deeply alienating for anyone in it for the real technology.","vec":[0.9,0.4,0.2,0.1,0.2,0.85,0.3,0.5,0.95,0.1,0,0.8]},{"chapter":3,"name":"Chronic Crypto UX Friction","year":"2020","kind":"tension","cluster":2,"story":"Enduring the constant frustration of trying to onboard normal people into tools burdened by seed phrases, clunky wallets, and hostile interfaces that undermine the promise of open rails.","vec":[0.1,0.3,0.5,0.95,0.4,0.6,0.6,0,0.4,0.3,-0.1,0.65]},{"chapter":3,"name":"Governance Theater vs Execution","year":"2022","kind":"tension","cluster":0,"story":"Seeing DAO forums bog down in endless proposals, faction politics, and committee bikeshedding while urgent ecosystem and product decisions stall. Exposes the painful cost of poorly structured decentralization.","vec":[0.9,0.2,0.3,0.1,0.4,0.75,0.7,0.3,0.4,0.1,-0.25,0.75]},{"chapter":3,"name":"Influence Without Code Equity","year":"2023","kind":"tension","cluster":1,"story":"Earning real respect and visibility across NEAR through BD, content, and community work while hitting the structural ceiling of not being able to own and ship the software layer directly.","vec":[0.2,0.7,0.3,0.3,0.7,0.4,0.9,0,0.2,0.3,-0.15,0.8]},{"chapter":3,"name":"Technology vs Casino Optics","year":"2021","kind":"tension","cluster":3,"story":"Constantly defending serious cryptographic infrastructure to outsiders who only see memecoins, rug pulls, and speculative manias in the headlines. Exhausting to bridge a signal that the market keeps drowning out.","vec":[0.6,0.2,0.5,0.2,0.8,0.7,0.3,0.4,0.7,0.2,0,0.7]},{"chapter":3,"name":"Non-Technical Imposter Friction","year":"2021","kind":"tension","cluster":2,"story":"Understanding system architecture and UX trade-offs deeply enough to debate protocol engineers, yet feeling permanently one layer removed from the repository and the compiler.","vec":[0,0.3,0.7,0.5,0.2,0.3,0.85,0,0.1,0.6,-0.2,0.85]},{"chapter":3,"name":"Always One Step From Solo","year":"2023","kind":"tension","cluster":1,"story":"Emerging from a decade in crypto with sharp product taste, deep network reach, and architectural fluency—standing right at the threshold of building independently, waiting for the lever that closes the last gap.","vec":[0.1,0.85,0.55,0.65,0.4,0.5,1,0.1,0.3,0.75,-0.1,0.9]},{"chapter":4,"name":"First AI Coding Breakthrough","year":"2023","kind":"event","cluster":2,"story":"The moment LLMs could write real code, he jumped straight into the terminal and taught himself how to build from scratch. A decade of pent-up product ideas suddenly had a direct path to execution.","vec":[0,0.75,0.65,0.15,0,0.35,0.7,0,0.4,0.9,0.85,0.45]},{"chapter":4,"name":"Early Vibe-Coding Wave","year":"2023–24","kind":"event","cluster":2,"story":"Part of the earliest cohort building real software conversationally with LLMs before the workflow even had a name. Learned by shipping live prototypes rather than following traditional textbook curricula.","vec":[0,0.55,0.55,0.35,0.2,0.7,0.5,0,0.25,0.95,0.9,0.1]},{"chapter":4,"name":"Day-One Model Drops","year":"2023–26","kind":"event","cluster":2,"story":"Made a habit of stress-testing every frontier LLM, coding agent, and developer tool the hour it released. Turned release-day curiosity into an ongoing edge in knowing what each model actually handles well.","vec":[0,0.2,0.7,0.1,0.15,0.4,0.65,0,0,1,0.6,0]},{"chapter":4,"name":"First Solo Deployed App","year":"2023–24","kind":"event","cluster":1,"story":"Pushed a self-built application live to the web without waiting on an engineer, designer, or product sprint. That first solo deployment permanently rewired the ceiling of what felt buildable.","vec":[0,0.95,0.5,0.3,0,0.25,0.65,0,0.75,0.45,0.9,0.5]},{"chapter":4,"name":"First Hackathon Win","year":"2024","kind":"event","cluster":1,"story":"Entered a competitive hackathon as a self-taught AI builder and walked away with a win. External validation under a ticking clock proved the new workflow could beat conventional teams.","vec":[0,0.8,0.55,0.4,0.35,0.45,0.9,0,0.2,0.55,1,0.65]},{"chapter":4,"name":"Repeat Hackathon Wins","year":"2024–25","kind":"event","cluster":1,"story":"Followed the first win with additional hackathon podiums, confirming that speed and product clarity were repeatable advantages rather than one-off luck. Each sprint compressed the distance between raw concept and working demo.","vec":[0,0.75,0.65,0.45,0.3,0.35,0.95,0,0.15,0.5,1,0.55]},{"chapter":4,"name":"Agentic Workflow Shift","year":"2025","kind":"event","cluster":2,"story":"Transitioned from copy-pasting snippets in chat windows to orchestrating multi-step coding agents across full repositories. Project scope jumped from small utilities to multi-file interactive systems.","vec":[0,0.4,0.9,0.15,0,0.3,0.65,0,0.2,0.9,0.85,0]},{"chapter":4,"name":"Ambitious Side-Project Arc","year":"2025–26","kind":"event","cluster":2,"story":"Built a growing portfolio of increasingly complex side projects spanning full-stack apps, developer tools, and interactive data experiences. Each release deliberately pushed past the technical depth of the last.","vec":[0,0.65,0.85,0.65,0.2,0.3,0.9,0,0.25,0.8,0.9,0.35]},{"chapter":4,"name":"Latent Space Chamber","year":"2026","kind":"event","cluster":3,"story":"Engineered an interactive 3D WebGL and SVG visualization mapping both LLM latent spaces and the geometry of his own lived priors. A meta-artifact proving how far a self-taught builder could push visual and mathematical craft.","vec":[0.15,0.55,0.9,0.95,0.85,0.45,0.75,0.35,0.1,0.85,0.8,0.4]},{"chapter":4,"name":"Removing the Last Middleman","year":"2024","kind":"prior","cluster":0,"story":"Crypto removed institutional middlemen from money; AI removed the execution middleman from software. The same anti-gatekeeper instinct from Venezuela and crypto law reached its logical conclusion in code.","vec":[0.75,0.9,0.35,0,0.2,0.8,0.45,0.45,1,0.4,0.55,0.25]},{"chapter":4,"name":"Taste as the Compiler","year":"2024","kind":"prior","cluster":3,"story":"When syntax becomes abundant, product judgment, restraint, and visual clarity become the real bottleneck. Knowing what is worth building—and what to cut—matters more than memorizing boilerplate.","vec":[0,0.3,0.35,1,0.65,0.75,0.4,0,0,0.45,0.55,0]},{"chapter":4,"name":"Non-Technical Edge","year":"2024","kind":"prior","cluster":3,"story":"Years in law, geopolitics, crypto governance, and community building stopped being a detour and became a differentiator. Domain context and user empathy give AI-generated code a point of view pure specialists often miss.","vec":[0.35,0.4,0.2,0.55,0.9,0.85,0.35,0.65,0.1,0.3,0.2,0.25]},{"chapter":4,"name":"Relentless Frontier Testing","year":"2024–25","kind":"prior","cluster":2,"story":"Never rely on secondhand benchmarks or social-media hype when a new model drops. The only reliable signal comes from throwing real, messy tasks at the tool on day one.","vec":[0.2,0.35,0.6,0,0,0.8,0.6,0,0.3,1,0.55,0]},{"chapter":4,"name":"Sovereign Solo Builder","year":"2025","kind":"prior","cluster":1,"story":"Agency is complete when one person can go from raw thesis to deployed artifact without permission or handoffs. Waiting for committees, funding rounds, or headcount became optional.","vec":[0.35,1,0.55,0.25,0.1,0.65,0.85,0,0.9,0.4,0.85,0.45]},{"chapter":4,"name":"Compounding Nonlinear Priors","year":"Today","kind":"prior","cluster":3,"story":"What looked like disconnected chapters on a resume—law, history, NEAR governance, UX obsession—collapsed into a single uncopyable intuition. Nonlinear paths look inefficient right up until the tools arrive to fuse them.","vec":[0.3,0.55,0.35,0.45,0.8,0.75,0.55,0.7,0.15,0.55,0.25,0.55]},{"chapter":4,"name":"Clarity Precedes Code","year":"2024","kind":"prior","cluster":0,"story":"Writing precise specs for an LLM mirrors legal drafting and protocol design: ambiguous thinking produces broken outputs. If you cannot articulate the invariant in plain language, the model cannot save you.","vec":[0.65,0.2,0.75,0.2,0.55,0.6,0.2,0,0.15,0.2,0.45,0]},{"chapter":4,"name":"Demo Over Deck","year":"2024–25","kind":"prior","cluster":1,"story":"A working link beats a twenty-slide pitch in every room. Shipping a tangible prototype in hours collapses weeks of abstract debate into immediate feedback.","vec":[0.15,0.75,0.4,0.45,0.4,0.65,0.75,0,0.35,0.25,1,0.15]},{"chapter":4,"name":"Zero-Permission Prototyping","year":"2025","kind":"prior","cluster":0,"story":"Just as cold-emailing a senior partner bypassed graduate pipelines, AI coding bypasses technical gatekeeping altogether. You no longer need an invitation to build at the frontier.","vec":[0.55,0.95,0.35,0,0.1,0.75,0.7,0.1,0.95,0.5,0.75,0.2]},{"chapter":4,"name":"Tools Age, Instincts Compound","year":"Today","kind":"prior","cluster":2,"story":"Specific frameworks and prompting tricks expire within months, so attachment to any single stack is a trap. What endures is architectural intuition, taste, and the nerve to keep shipping.","vec":[0.1,0.45,0.7,0.55,0.15,0.7,0.5,0.2,0.1,0.75,0.4,0.25]},{"chapter":4,"name":"Prompt-to-Architecture Design","year":"2024","kind":"skill","cluster":2,"story":"Breaking an ambitious product idea into clean modules, data schemas, and verifiable milestones before generating a line of code. Prevents LLM sessions from collapsing into tangled spaghetti.","vec":[0.1,0.25,0.95,0.35,0.2,0.35,0.4,0,0,0.45,0.8,0]},{"chapter":4,"name":"Multi-Model Benchmarking","year":"2024–26","kind":"skill","cluster":2,"story":"Routing tasks across frontier models based on empirical strengths—reasoning, refactoring, visual polish, or speed—rather than brand loyalty. Built through hands-on testing on every release day.","vec":[0,0.2,0.8,0.2,0.1,0.55,0.45,0,0.25,0.95,0.7,0]},{"chapter":4,"name":"Rapid Hackathon Prototyping","year":"2024–25","kind":"skill","cluster":1,"story":"Compressing ideation, scoping, implementation, and live demo polish into a 24-to-48-hour window. Knows exactly which corners to cut and which centerpiece interaction wins the room.","vec":[0,0.7,0.65,0.55,0.4,0.35,0.85,0,0.1,0.5,1,0.5]},{"chapter":4,"name":"Full-Stack Vibe Debugging","year":"2023–25","kind":"skill","cluster":2,"story":"Diagnosing broken builds, state bugs, and API failures across frontend and backend by pairing error traces with targeted model interrogation. Turned early trial-and-error into repeatable systems intuition.","vec":[0,0.35,0.9,0,0,0.2,0.4,0,0,0.55,0.8,0.45]},{"chapter":4,"name":"UI/UX Polish in Code","year":"2024–26","kind":"skill","cluster":3,"story":"Translating years of sharp product taste directly into typography, spacing, motion, and responsive layouts. Refuses to settle for generic AI-generated templates when shipping interfaces.","vec":[0,0.2,0.6,1,0.45,0.35,0.55,0,0,0.35,0.7,0]},{"chapter":4,"name":"Directing AI Agents","year":"2025–26","kind":"skill","cluster":2,"story":"Managing autonomous coding agents with tight context, clear constraints, and incremental verification loops. Treats each agent like a fast collaborator who needs crisp direction and strict review.","vec":[0.15,0.5,0.9,0.15,0.3,0.3,0.6,0,0.1,0.8,0.9,0]},{"chapter":4,"name":"Tight-Deadline Shipping","year":"2024–25","kind":"skill","cluster":1,"story":"Consistently crossing the finish line when the clock is almost up, keeping deployments stable and demos legible under pressure. Built on a bias toward working software over theoretical perfection.","vec":[0,0.65,0.5,0.25,0.15,0.2,0.85,0,0,0.2,1,0.7]},{"chapter":4,"name":"Interactive Visual Systems","year":"2025–26","kind":"skill","cluster":3,"story":"Combining WebGL, SVG, projection math, and interactive controls to make abstract concepts—like high-dimensional latent spaces—viscerally legible. Bridges technical depth with narrative storytelling.","vec":[0,0.3,0.9,0.95,0.7,0.35,0.6,0,0,0.75,0.7,0]},{"chapter":4,"name":"Spec & Context Engineering","year":"2025","kind":"skill","cluster":0,"story":"Structuring constraints, edge cases, and system prompts with the rigor of a legal contract. Clean context upfront yields dramatically cleaner architectures downstream.","vec":[0.55,0.2,0.85,0.15,0.45,0.4,0.3,0,0.1,0.5,0.7,0]},{"chapter":4,"name":"Ecosystem Tool Fluency","year":"2024–26","kind":"skill","cluster":2,"story":"Moving fluently across terminals, git workflows, package managers, CLIs, and modern AI IDEs without friction. Converted years of proximity to engineers into daily muscle memory.","vec":[0,0.4,0.85,0.1,0,0.1,0.4,0,0.2,0.8,0.8,0.1]},{"chapter":4,"name":"Demo Storytelling","year":"2024–25","kind":"skill","cluster":3,"story":"Framing a technical build around a sharp hook and an unmistakable live walkthrough so judges and users grasp the point in sixty seconds. Marries NEAR-era narrative instincts with live code.","vec":[0,0.3,0.3,0.7,0.95,0.25,0.65,0.1,0,0.2,0.75,0.1]},{"chapter":4,"name":"Prototype vs. Deep Craft","year":"2024–25","kind":"tension","cluster":2,"story":"AI makes getting to eighty percent effortless, but the last twenty percent of architecture, performance, and edge cases still demands real engineering depth. Constantly pushing past 'it works' toward genuine technical mastery.","vec":[0.1,0.2,0.9,0.6,0,0.35,0.75,0,0,0.35,-0.15,0.5]},{"chapter":4,"name":"Outrunning Tooling Maturity","year":"2024–25","kind":"tension","cluster":2,"story":"Building at the bleeding edge means fighting context limits, brittle agent loops, and APIs that break mid-project. High velocity constantly collides with half-baked developer infrastructure.","vec":[0,0.3,0.75,0,0,0.3,0.7,0,0.15,0.85,0.45,0.55]},{"chapter":4,"name":"Ambition vs. Focus","year":"2025","kind":"tension","cluster":1,"story":"When almost any idea can be prototyped in a weekend, the hardest discipline is choosing which project deserves months of depth. Too many viable threads compete for finite attention.","vec":[0,0.55,0.3,0.25,0.1,0.2,0.9,0,0,0.8,-0.2,0.45]},{"chapter":4,"name":"Unlearning the Engineer Crutch","year":"2023–24","kind":"tension","cluster":1,"story":"Years of operating as the non-technical leader left a subtle reflex to hand hard implementation off to someone else. Breaking that mental boundary required proving to himself he could debug his own stack.","vec":[0,0.85,0.45,0,-0.15,0.5,0.65,0,0.65,0.3,0.4,0.8]},{"chapter":4,"name":"Vibe-Coder Stigma","year":"2024–25","kind":"tension","cluster":3,"story":"Navigating dismissal from traditionalists who equate AI-assisted coding with shallow work. Responds by letting shipped craft, hackathon wins, and technical depth speak louder than labels.","vec":[0.25,0.55,0.4,0.35,0.65,0.85,0.6,0,0.3,0.3,0.5,0.55]},{"chapter":4,"name":"Model Churn Fatigue","year":"2025–26","kind":"tension","cluster":2,"story":"Staying current across weekly model drops, new CLIs, and shifting agent paradigms carries a real cognitive tax. Balancing frontier exploration against uninterrupted deep building time.","vec":[0,0.15,0.55,0,0,0.2,0.4,0,0,0.85,-0.2,0.6]},{"chapter":4,"name":"Black-Box Comprehension Gap","year":"2024","kind":"tension","cluster":0,"story":"Shipping code faster than you can audit every line creates an uncomfortable tension for someone wired for rule-of-law scrutiny. Forces a deliberate habit of reading, questioning, and understanding the underlying mechanics.","vec":[0.8,0.2,0.8,0,0,0.55,0.3,0,0.65,0.35,-0.2,0.4]},{"chapter":4,"name":"Solo Velocity vs. Scale","year":"2026","kind":"tension","cluster":1,"story":"Moving alone maximizes speed, coherence, and creative sovereignty, yet ambitious systems eventually test the limits of a single pair of hands. Figuring out where solo agency ends and leverage through people or agents begins.","vec":[0.15,0.85,0.45,0.2,0.35,0.3,0.8,0,0.5,0.25,0.5,0.4]}];
+
+// Build normalized 186-node dataset with smooth bornAt timestamps
+const chapCounts = [0, 0, 0, 0, 0];
+for (const n of RAW_NODES) chapCounts[n.chapter]++;
+const chapSeen = [0, 0, 0, 0, 0];
+
+const NODES = RAW_NODES.map((n, id) => {
+  const cIdx = chapSeen[n.chapter]++;
+  const bornAt = n.chapter + 0.04 + (cIdx / Math.max(1, chapCounts[n.chapter] - 1)) * 0.92;
+  return {
+    id,
+    chapter: n.chapter,
+    name: n.name,
+    year: n.year,
+    kind: n.kind,
+    cluster: n.cluster,
+    story: n.story,
+    vec: n.vec,
+    dir: unit(n.vec),
+    bornAt,
+  };
+});
+
+const N_NODES = NODES.length;
+
 // =========================================================================
-// REAL 3D PCA PROJECTION (R^8 -> [-0.94, 0.94]^3)
+// EMERGENT INTERLINKING (DISCOVERED PURELY FROM 12-D COSINE SIMILARITY!)
+// =========================================================================
+function sharedDimsLabel(aVec, bVec) {
+  const prods = aVec.map((v, d) => ({ d, p: Math.max(0, v) * Math.max(0, bVec[d]) }));
+  prods.sort((x, y) => y.p - x.p);
+  const top = prods.filter((x) => x.p > 0.12).slice(0, 2);
+  if (!top.length) return "Latent alignment";
+  return top.map((x) => DIM_NAMES[x.d]).join(" + ");
+}
+
+function discoverEmergentEdges() {
+  const edgeMap = new Map();
+  const addEdge = (i, j, sim, isBridge) => {
+    const a = Math.min(i, j), b = Math.max(i, j);
+    const key = `${a}_${b}`;
+    if (edgeMap.has(key)) return;
+    // Order from earlier chapter -> later chapter for directional pulses
+    const [from, to] = NODES[a].bornAt <= NODES[b].bornAt ? [a, b] : [b, a];
+    const shared = sharedDimsLabel(NODES[from].vec, NODES[to].vec);
+    edgeMap.set(key, [from, to, sim, isBridge, shared]);
+  };
+
+  for (let i = 0; i < N_NODES; i++) {
+    const crossCands = [];
+    const intraCands = [];
+    for (let j = 0; j < N_NODES; j++) {
+      if (i === j) continue;
+      const sim = cosSim(NODES[i].vec, NODES[j].vec);
+      if (NODES[i].chapter !== NODES[j].chapter) {
+        if (sim > 0.87) crossCands.push([j, sim]);
+      } else {
+        if (sim > 0.88) intraCands.push([j, sim]);
+      }
+    }
+    crossCands.sort((x, y) => y[1] - x[1]);
+    intraCands.sort((x, y) => y[1] - x[1]);
+
+    // Top 2 emergent cross-era bridges per node (preferring distinct target chapters)
+    const usedChap = new Set();
+    let crossAdded = 0;
+    for (const [j, sim] of crossCands) {
+      if (crossAdded >= 2) break;
+      const ch = NODES[j].chapter;
+      if (usedChap.has(ch) && crossCands.length > 3) continue;
+      usedChap.add(ch);
+      addEdge(i, j, sim, true);
+      crossAdded++;
+    }
+    // Top 1 emergent intra-chapter semantic neighbor
+    if (intraCands.length > 0) {
+      addEdge(i, intraCands[0][0], intraCands[0][1], false);
+    }
+  }
+  return [...edgeMap.values()];
+}
+
+const EDGES = discoverEmergentEdges();
+
+// Pre-index adjacency per node for O(1) Story Card lookup
+const NODE_EDGES = Array.from({ length: N_NODES }, () => ({ incoming: [], outgoing: [] }));
+for (let eIdx = 0; eIdx < EDGES.length; eIdx++) {
+  const [from, to, sim, isBridge, shared] = EDGES[eIdx];
+  NODE_EDGES[to].incoming.push({ id: from, sim, isBridge, shared });
+  NODE_EDGES[from].outgoing.push({ id: to, sim, isBridge, shared });
+}
+for (let i = 0; i < N_NODES; i++) {
+  NODE_EDGES[i].incoming.sort((a, b) => b.sim - a.sim);
+  NODE_EDGES[i].outgoing.sort((a, b) => b.sim - a.sim);
+}
+
+// =========================================================================
+// REAL 12-D -> 3-D PCA PROJECTION
 // =========================================================================
 function computePCA3() {
   const samples = NODES.map((n) => n.dir);
@@ -1165,7 +995,7 @@ function computePCA3() {
   const basis = [];
   const C = cov.map((r) => r.slice());
   for (let k = 0; k < 3; k++) {
-    let v = unit(Array.from({ length: D_MODEL }, (_, i) => ((i + k * 3) % 2 === 0 ? 1 : -0.7) + 0.17 * i));
+    let v = unit(Array.from({ length: D_MODEL }, (_, i) => ((i + k * 3) % 2 === 0 ? 1 : -0.7) + 0.13 * i));
     for (let iter = 0; iter < 80; iter++) {
       const next = new Array(D_MODEL).fill(0);
       for (let i = 0; i < D_MODEL; i++) {
@@ -1195,38 +1025,40 @@ function computePCA3() {
       if (c > maxAbs) maxAbs = c;
     }
   }
-  const scale = 0.86 / maxAbs;
+  const scale = 0.88 / maxAbs;
   return { mean, basis, scale };
 }
 
 const PCA3 = computePCA3();
 
-function project3(vec8) {
-  const u = unit(vec8);
+function project3(vec12) {
+  const u = unit(vec12);
   const centered = u.map((v, d) => v - PCA3.mean[d]);
   return [
-    Math.max(-0.92, Math.min(0.92, dot(centered, PCA3.basis[0]) * PCA3.scale)),
-    Math.max(-0.92, Math.min(0.92, dot(centered, PCA3.basis[1]) * PCA3.scale)),
-    Math.max(-0.92, Math.min(0.92, dot(centered, PCA3.basis[2]) * PCA3.scale)),
+    Math.max(-0.94, Math.min(0.94, dot(centered, PCA3.basis[0]) * PCA3.scale)),
+    Math.max(-0.94, Math.min(0.94, dot(centered, PCA3.basis[1]) * PCA3.scale)),
+    Math.max(-0.94, Math.min(0.94, dot(centered, PCA3.basis[2]) * PCA3.scale)),
   ];
 }
 
 const NODE_POS3 = NODES.map((n) => project3(n.dir));
 
-// Chapter centroids for smooth timeline trajectory
-const CHAPTER_POS3 = CHAPTERS.map((ch) => {
+const CHAPTER_POS3 = CHAPTERS.map((_, chIdx) => {
   const sum = [0, 0, 0];
-  for (const id of ch.anchorIds) {
-    sum[0] += NODE_POS3[id][0];
-    sum[1] += NODE_POS3[id][1];
-    sum[2] += NODE_POS3[id][2];
+  let cnt = 0;
+  for (let i = 0; i < N_NODES; i++) {
+    if (NODES[i].chapter === chIdx) {
+      sum[0] += NODE_POS3[i][0];
+      sum[1] += NODE_POS3[i][1];
+      sum[2] += NODE_POS3[i][2];
+      cnt++;
+    }
   }
-  const n = ch.anchorIds.length;
-  return [sum[0] / n, sum[1] / n, sum[2] / n];
+  return [sum[0] / Math.max(1, cnt), sum[1] / Math.max(1, cnt), sum[2] / Math.max(1, cnt)];
 });
 
-// Dense Background Field of Accumulated Unspoken Moments (1,600 stars that grow with time)
-const N_BG = 1600;
+// Dense Background Field of Unspoken Lived Moments (1,500 stars anchored around the 186 real nodes)
+const N_BG = 1500;
 function buildLivedField() {
   const r = mulberry32(892026);
   const gauss = () => (r() + r() + r() + r() - 2.0) * 0.85;
@@ -1236,60 +1068,37 @@ function buildLivedField() {
   const bornAt = [];
 
   for (let i = 0; i < N_BG; i++) {
-    let vec8;
-    let cIdx;
-    let born;
-    if (i < 1050) {
-      // Anchored organically around real nodes so each chapter visibly thickens its neighborhood
-      const host = NODES[i % N_NODES];
-      cIdx = host.cluster;
-      const spread = 0.22 + 0.52 * Math.pow(r(), 1.2);
-      vec8 = unit(host.dir.map((v) => v + gauss() * spread));
-      born = Math.max(0, Math.min(4.98, host.bornAt + (r() - 0.35) * 0.6));
-    } else {
-      // Diffuse global subconscious / lived-experience texture across the whole cube
-      vec8 = unit(Array.from({ length: D_MODEL }, () => gauss()));
-      let bestC = 0;
-      let bestDot = -2;
-      for (let c = 0; c < 4; c++) {
-        const d = dot(vec8, CLUSTERS[c].center);
-        if (d > bestDot) { bestDot = d; bestC = c; }
-      }
-      cIdx = bestC;
-      born = r() * 4.95;
-    }
-    const p = project3(vec8);
+    const host = NODES[i % N_NODES];
+    const isDiffuse = i >= 1050;
+    const vec12 = isDiffuse
+      ? unit(Array.from({ length: D_MODEL }, () => Math.max(-0.2, gauss() * 0.55 + 0.35)))
+      : unit(host.dir.map((v) => v + gauss() * (0.20 + 0.42 * r())));
+    const p = project3(vec12);
     pos3.push([
       Math.max(-0.96, Math.min(0.96, p[0] + (r() - 0.5) * 0.14)),
       Math.max(-0.96, Math.min(0.96, p[1] + (r() - 0.5) * 0.14)),
       Math.max(-0.96, Math.min(0.96, p[2] + (r() - 0.5) * 0.14)),
     ]);
-    cluster.push(cIdx);
+    cluster.push(host.cluster);
     weight.push(0.35 + 0.65 * r());
-    bornAt.push(born);
+    bornAt.push(isDiffuse ? r() * 4.95 : Math.max(0, Math.min(4.98, host.bornAt + (r() - 0.35) * 0.5)));
   }
 
-  // ~950 delicate local manifold filaments
   const edges = [];
-  const maxEdges = 950;
+  const maxEdges = 850;
   for (let i = 0; i < N_BG && edges.length < maxEdges; i++) {
     const a = pos3[i];
     let bestJ = -1;
-    let bestD2 = 0.068;
-    for (let k = 0; k < 48; k++) {
-      const j = (i + 1 + ((k * 31) % (N_BG - 1))) % N_BG;
+    let bestD2 = 0.064;
+    for (let k = 0; k < 42; k++) {
+      const j = (i + 1 + ((k * 37) % (N_BG - 1))) % N_BG;
       if (j === i) continue;
       const b = pos3[j];
       const dx = a[0] - b[0], dy = a[1] - b[1], dz = a[2] - b[2];
       const d2 = dx * dx + dy * dy + dz * dz;
-      if (d2 > 0.002 && d2 < bestD2) {
-        bestD2 = d2;
-        bestJ = j;
-      }
+      if (d2 > 0.002 && d2 < bestD2) { bestD2 = d2; bestJ = j; }
     }
-    if (bestJ >= 0) {
-      edges.push([i, bestJ, 1.0 - Math.sqrt(bestD2) / 0.27, Math.max(bornAt[i], bornAt[bestJ])]);
-    }
+    if (bestJ >= 0) edges.push([i, bestJ, 1.0 - Math.sqrt(bestD2) / 0.26, Math.max(bornAt[i], bornAt[bestJ])]);
   }
   return { pos3, cluster, weight, bornAt, edges };
 }
@@ -1301,74 +1110,90 @@ const BG_WEIGHT = BG.weight;
 const BG_BORN = BG.bornAt;
 const BG_EDGES = BG.edges;
 
-// Evaluate node activations & retroactive echoes at a given timeline depth t in [0, 5] OR in a synthesis lens
-function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
+// Evaluate activations, emergent retroactive echoes & lens resonance across all 186 real nodes
+function evaluateState(mode, timeDepth, lensIdx, kindFilter = "all", mutedIds = null) {
   const acts = new Array(N_NODES).fill(0);
-  const echoes = new Array(N_NODES).fill(0); // retroactive echo intensity from earlier chapters!
+  const echoes = new Array(N_NODES).fill(0);
   const activeEdges = [];
+  const lensPath = [];
+
+  const matchesKind = (n) => kindFilter === "all" || n.kind === kindFilter;
 
   if (mode === "timeline") {
     const t = Math.max(0.05, Math.min(5.0, timeDepth));
     const curChap = Math.min(4, Math.floor(t));
 
     for (let i = 0; i < N_NODES; i++) {
-      if (mutedIds && mutedIds[i]) continue;
       const n = NODES[i];
-      if (n.bornAt > t) continue;
+      if ((mutedIds && mutedIds[i]) || n.bornAt > t || !matchesKind(n)) continue;
       const age = t - n.bornAt;
       if (n.chapter === curChap) {
-        // Current chapter nodes glow brightly as they crystallize
-        const ramp = Math.min(1.0, age / 0.22);
-        acts[i] = 0.65 + 0.35 * ramp;
+        acts[i] = 0.62 + 0.38 * Math.min(1.0, age / 0.20);
       } else {
-        // Past chapter nodes remain present as calm established stars
-        acts[i] = 0.26;
+        acts[i] = 0.24;
       }
     }
 
-    // Activate edges whose endpoints are born, and fire RETROACTIVE ECHOES on cross-era bridges!
     for (let eIdx = 0; eIdx < EDGES.length; eIdx++) {
-      const [a, b, str, isBridge] = EDGES[eIdx];
+      const [a, b, sim, isBridge] = EDGES[eIdx];
       if ((mutedIds && mutedIds[a]) || (mutedIds && mutedIds[b])) continue;
       const na = NODES[a], nb = NODES[b];
-      if (na.bornAt > t || nb.bornAt > t) continue;
+      if (na.bornAt > t || nb.bornAt > t || !matchesKind(na) || !matchesKind(nb)) continue;
 
       const aIsCur = na.chapter === curChap;
       const bIsCur = nb.chapter === curChap;
-      let flow = 0.16;
+      let flow = 0.12;
       let isRetro = false;
 
-      if (isBridge && (aIsCur !== bIsCur)) {
-        // Cross-era bridge connecting an earlier chapter into the active chapter!
-        flow = 0.96 * str;
+      if (isBridge && (aIsCur !== bIsCur) && sim > 0.915) {
+        // High-similarity emergent cross-era bridge firing into the active chapter!
+        flow = Math.min(1.0, (sim - 0.85) * 7.0);
         isRetro = true;
         const older = aIsCur ? b : a;
-        echoes[older] = Math.max(echoes[older], 0.95 * str);
-        acts[older] = Math.max(acts[older], 0.85 * str);
+        echoes[older] = Math.max(echoes[older], flow);
+        acts[older] = Math.max(acts[older], 0.78 * flow);
       } else if (aIsCur && bIsCur) {
-        flow = 0.72 * str;
+        flow = 0.55;
       }
-      activeEdges.push({ idx: eIdx, a, b, flow, isBridge, isRetro });
+      activeEdges.push({ idx: eIdx, a, b, sim, flow, isBridge, isRetro });
     }
   } else {
-    // Lens / Synthesis mode: entire life (1989 -> Today) is present; selected constellation ignites!
+    // 12-D Semantic Synthesis Lens: score all 186 nodes directly by cosine similarity!
     const lens = LENSES[lensIdx] || LENSES[0];
-    const inLens = new Set(lens.nodes);
-    for (let i = 0; i < N_NODES; i++) {
-      if (mutedIds && mutedIds[i]) continue;
-      acts[i] = inLens.has(i) ? 0.95 : 0.18;
+    const scored = NODES.map((n, i) => ({
+      i,
+      s: (mutedIds && mutedIds[i]) || !matchesKind(n) ? 0 : cosSim(n.dir, lens.query12),
+    }));
+    const sorted = [...scored].sort((x, y) => y.s - x.s);
+    const threshold = sorted[Math.min(28, sorted.length - 1)].s;
+    const topSet = new Set();
+
+    for (const item of scored) {
+      if (item.s >= threshold && item.s > 0.55) {
+        acts[item.i] = Math.min(1.0, 0.55 + (item.s - threshold) * 2.5);
+        topSet.add(item.i);
+      } else if (item.s > 0) {
+        acts[item.i] = 0.15;
+      }
     }
+
+    // Build chronological synthesis path through the top 2 nodes from each chapter
+    for (let ch = 0; ch < N_CHAPTERS; ch++) {
+      const chTop = sorted.filter((x) => NODES[x.i].chapter === ch && topSet.has(x.i)).slice(0, 2);
+      for (const item of chTop) lensPath.push(item.i);
+    }
+
     for (let eIdx = 0; eIdx < EDGES.length; eIdx++) {
-      const [a, b, str, isBridge] = EDGES[eIdx];
+      const [a, b, sim, isBridge] = EDGES[eIdx];
       if ((mutedIds && mutedIds[a]) || (mutedIds && mutedIds[b])) continue;
-      const both = inLens.has(a) && inLens.has(b);
-      const one = inLens.has(a) || inLens.has(b);
-      const flow = both ? 0.96 * str : one ? 0.22 * str : 0.08;
-      activeEdges.push({ idx: eIdx, a, b, flow, isBridge, isRetro: both && isBridge });
+      if (!matchesKind(NODES[a]) || !matchesKind(NODES[b])) continue;
+      const both = topSet.has(a) && topSet.has(b);
+      if (!both && !isBridge) continue;
+      const flow = both ? 0.92 : 0.08;
+      activeEdges.push({ idx: eIdx, a, b, sim, flow, isBridge, isRetro: both && isBridge });
     }
   }
 
-  // Cluster resonance meters (0..1)
   const clusterEnergy = [0, 0, 0, 0];
   const clusterCounts = [0, 0, 0, 0];
   for (let i = 0; i < N_NODES; i++) {
@@ -1376,9 +1201,9 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
     clusterEnergy[c] += acts[i];
     clusterCounts[c]++;
   }
-  const clusterLevels = clusterEnergy.map((e, c) => Math.min(1, e / Math.max(1, clusterCounts[c] * 0.72)));
+  const clusterLevels = clusterEnergy.map((e, c) => Math.min(1, e / Math.max(1, clusterCounts[c] * 0.52)));
 
-  return { acts, echoes, activeEdges, clusterLevels };
+  return { acts, echoes, activeEdges, clusterLevels, lensPath };
 }
 
 ;
@@ -1399,6 +1224,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
   const lensPane = document.querySelector("[data-pane-lens]");
   const chapterBtns = [...document.querySelectorAll("[data-chapter-btn]")];
   const lensBtns = [...document.querySelectorAll("[data-lens-btn]")];
+  const kindBtns = [...document.querySelectorAll("[data-kind-btn]")];
   const timeSlider = document.querySelector("[data-time-slider]");
   const timeValEl = document.querySelector("[data-time-val]");
   const playBtn = document.querySelector("[data-play-btn]");
@@ -1411,6 +1237,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
   const activeListEl = document.querySelector("[data-active-list]");
   const clusterBars = [...document.querySelectorAll("[data-cluster-bar]")];
   const clusterVals = [...document.querySelectorAll("[data-cluster-val]")];
+  const statsSubEl = document.querySelector("[data-stats-sub]");
 
   // Floating camera controls
   const zoomInBtn = document.querySelector("[data-zoom-in]");
@@ -1435,15 +1262,26 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
   const CLUSTER_HEX_DARK = ["#58bdff", "#fab248", "#3de0ae", "#db75f5"];
   const CLUSTER_HEX_LIGHT = ["#1466c2", "#bd5c0a", "#0d8561", "#8a29a8"];
 
+  const defaultSel = (() => {
+    const idx = NODES.findIndex((n) => /last middleman/i.test(n.name));
+    return idx >= 0 ? idx : N_NODES - 1;
+  })();
+
+  if (statsSubEl) {
+    const bridgeCount = EDGES.filter((e) => e[3]).length;
+    statsSubEl.textContent = `5 Chapters · ${N_NODES} Enriched Nodes · ${bridgeCount} Emergent Cross-Era Bridges · 12-D → 3-D PCA`;
+  }
+
   const state = {
-    mode: "timeline", // "timeline" | "lens"
-    timeDepth: 4.95,  // Start near Today so the full living galaxy & retroactive echoes shine on first load!
+    mode: "timeline",   // "timeline" | "lens"
+    kindFilter: "all",  // "all" | "event" | "prior" | "skill" | "tension"
+    timeDepth: 4.98,
     lensIdx: 0,
     playing: false,
     showLabels: true,
-    selectedNode: 34, // "Removing the last middleman" — showcases cross-era synthesis immediately
+    selectedNode: defaultSel,
     hoveredNode: -1,
-    muted: {},        // nodeId -> true ("What if?" counterfactual mute)
+    muted: {},
     autoSpin: false,
     az: 0.68,
     el: 0.42,
@@ -1483,7 +1321,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
   }
 
   // =========================================================================
-  // 2. NATIVE WEBGL1 GALAXY RENDERER (LINES + ANALYTIC SDF POINTS)
+  // 2. NATIVE WEBGL1 GALAXY RENDERER
   // =========================================================================
   const gl = canvas.getContext("webgl", {
     alpha: true,
@@ -1598,22 +1436,18 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
         float alpha = 0.0;
 
         if (mode < 0.5) {
-          // Mode 0: Crisp pinpoint lived-experience background star
           float core = smoothstep(0.76, 0.14, r);
           alpha = core * vCol.a * (0.45 + 0.55 * vDepth);
         } else if (mode < 1.5) {
-          // Mode 1: Named Experience / Mental-Model Node
           float coreR = mix(0.24, 0.34, clamp(ringInt, 0.0, 1.0));
           float core = smoothstep(coreR + 0.14, coreR - 0.06, r);
           float hot = exp(-r * r * 24.0);
           float ring = exp(-pow((r - 0.78) * 14.0, 2.0)) * ringInt;
-          // Muted ("What if?") node: hollow dim ring
           if (extra < -0.5) {
             core *= 0.14;
             hot = 0.0;
             ring = exp(-pow((r - 0.68) * 13.0, 2.0)) * 0.85;
           }
-          // Retroactive Echo or Selected node: crisp double ring
           if (extra > 0.5) {
             ring = max(ring, exp(-pow((r - 0.84) * 16.0, 2.0)) * 0.95);
             ring = max(ring, exp(-pow((r - 0.56) * 16.0, 2.0)) * 0.65);
@@ -1622,13 +1456,11 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
           else col = mix(col, col * 0.45, hot * 0.3);
           alpha = clamp(core * 0.95 + ring * 0.85, 0.0, 1.0) * vCol.a * (0.48 + 0.52 * vDepth);
         } else if (mode < 2.5) {
-          // Mode 2: Traveling bridge light packet / chapter waypoint
           float core = smoothstep(0.48, 0.12, r);
           float rim = exp(-pow((r - 0.78) * 14.0, 2.0)) * ringInt;
           if (uLight < 0.5) col = mix(col, vec3(1.0), exp(-r * r * 18.0) * 0.6);
           alpha = clamp(core + rim * 0.8, 0.0, 1.0) * vCol.a * (0.55 + 0.45 * vDepth);
         } else {
-          // Mode 3: Selected node / active timeline optical reticle
           float core = smoothstep(0.22, 0.05, r);
           float ring1 = exp(-pow((r - 0.60) * 18.0, 2.0)) * 0.95;
           float ring2 = exp(-pow((r - 0.88) * 20.0, 2.0)) * 0.48;
@@ -1649,9 +1481,9 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
     pointBuf = gl.createBuffer();
   }
 
-  const MAX_LINE_VERTS = 5400;
+  const MAX_LINE_VERTS = 6400;
   const lineData = new Float32Array(MAX_LINE_VERTS * 7);
-  const MAX_POINTS = 2200;
+  const MAX_POINTS = 2400;
   const pointData = new Float32Array(MAX_POINTS * 11);
   let lineVerts = 0;
   let pointCount = 0;
@@ -1714,7 +1546,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
   window.addEventListener("resize", resizeViewport);
 
   // =========================================================================
-  // 3. SVG OPTICAL CUBE FRAME + DE-OVERLAPPED HUMAN LABELS
+  // 3. SVG OPTICAL CUBE FRAME + DE-OVERLAPPED LABELS
   // =========================================================================
   function renderSvgFrameAndLabels(basis, evalRes) {
     const { cw, ch, zoom } = state;
@@ -1792,19 +1624,27 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
       return false;
     };
 
-    // Rank nodes by priority: selected > hovered > retroactive echoes > active anchors > active features
-    const maxLabels = Math.min(20, Math.round(9 + Math.max(0, zoom - 0.9) * 6.0));
+    // Highlight direct emergent neighbors of the selected node!
+    const selNeighbors = new Set();
+    if (state.selectedNode >= 0) {
+      const adj = NODE_EDGES[state.selectedNode];
+      for (const e of adj.incoming.slice(0, 3)) selNeighbors.add(e.id);
+      for (const e of adj.outgoing.slice(0, 3)) selNeighbors.add(e.id);
+    }
+
+    const maxLabels = Math.min(28, Math.round(11 + Math.max(0, zoom - 0.9) * 8.0));
     const ranked = NODES.map((n, i) => {
       const a = evalRes.acts[i];
       const echo = evalRes.echoes[i];
       const isSel = i === state.selectedNode;
       const isHov = i === state.hoveredNode;
-      const isBorn = state.mode === "lens" || n.bornAt <= state.timeDepth;
-      const score = !isBorn ? -1
-        : (isSel ? 10 : 0) + (isHov ? 8 : 0) + echo * 2.2 + a * (n.kind === "anchor" ? 1.4 : 1.0);
-      return { i, a, echo, isSel, isHov, isBorn, score };
+      const isAdj = selNeighbors.has(i);
+      const isVisible = (state.mode === "lens" || n.bornAt <= state.timeDepth) && (state.kindFilter === "all" || n.kind === state.kindFilter);
+      const score = !isVisible ? -1
+        : (isSel ? 12 : 0) + (isHov ? 10 : 0) + (isAdj ? 4.5 : 0) + echo * 2.2 + a * (n.kind === "event" ? 1.25 : 1.0);
+      return { i, a, echo, isSel, isHov, isAdj, isVisible, score };
     })
-      .filter((x) => x.isBorn && (x.score > 0.45 || zoom > 1.8))
+      .filter((x) => x.isVisible && (x.score > 0.55 || zoom > 1.7))
       .sort((x, y) => y.score - x.score)
       .slice(0, maxLabels);
 
@@ -1815,7 +1655,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
       if (sp[0] < 16 || sp[0] > cw - 16 || sp[1] < 18 || sp[1] > ch - 18) continue;
 
       const isMuted = !!state.muted[r.i];
-      const isEcho = r.echo > 0.3;
+      const isEcho = r.echo > 0.3 || r.isAdj;
       const col = isMuted
         ? "#ff6472"
         : r.isSel
@@ -1843,7 +1683,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
       if (!chosen) chosen = { ox: 10, oy: 3, lx: sp[0] + 10, ly: sp[1] + 3, anchor: "start", rx0: sp[0] + 10 };
       placed.push([chosen.rx0 - 2, chosen.ly - 9, chosen.rx0 + tw + 2, chosen.ly + 4]);
 
-      const opacity = r.isSel || r.isHov || isEcho ? 1.0 : Math.min(0.92, 0.45 + r.a * 0.52);
+      const opacity = r.isSel || r.isHov || isEcho ? 1.0 : Math.min(0.9, 0.44 + r.a * 0.50);
       const leader = Math.abs(chosen.oy) > 6 || r.isSel
         ? `<line x1="${sp[0].toFixed(1)}" y1="${sp[1].toFixed(1)}" x2="${(chosen.lx + (chosen.ox > 0 ? -2 : 2)).toFixed(1)}" y2="${(chosen.ly - 3).toFixed(1)}" stroke="${col}" stroke-width="0.65" opacity="0.5"/>`
         : "";
@@ -1864,7 +1704,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
   function renderNodeCard() {
     const id = state.selectedNode;
     if (id < 0 || id >= N_NODES) {
-      nodeCardEl.innerHTML = `<div class="node-card-empty">Click any glowing star in the cube to inspect its story and hidden cross-era connections.</div>`;
+      nodeCardEl.innerHTML = `<div class="node-card-empty">Click any of the ${N_NODES} stars in the cube to inspect its story and emergent 12-D bridges.</div>`;
       return;
     }
     const n = NODES[id];
@@ -1873,60 +1713,68 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
     const hexPal = isLight() ? CLUSTER_HEX_LIGHT : CLUSTER_HEX_DARK;
     const col = hexPal[n.cluster];
     const isMuted = !!state.muted[id];
-
-    const informedBy = EDGES.filter(([, to]) => to === id).map(([from, , , isBridge, note]) => ({
-      id: from, node: NODES[from], isBridge, note,
-    }));
-    const echoedIn = EDGES.filter(([from]) => from === id).map(([, to, , isBridge, note]) => ({
-      id: to, node: NODES[to], isBridge, note,
-    }));
+    const adj = NODE_EDGES[id];
 
     const linksHtml = (list, label, arrow) => {
       if (!list.length) return "";
       return (
         `<div class="nc-links-block"><div class="nc-links-hdr">${label}</div><div class="nc-links-row">` +
-        list.map((item) =>
-          `<button class="nc-chip${item.isBridge ? " is-bridge" : ""}" data-jump-node="${item.id}" title="${item.note}">` +
-          `${arrow} ${item.node.name} <span class="nc-chip-yr">Ch.${item.node.chapter + 1}</span></button>`,
-        ).join("") +
+        list.slice(0, 4).map((item) => {
+          const target = NODES[item.id];
+          const pct = Math.round(item.sim * 100);
+          return (
+            `<button class="nc-chip${item.isBridge ? " is-bridge" : ""}" data-jump-node="${item.id}" title="Emergent ${pct}% cosine match · Shared: ${item.shared}">` +
+            `${arrow} ${target.name} <span class="nc-chip-yr">Ch.${target.chapter + 1} · ${pct}%</span></button>`
+          );
+        }).join("") +
         `</div></div>`
       );
     };
+
+    const topDims = n.vec
+      .map((v, d) => ({ d, v }))
+      .filter((x) => x.v >= 0.55)
+      .sort((a, b) => b.v - a.v)
+      .slice(0, 3)
+      .map((x) => DIM_NAMES[x.d]);
 
     nodeCardEl.innerHTML = `
       <div class="nc-head">
         <div>
           <div class="nc-meta">
             <span class="nc-dot" style="background:${col}"></span>
+            <span>${n.kind.toUpperCase()}</span>
+            <span>·</span>
             <span>${cl.name}</span>
             <span>·</span>
             <span>Ch.${ch.num} (${n.year})</span>
           </div>
           <div class="nc-title">${n.name}</div>
         </div>
-        <button class="nc-mute-btn${isMuted ? " is-muted" : ""}" data-toggle-mute="${id}" title="Counterfactual: see what disconnects if this experience is muted">
+        <button class="nc-mute-btn${isMuted ? " is-muted" : ""}" data-toggle-mute="${id}" title="Counterfactual: mute this node to see what disconnects">
           ${isMuted ? "Restore" : "What if?"}
         </button>
       </div>
       <div class="nc-story">${n.story}</div>
-      ${linksHtml(informedBy, "Informed by", "←")}
-      ${linksHtml(echoedIn, "Echoed later in", "→")}
+      ${topDims.length ? `<div class="nc-dims">${topDims.map((d) => `<span>${d}</span>`).join("")}</div>` : ""}
+      ${linksHtml(adj.incoming, "Emergent Earlier Echoes (12-D Match)", "←")}
+      ${linksHtml(adj.outgoing, "Echoed Later In (12-D Match)", "→")}
     `;
   }
 
   function updateHud(evalRes, force = false) {
     const curChap = Math.min(4, Math.floor(state.timeDepth));
-    const key = `${state.mode}|${state.timeDepth.toFixed(2)}|${state.lensIdx}|${state.selectedNode}|${Object.keys(state.muted).join(",")}|${isLight()}`;
+    const key = `${state.mode}|${state.kindFilter}|${state.timeDepth.toFixed(2)}|${state.lensIdx}|${state.selectedNode}|${Object.keys(state.muted).join(",")}|${isLight()}`;
     if (!force && key === lastHudKey) return;
     lastHudKey = key;
 
     const hexPal = isLight() ? CLUSTER_HEX_LIGHT : CLUSTER_HEX_DARK;
 
-    // Mode panes
     tabTimelineBtn.classList.toggle("active", state.mode === "timeline");
     tabLensBtn.classList.toggle("active", state.mode === "lens");
     timelinePane.style.display = state.mode === "timeline" ? "block" : "none";
     lensPane.style.display = state.mode === "lens" ? "block" : "none";
+    kindBtns.forEach((b) => b.classList.toggle("active", b.dataset.kindBtn === state.kindFilter));
 
     if (state.mode === "timeline") {
       const ch = CHAPTERS[curChap];
@@ -1944,7 +1792,6 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
       echoNoteEl.textContent = lens.subtitle;
     }
 
-    // Cluster resonance meters
     for (let c = 0; c < 4; c++) {
       const pct = Math.round(evalRes.clusterLevels[c] * 100);
       clusterBars[c].style.width = `${pct}%`;
@@ -1952,15 +1799,12 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
       clusterVals[c].textContent = `${pct}%`;
     }
 
-    // Active resonating nodes list (top 6 clickable)
-    const topNodes = NODES.map((n, i) => ({
-      n, i, a: evalRes.acts[i], echo: evalRes.echoes[i],
-    }))
-      .filter((x) => x.a > 0.25)
-      .sort((x, y) => (y.echo * 0.6 + y.a) - (x.echo * 0.6 + x.a))
+    const topNodes = NODES.map((n, i) => ({ n, i, a: evalRes.acts[i], echo: evalRes.echoes[i] }))
+      .filter((x) => x.a > 0.28)
+      .sort((x, y) => (y.echo * 0.7 + y.a) - (x.echo * 0.7 + x.a))
       .slice(0, 6);
 
-    activeListEl.innerHTML = topNodes.map(({ n, i, a, echo }) => {
+    activeListEl.innerHTML = topNodes.map(({ n, i, echo }) => {
       const isEcho = echo > 0.3;
       const isSel = i === state.selectedNode;
       const col = isEcho ? (isLight() ? "#b83a14" : "#ffe08a") : hexPal[n.cluster];
@@ -1968,7 +1812,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
         `<button class="act-row${isSel ? " is-sel" : ""}" data-select-node="${i}">` +
         `<span class="hud-dot" style="background:${col}"></span>` +
         `<span class="act-name">${n.name}</span>` +
-        `<span class="act-tag">${isEcho ? `ECHO Ch.${n.chapter + 1}` : n.year}</span></button>`
+        `<span class="act-tag">${isEcho ? `ECHO Ch.${n.chapter + 1}` : n.kind.toUpperCase()}</span></button>`
       );
     }).join("");
 
@@ -1988,12 +1832,10 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
     resizeViewport();
 
     if (state.playing && state.mode === "timeline") {
-      state.timeDepth += dt * 0.38;
-      if (state.timeDepth > 5.2) state.timeDepth = 0.08;
+      state.timeDepth += dt * 0.36;
+      if (state.timeDepth > 5.2) state.timeDepth = 0.06;
     }
-    if (state.autoSpin) {
-      state.targetAz += dt * 0.14;
-    }
+    if (state.autoSpin) state.targetAz += dt * 0.14;
 
     const damp = 1 - Math.exp(-12 * dt);
     state.az += (state.targetAz - state.az) * damp;
@@ -2001,7 +1843,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
     state.zoom += (state.targetZoom - state.zoom) * damp;
 
     const effTime = Math.min(5.0, state.timeDepth);
-    const evalRes = evaluateState(state.mode, effTime, state.lensIdx, state.muted);
+    const evalRes = evaluateState(state.mode, effTime, state.lensIdx, state.kindFilter, state.muted);
     const basis = camBasis(state.az, state.el);
     const light = isLight();
     const pal = light ? CLUSTER_RGB_LIGHT : CLUSTER_RGB_DARK;
@@ -2020,8 +1862,8 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
       const zoomBoost = Math.pow(state.zoom, 0.35);
 
       // --- A. LINES ---
-      // 1. Growing background lived-experience manifold web
-      const webAlpha = light ? 0.12 : 0.14;
+      // 1. Background lived-experience manifold web
+      const webAlpha = light ? 0.09 : 0.11;
       for (let i = 0; i < BG_EDGES.length; i++) {
         const [aIdx, bIdx, w, born] = BG_EDGES[i];
         if (state.mode === "timeline" && born > effTime) continue;
@@ -2029,85 +1871,80 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
         pushLine(BG_POS3[aIdx], BG_POS3[bIdx], c[0], c[1], c[2], webAlpha * (0.45 + 0.55 * w));
       }
 
-      // 2. Meaningful Experience Edges & Retroactive Cross-Era Bridges
+      // 2. Emergent Semantic Edges & Golden Retroactive Bridges
+      let pulseCount = 0;
       for (let i = 0; i < evalRes.activeEdges.length; i++) {
         const e = evalRes.activeEdges[i];
         const isSelEdge = e.a === state.selectedNode || e.b === state.selectedNode;
         const pA = NODE_POS3[e.a], pB = NODE_POS3[e.b];
 
-        if (e.isRetro || isSelEdge) {
-          // Luminous golden bridge connecting eras!
-          const alpha = isSelEdge ? 0.85 : 0.28 + e.flow * 0.56;
-          pushLine(pA, pB, goldCol[0], goldCol[1], goldCol[2], alpha);
-          // Crisp traveling light pulse from earlier chapter -> later chapter
-          const phase = (tSec * (0.34 + 0.25 * e.flow) + i * 0.17) % 1.0;
+        if (isSelEdge) {
+          pushLine(pA, pB, goldCol[0], goldCol[1], goldCol[2], 0.88);
+          const phase = (tSec * 0.45 + i * 0.17) % 1.0;
           const pkt = lerp3(pA, pB, phase);
-          pushPoint(pkt, light ? goldCol[0] : 1.0, light ? goldCol[1] : 0.95, light ? goldCol[2] : 0.78, 0.92, 3.4 * zoomBoost, 2, 0.0, 0);
+          pushPoint(pkt, light ? goldCol[0] : 1.0, light ? goldCol[1] : 0.96, light ? goldCol[2] : 0.78, 0.95, 3.6 * zoomBoost, 2, 0.0, 0);
+        } else if (e.isRetro) {
+          pushLine(pA, pB, goldCol[0], goldCol[1], goldCol[2], 0.14 + e.flow * 0.34);
+          if (pulseCount < 40 && e.sim > 0.945) {
+            pulseCount++;
+            const phase = (tSec * (0.28 + 0.22 * e.flow) + i * 0.13) % 1.0;
+            const pkt = lerp3(pA, pB, phase);
+            pushPoint(pkt, light ? goldCol[0] : 1.0, light ? goldCol[1] : 0.95, light ? goldCol[2] : 0.78, 0.78, 2.8 * zoomBoost, 2, 0.0, 0);
+          }
         } else {
           const c = pal[NODES[e.a].cluster];
-          pushLine(pA, pB, c[0], c[1], c[2], 0.08 + e.flow * 0.38);
+          pushLine(pA, pB, c[0], c[1], c[2], 0.05 + e.flow * 0.22);
         }
       }
 
-      // 3. Smooth Life Trajectory / Lens Synthesis Path
+      // 3. Smooth Trajectory Path (Chapter centroids in Timeline mode, top matching nodes in Lens mode)
       const pathPts = state.mode === "timeline"
         ? CHAPTER_POS3
-        : LENSES[state.lensIdx].path.map((id) => NODE_POS3[id]);
-      const nSegs = pathPts.length - 1;
-      const subSteps = 6;
-      const progress = state.mode === "timeline" ? Math.max(0, effTime - 0.5) : nSegs;
-
-      for (let seg = 0; seg < nSegs; seg++) {
-        const p0 = pathPts[Math.max(0, seg - 1)];
-        const p1 = pathPts[seg];
-        const p2 = pathPts[seg + 1];
-        const p3 = pathPts[Math.min(nSegs, seg + 2)];
-        let prev = p1;
-        for (let k = 1; k <= subSteps; k++) {
-          const t = k / subSteps;
-          const t2 = t * t, t3 = t2 * t;
-          const cur = [0, 1, 2].map((d) =>
-            0.5 * (
-              2 * p1[d] +
-              (-p0[d] + p2[d]) * t +
-              (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * t2 +
-              (-p0[d] + 3 * p1[d] - 3 * p2[d] + p3[d]) * t3
-            ),
-          );
-          if (seg + t <= progress) {
-            pushLine(prev, cur, goldCol[0], goldCol[1], goldCol[2], 0.58);
+        : evalRes.lensPath.map((id) => NODE_POS3[id]);
+      if (pathPts.length >= 2) {
+        const nSegs = pathPts.length - 1;
+        const subSteps = 6;
+        const progress = state.mode === "timeline" ? Math.max(0, effTime - 0.5) : nSegs;
+        for (let seg = 0; seg < nSegs; seg++) {
+          const p0 = pathPts[Math.max(0, seg - 1)];
+          const p1 = pathPts[seg];
+          const p2 = pathPts[seg + 1];
+          const p3 = pathPts[Math.min(nSegs, seg + 2)];
+          let prev = p1;
+          for (let k = 1; k <= subSteps; k++) {
+            const t = k / subSteps;
+            const t2 = t * t, t3 = t2 * t;
+            const cur = [0, 1, 2].map((d) =>
+              0.5 * (
+                2 * p1[d] +
+                (-p0[d] + p2[d]) * t +
+                (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * t2 +
+                (-p0[d] + 3 * p1[d] - 3 * p2[d] + p3[d]) * t3
+              ),
+            );
+            if (seg + t <= progress) pushLine(prev, cur, goldCol[0], goldCol[1], goldCol[2], 0.55);
+            prev = cur;
           }
-          prev = cur;
         }
       }
 
       // --- B. POINTS ---
-      // 1. 1,600 Growing Background Lived-Experience Stars
-      const activeIdx = [];
-      for (let i = 0; i < N_NODES; i++) if (evalRes.acts[i] > 0.55) activeIdx.push(i);
-
+      // 1. 1,500 Background Lived-Experience Stars
       for (let i = 0; i < N_BG; i++) {
         if (state.mode === "timeline" && BG_BORN[i] > effTime) continue;
         const bp = BG_POS3[i];
         const c = pal[BG_CLUSTER[i]];
         const w = BG_WEIGHT[i];
-        let symp = 0;
-        for (let k = 0; k < activeIdx.length; k++) {
-          const fp = NODE_POS3[activeIdx[k]];
-          const dx = bp[0] - fp[0], dy = bp[1] - fp[1], dz = bp[2] - fp[2];
-          const d2 = dx * dx + dy * dy + dz * dz;
-          if (d2 < 0.075) symp = Math.max(symp, (1.0 - d2 / 0.075) * evalRes.acts[activeIdx[k]]);
-        }
-        const baseA = light ? 0.28 + 0.28 * w : 0.30 + 0.34 * w;
-        const alpha = Math.min(0.9, baseA + symp * 0.36);
-        const sz = (2.1 + 1.9 * w + symp * 1.5) * zoomBoost;
-        pushPoint(bp, c[0], c[1], c[2], alpha, sz, 0, 0, 0);
+        const baseA = light ? 0.22 + 0.24 * w : 0.24 + 0.28 * w;
+        const sz = (1.9 + 1.6 * w) * zoomBoost;
+        pushPoint(bp, c[0], c[1], c[2], baseA, sz, 0, 0, 0);
       }
 
-      // 2. 42 Named Experience & Mental-Model Nodes
+      // 2. All 186 Enriched Real Atomic Nodes!
       for (let i = 0; i < N_NODES; i++) {
         const n = NODES[i];
         if (state.mode === "timeline" && n.bornAt > effTime) continue;
+        if (state.kindFilter !== "all" && n.kind !== state.kindFilter) continue;
 
         const a = evalRes.acts[i];
         const echo = evalRes.echoes[i];
@@ -2116,38 +1953,36 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
         const isMuted = !!state.muted[i];
 
         let c = pal[n.cluster];
-        let ring = a > 0.55 ? 0.85 : n.kind === "anchor" ? 0.3 : 0.0;
+        let ring = a > 0.62 ? 0.78 : n.kind === "event" ? 0.28 : 0.0;
         let extra = 0;
-        let sz = (n.kind === "anchor" ? 5.2 : 3.8) + a * 5.2;
-        let alpha = 0.45 + a * 0.55;
+        let sz = (n.kind === "event" ? 4.4 : 3.4) + a * 4.2;
+        let alpha = 0.42 + a * 0.58;
 
         if (isMuted) {
           c = light ? [0.76, 0.14, 0.22] : [1.0, 0.38, 0.44];
           extra = -1.0;
           ring = 1.0;
-          sz = 9.0;
+          sz = 8.5;
           alpha = 0.85;
-        } else if (echo > 0.3) {
-          // Retroactive echo from an earlier chapter!
+        } else if (echo > 0.35) {
           c = goldCol;
           extra = 1.0;
           ring = 1.0;
-          sz = 11.2;
-          alpha = 1.0;
+          sz = 9.5;
+          alpha = 0.98;
         } else if (isHov) {
           ring = 1.0;
-          sz = Math.max(sz, 11.5);
+          sz = Math.max(sz, 10.8);
           alpha = 1.0;
         }
         pushPoint(NODE_POS3[i], c[0], c[1], c[2], alpha, sz * zoomBoost, 1, ring, extra);
 
         if (isSel) {
           const selCol = light ? [0.06, 0.20, 0.48] : [1.0, 0.94, 0.72];
-          pushPoint(NODE_POS3[i], selCol[0], selCol[1], selCol[2], 1.0, 17.5 * zoomBoost, 3, 1.0, 0);
+          pushPoint(NODE_POS3[i], selCol[0], selCol[1], selCol[2], 1.0, 17.0 * zoomBoost, 3, 1.0, 0);
         }
       }
 
-      // Upload & Draw
       const camScale = Math.min(state.cw, state.ch) * 0.34 * state.zoom;
       const setCamUniforms = (prog) => {
         gl.uniform3fv(gl.getUniformLocation(prog, "uRight"), basis.right);
@@ -2194,19 +2029,21 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
   }
 
   // =========================================================================
-  // 6. INTERACTION: 3D ORBIT, ZOOM, CLICK NODE TO INSPECT STORY
+  // 6. INTERACTION
   // =========================================================================
   function stageLocal(e) {
     const r = stage.getBoundingClientRect();
     return [e.clientX - r.left, e.clientY - r.top];
   }
 
-  function findNearestNode(mx, my, maxPx = 16) {
+  function findNearestNode(mx, my, maxPx = 15) {
     const basis = camBasis(state.az, state.el);
     let best = -1;
     let bestD = maxPx;
     for (let i = 0; i < N_NODES; i++) {
-      if (state.mode === "timeline" && NODES[i].bornAt > state.timeDepth) continue;
+      const n = NODES[i];
+      if (state.mode === "timeline" && n.bornAt > state.timeDepth) continue;
+      if (state.kindFilter !== "all" && n.kind !== state.kindFilter) continue;
       const sp = proj3(NODE_POS3[i], basis, state.cw, state.ch, state.zoom);
       const d = Math.hypot(sp[0] - mx, sp[1] - my);
       if (d < bestD) { bestD = d; best = i; }
@@ -2233,7 +2070,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
   stage.addEventListener("pointermove", (e) => {
     const pt = stageLocal(e);
     if (!dragging) {
-      state.hoveredNode = findNearestNode(pt[0], pt[1], 16);
+      state.hoveredNode = findNearestNode(pt[0], pt[1], 15);
       stage.style.cursor = state.hoveredNode >= 0 ? "pointer" : "grab";
       return;
     }
@@ -2248,10 +2085,10 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
   stage.addEventListener("pointerup", (e) => {
     if (dragging && dragMoved < 5) {
       const pt = stageLocal(e);
-      const hit = findNearestNode(pt[0], pt[1], 18);
+      const hit = findNearestNode(pt[0], pt[1], 17);
       if (hit >= 0) {
         state.selectedNode = hit;
-        updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+        updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
       }
     }
     dragging = false;
@@ -2271,10 +2108,11 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
     state.targetAz = 0.68;
     state.targetEl = 0.42;
     state.targetZoom = 0.94;
+    state.kindFilter = "all";
     state.muted = {};
     state.autoSpin = false;
     if (spinBtn) spinBtn.classList.remove("active");
-    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
   }
   stage.addEventListener("dblclick", resetAll);
 
@@ -2283,13 +2121,20 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
   // =========================================================================
   tabTimelineBtn.addEventListener("click", () => {
     state.mode = "timeline";
-    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
   });
   tabLensBtn.addEventListener("click", () => {
     state.mode = "lens";
     state.playing = false;
     playBtn.textContent = "Play Arc";
-    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
+  });
+
+  kindBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.kindFilter = btn.dataset.kindBtn;
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
+    });
   });
 
   chapterBtns.forEach((btn) => {
@@ -2298,9 +2143,10 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
       state.mode = "timeline";
       state.playing = false;
       playBtn.textContent = "Play Arc";
-      state.timeDepth = idx + 0.95;
-      state.selectedNode = CHAPTERS[idx].anchorIds[CHAPTERS[idx].anchorIds.length - 1];
-      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      state.timeDepth = idx + 0.98;
+      const chapNodes = NODES.filter((n) => n.chapter === idx);
+      if (chapNodes.length) state.selectedNode = chapNodes[chapNodes.length - 1].id;
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
     });
   });
 
@@ -2308,9 +2154,9 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
     btn.addEventListener("click", () => {
       state.mode = "lens";
       state.lensIdx = Number(btn.dataset.lensBtn);
-      const path = LENSES[state.lensIdx].path;
-      state.selectedNode = path[path.length - 1];
-      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      const ev = evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted);
+      if (ev.lensPath.length) state.selectedNode = ev.lensPath[ev.lensPath.length - 1];
+      updateHud(ev, true);
     });
   });
 
@@ -2319,12 +2165,12 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
     state.playing = false;
     playBtn.textContent = "Play Arc";
     state.timeDepth = Number(timeSlider.value);
-    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
   });
 
   playBtn.addEventListener("click", () => {
     state.mode = "timeline";
-    if (!state.playing && state.timeDepth >= 4.85) state.timeDepth = 0.08;
+    if (!state.playing && state.timeDepth >= 4.85) state.timeDepth = 0.06;
     state.playing = !state.playing;
     playBtn.textContent = state.playing ? "Pause" : "Play Arc";
   });
@@ -2338,7 +2184,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
     const next = isLight() ? "dark" : "light";
     document.body.setAttribute("data-theme", next);
     themeBtn.textContent = next === "light" ? "Dark" : "Light";
-    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
   });
 
   panelToggleBtn.addEventListener("click", () => {
@@ -2351,7 +2197,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
     const btn = e.target.closest("[data-select-node]");
     if (btn) {
       state.selectedNode = Number(btn.dataset.selectNode);
-      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
     }
   });
 
@@ -2361,9 +2207,9 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
       const id = Number(jump.dataset.jumpNode);
       state.selectedNode = id;
       if (state.mode === "timeline" && NODES[id].bornAt > state.timeDepth) {
-        state.timeDepth = NODES[id].chapter + 0.95;
+        state.timeDepth = NODES[id].chapter + 0.98;
       }
-      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
       return;
     }
     const muteBtn = e.target.closest("[data-toggle-mute]");
@@ -2371,7 +2217,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
       const id = Number(muteBtn.dataset.toggleMute);
       if (state.muted[id]) delete state.muted[id];
       else state.muted[id] = true;
-      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
     }
   });
 
@@ -2406,7 +2252,7 @@ function evaluateState(mode, timeDepth, lensIdx, mutedIds = null) {
   });
 
   resizeViewport();
-  updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+  updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
   requestAnimationFrame(renderFrame);
 })();
 </script></body></html>

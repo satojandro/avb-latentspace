@@ -1,0 +1,344 @@
+[
+  {
+    "chapter": 4,
+    "name": "First AI Coding Breakthrough",
+    "year": "2023",
+    "kind": "event",
+    "cluster": 2,
+    "story": "The moment LLMs could write real code, he jumped straight into the terminal and taught himself how to build from scratch. A decade of pent-up product ideas suddenly had a direct path to execution.",
+    "vec": [0.0, 0.75, 0.65, 0.15, 0.0, 0.35, 0.7, 0.0, 0.4, 0.9, 0.85, 0.45]
+  },
+  {
+    "chapter": 4,
+    "name": "Early Vibe-Coding Wave",
+    "year": "2023–24",
+    "kind": "event",
+    "cluster": 2,
+    "story": "Part of the earliest cohort building real software conversationally with LLMs before the workflow even had a name. Learned by shipping live prototypes rather than following traditional textbook curricula.",
+    "vec": [0.0, 0.55, 0.55, 0.35, 0.2, 0.7, 0.5, 0.0, 0.25, 0.95, 0.9, 0.1]
+  },
+  {
+    "chapter": 4,
+    "name": "Day-One Model Drops",
+    "year": "2023–26",
+    "kind": "event",
+    "cluster": 2,
+    "story": "Made a habit of stress-testing every frontier LLM, coding agent, and developer tool the hour it released. Turned release-day curiosity into an ongoing edge in knowing what each model actually handles well.",
+    "vec": [0.0, 0.2, 0.7, 0.1, 0.15, 0.4, 0.65, 0.0, 0.0, 1.0, 0.6, 0.0]
+  },
+  {
+    "chapter": 4,
+    "name": "First Solo Deployed App",
+    "year": "2023–24",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Pushed a self-built application live to the web without waiting on an engineer, designer, or product sprint. That first solo deployment permanently rewired the ceiling of what felt buildable.",
+    "vec": [0.0, 0.95, 0.5, 0.3, 0.0, 0.25, 0.65, 0.0, 0.75, 0.45, 0.9, 0.5]
+  },
+  {
+    "chapter": 4,
+    "name": "First Hackathon Win",
+    "year": "2024",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Entered a competitive hackathon as a self-taught AI builder and walked away with a win. External validation under a ticking clock proved the new workflow could beat conventional teams.",
+    "vec": [0.0, 0.8, 0.55, 0.4, 0.35, 0.45, 0.9, 0.0, 0.2, 0.55, 1.0, 0.65]
+  },
+  {
+    "chapter": 4,
+    "name": "Repeat Hackathon Wins",
+    "year": "2024–25",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Followed the first win with additional hackathon podiums, confirming that speed and product clarity were repeatable advantages rather than one-off luck. Each sprint compressed the distance between raw concept and working demo.",
+    "vec": [0.0, 0.75, 0.65, 0.45, 0.3, 0.35, 0.95, 0.0, 0.15, 0.5, 1.0, 0.55]
+  },
+  {
+    "chapter": 4,
+    "name": "Agentic Workflow Shift",
+    "year": "2025",
+    "kind": "event",
+    "cluster": 2,
+    "story": "Transitioned from copy-pasting snippets in chat windows to orchestrating multi-step coding agents across full repositories. Project scope jumped from small utilities to multi-file interactive systems.",
+    "vec": [0.0, 0.4, 0.9, 0.15, 0.0, 0.3, 0.65, 0.0, 0.2, 0.9, 0.85, 0.0]
+  },
+  {
+    "chapter": 4,
+    "name": "Ambitious Side-Project Arc",
+    "year": "2025–26",
+    "kind": "event",
+    "cluster": 2,
+    "story": "Built a growing portfolio of increasingly complex side projects spanning full-stack apps, developer tools, and interactive data experiences. Each release deliberately pushed past the technical depth of the last.",
+    "vec": [0.0, 0.65, 0.85, 0.65, 0.2, 0.3, 0.9, 0.0, 0.25, 0.8, 0.9, 0.35]
+  },
+  {
+    "chapter": 4,
+    "name": "Latent Space Chamber",
+    "year": "2026",
+    "kind": "event",
+    "cluster": 3,
+    "story": "Engineered an interactive 3D WebGL and SVG visualization mapping both LLM latent spaces and the geometry of his own lived priors. A meta-artifact proving how far a self-taught builder could push visual and mathematical craft.",
+    "vec": [0.15, 0.55, 0.9, 0.95, 0.85, 0.45, 0.75, 0.35, 0.1, 0.85, 0.8, 0.4]
+  },
+  {
+    "chapter": 4,
+    "name": "Removing the Last Middleman",
+    "year": "2024",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Crypto removed institutional middlemen from money; AI removed the execution middleman from software. The same anti-gatekeeper instinct from Venezuela and crypto law reached its logical conclusion in code.",
+    "vec": [0.75, 0.9, 0.35, 0.0, 0.2, 0.8, 0.45, 0.45, 1.0, 0.4, 0.55, 0.25]
+  },
+  {
+    "chapter": 4,
+    "name": "Taste as the Compiler",
+    "year": "2024",
+    "kind": "prior",
+    "cluster": 3,
+    "story": "When syntax becomes abundant, product judgment, restraint, and visual clarity become the real bottleneck. Knowing what is worth building—and what to cut—matters more than memorizing boilerplate.",
+    "vec": [0.0, 0.3, 0.35, 1.0, 0.65, 0.75, 0.4, 0.0, 0.0, 0.45, 0.55, 0.0]
+  },
+  {
+    "chapter": 4,
+    "name": "Non-Technical Edge",
+    "year": "2024",
+    "kind": "prior",
+    "cluster": 3,
+    "story": "Years in law, geopolitics, crypto governance, and community building stopped being a detour and became a differentiator. Domain context and user empathy give AI-generated code a point of view pure specialists often miss.",
+    "vec": [0.35, 0.4, 0.2, 0.55, 0.9, 0.85, 0.35, 0.65, 0.1, 0.3, 0.2, 0.25]
+  },
+  {
+    "chapter": 4,
+    "name": "Relentless Frontier Testing",
+    "year": "2024–25",
+    "kind": "prior",
+    "cluster": 2,
+    "story": "Never rely on secondhand benchmarks or social-media hype when a new model drops. The only reliable signal comes from throwing real, messy tasks at the tool on day one.",
+    "vec": [0.2, 0.35, 0.6, 0.0, 0.0, 0.8, 0.6, 0.0, 0.3, 1.0, 0.55, 0.0]
+  },
+  {
+    "chapter": 4,
+    "name": "Sovereign Solo Builder",
+    "year": "2025",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "Agency is complete when one person can go from raw thesis to deployed artifact without permission or handoffs. Waiting for committees, funding rounds, or headcount became optional.",
+    "vec": [0.35, 1.0, 0.55, 0.25, 0.1, 0.65, 0.85, 0.0, 0.9, 0.4, 0.85, 0.45]
+  },
+  {
+    "chapter": 4,
+    "name": "Compounding Nonlinear Priors",
+    "year": "Today",
+    "kind": "prior",
+    "cluster": 3,
+    "story": "What looked like disconnected chapters on a resume—law, history, NEAR governance, UX obsession—collapsed into a single uncopyable intuition. Nonlinear paths look inefficient right up until the tools arrive to fuse them.",
+    "vec": [0.3, 0.55, 0.35, 0.45, 0.8, 0.75, 0.55, 0.7, 0.15, 0.55, 0.25, 0.55]
+  },
+  {
+    "chapter": 4,
+    "name": "Clarity Precedes Code",
+    "year": "2024",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Writing precise specs for an LLM mirrors legal drafting and protocol design: ambiguous thinking produces broken outputs. If you cannot articulate the invariant in plain language, the model cannot save you.",
+    "vec": [0.65, 0.2, 0.75, 0.2, 0.55, 0.6, 0.2, 0.0, 0.15, 0.2, 0.45, 0.0]
+  },
+  {
+    "chapter": 4,
+    "name": "Demo Over Deck",
+    "year": "2024–25",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "A working link beats a twenty-slide pitch in every room. Shipping a tangible prototype in hours collapses weeks of abstract debate into immediate feedback.",
+    "vec": [0.15, 0.75, 0.4, 0.45, 0.4, 0.65, 0.75, 0.0, 0.35, 0.25, 1.0, 0.15]
+  },
+  {
+    "chapter": 4,
+    "name": "Zero-Permission Prototyping",
+    "year": "2025",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Just as cold-emailing a senior partner bypassed graduate pipelines, AI coding bypasses technical gatekeeping altogether. You no longer need an invitation to build at the frontier.",
+    "vec": [0.55, 0.95, 0.35, 0.0, 0.1, 0.75, 0.7, 0.1, 0.95, 0.5, 0.75, 0.2]
+  },
+  {
+    "chapter": 4,
+    "name": "Tools Age, Instincts Compound",
+    "year": "Today",
+    "kind": "prior",
+    "cluster": 2,
+    "story": "Specific frameworks and prompting tricks expire within months, so attachment to any single stack is a trap. What endures is architectural intuition, taste, and the nerve to keep shipping.",
+    "vec": [0.1, 0.45, 0.7, 0.55, 0.15, 0.7, 0.5, 0.2, 0.1, 0.75, 0.4, 0.25]
+  },
+  {
+    "chapter": 4,
+    "name": "Prompt-to-Architecture Design",
+    "year": "2024",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Breaking an ambitious product idea into clean modules, data schemas, and verifiable milestones before generating a line of code. Prevents LLM sessions from collapsing into tangled spaghetti.",
+    "vec": [0.1, 0.25, 0.95, 0.35, 0.2, 0.35, 0.4, 0.0, 0.0, 0.45, 0.8, 0.0]
+  },
+  {
+    "chapter": 4,
+    "name": "Multi-Model Benchmarking",
+    "year": "2024–26",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Routing tasks across frontier models based on empirical strengths—reasoning, refactoring, visual polish, or speed—rather than brand loyalty. Built through hands-on testing on every release day.",
+    "vec": [0.0, 0.2, 0.8, 0.2, 0.1, 0.55, 0.45, 0.0, 0.25, 0.95, 0.7, 0.0]
+  },
+  {
+    "chapter": 4,
+    "name": "Rapid Hackathon Prototyping",
+    "year": "2024–25",
+    "kind": "skill",
+    "cluster": 1,
+    "story": "Compressing ideation, scoping, implementation, and live demo polish into a 24-to-48-hour window. Knows exactly which corners to cut and which centerpiece interaction wins the room.",
+    "vec": [0.0, 0.7, 0.65, 0.55, 0.4, 0.35, 0.85, 0.0, 0.1, 0.5, 1.0, 0.5]
+  },
+  {
+    "chapter": 4,
+    "name": "Full-Stack Vibe Debugging",
+    "year": "2023–25",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Diagnosing broken builds, state bugs, and API failures across frontend and backend by pairing error traces with targeted model interrogation. Turned early trial-and-error into repeatable systems intuition.",
+    "vec": [0.0, 0.35, 0.9, 0.0, 0.0, 0.2, 0.4, 0.0, 0.0, 0.55, 0.8, 0.45]
+  },
+  {
+    "chapter": 4,
+    "name": "UI/UX Polish in Code",
+    "year": "2024–26",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Translating years of sharp product taste directly into typography, spacing, motion, and responsive layouts. Refuses to settle for generic AI-generated templates when shipping interfaces.",
+    "vec": [0.0, 0.2, 0.6, 1.0, 0.45, 0.35, 0.55, 0.0, 0.0, 0.35, 0.7, 0.0]
+  },
+  {
+    "chapter": 4,
+    "name": "Directing AI Agents",
+    "year": "2025–26",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Managing autonomous coding agents with tight context, clear constraints, and incremental verification loops. Treats each agent like a fast collaborator who needs crisp direction and strict review.",
+    "vec": [0.15, 0.5, 0.9, 0.15, 0.3, 0.3, 0.6, 0.0, 0.1, 0.8, 0.9, 0.0]
+  },
+  {
+    "chapter": 4,
+    "name": "Tight-Deadline Shipping",
+    "year": "2024–25",
+    "kind": "skill",
+    "cluster": 1,
+    "story": "Consistently crossing the finish line when the clock is almost up, keeping deployments stable and demos legible under pressure. Built on a bias toward working software over theoretical perfection.",
+    "vec": [0.0, 0.65, 0.5, 0.25, 0.15, 0.2, 0.85, 0.0, 0.0, 0.2, 1.0, 0.7]
+  },
+  {
+    "chapter": 4,
+    "name": "Interactive Visual Systems",
+    "year": "2025–26",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Combining WebGL, SVG, projection math, and interactive controls to make abstract concepts—like high-dimensional latent spaces—viscerally legible. Bridges technical depth with narrative storytelling.",
+    "vec": [0.0, 0.3, 0.9, 0.95, 0.7, 0.35, 0.6, 0.0, 0.0, 0.75, 0.7, 0.0]
+  },
+  {
+    "chapter": 4,
+    "name": "Spec & Context Engineering",
+    "year": "2025",
+    "kind": "skill",
+    "cluster": 0,
+    "story": "Structuring constraints, edge cases, and system prompts with the rigor of a legal contract. Clean context upfront yields dramatically cleaner architectures downstream.",
+    "vec": [0.55, 0.2, 0.85, 0.15, 0.45, 0.4, 0.3, 0.0, 0.1, 0.5, 0.7, 0.0]
+  },
+  {
+    "chapter": 4,
+    "name": "Ecosystem Tool Fluency",
+    "year": "2024–26",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Moving fluently across terminals, git workflows, package managers, CLIs, and modern AI IDEs without friction. Converted years of proximity to engineers into daily muscle memory.",
+    "vec": [0.0, 0.4, 0.85, 0.1, 0.0, 0.1, 0.4, 0.0, 0.2, 0.8, 0.8, 0.1]
+  },
+  {
+    "chapter": 4,
+    "name": "Demo Storytelling",
+    "year": "2024–25",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Framing a technical build around a sharp hook and an unmistakable live walkthrough so judges and users grasp the point in sixty seconds. Marries NEAR-era narrative instincts with live code.",
+    "vec": [0.0, 0.3, 0.3, 0.7, 0.95, 0.25, 0.65, 0.1, 0.0, 0.2, 0.75, 0.1]
+  },
+  {
+    "chapter": 4,
+    "name": "Prototype vs. Deep Craft",
+    "year": "2024–25",
+    "kind": "tension",
+    "cluster": 2,
+    "story": "AI makes getting to eighty percent effortless, but the last twenty percent of architecture, performance, and edge cases still demands real engineering depth. Constantly pushing past 'it works' toward genuine technical mastery.",
+    "vec": [0.1, 0.2, 0.9, 0.6, 0.0, 0.35, 0.75, 0.0, 0.0, 0.35, -0.15, 0.5]
+  },
+  {
+    "chapter": 4,
+    "name": "Outrunning Tooling Maturity",
+    "year": "2024–25",
+    "kind": "tension",
+    "cluster": 2,
+    "story": "Building at the bleeding edge means fighting context limits, brittle agent loops, and APIs that break mid-project. High velocity constantly collides with half-baked developer infrastructure.",
+    "vec": [0.0, 0.3, 0.75, 0.0, 0.0, 0.3, 0.7, 0.0, 0.15, 0.85, 0.45, 0.55]
+  },
+  {
+    "chapter": 4,
+    "name": "Ambition vs. Focus",
+    "year": "2025",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "When almost any idea can be prototyped in a weekend, the hardest discipline is choosing which project deserves months of depth. Too many viable threads compete for finite attention.",
+    "vec": [0.0, 0.55, 0.3, 0.25, 0.1, 0.2, 0.9, 0.0, 0.0, 0.8, -0.2, 0.45]
+  },
+  {
+    "chapter": 4,
+    "name": "Unlearning the Engineer Crutch",
+    "year": "2023–24",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Years of operating as the non-technical leader left a subtle reflex to hand hard implementation off to someone else. Breaking that mental boundary required proving to himself he could debug his own stack.",
+    "vec": [0.0, 0.85, 0.45, 0.0, -0.15, 0.5, 0.65, 0.0, 0.65, 0.3, 0.4, 0.8]
+  },
+  {
+    "chapter": 4,
+    "name": "Vibe-Coder Stigma",
+    "year": "2024–25",
+    "kind": "tension",
+    "cluster": 3,
+    "story": "Navigating dismissal from traditionalists who equate AI-assisted coding with shallow work. Responds by letting shipped craft, hackathon wins, and technical depth speak louder than labels.",
+    "vec": [0.25, 0.55, 0.4, 0.35, 0.65, 0.85, 0.6, 0.0, 0.3, 0.3, 0.5, 0.55]
+  },
+  {
+    "chapter": 4,
+    "name": "Model Churn Fatigue",
+    "year": "2025–26",
+    "kind": "tension",
+    "cluster": 2,
+    "story": "Staying current across weekly model drops, new CLIs, and shifting agent paradigms carries a real cognitive tax. Balancing frontier exploration against uninterrupted deep building time.",
+    "vec": [0.0, 0.15, 0.55, 0.0, 0.0, 0.2, 0.4, 0.0, 0.0, 0.85, -0.2, 0.6]
+  },
+  {
+    "chapter": 4,
+    "name": "Black-Box Comprehension Gap",
+    "year": "2024",
+    "kind": "tension",
+    "cluster": 0,
+    "story": "Shipping code faster than you can audit every line creates an uncomfortable tension for someone wired for rule-of-law scrutiny. Forces a deliberate habit of reading, questioning, and understanding the underlying mechanics.",
+    "vec": [0.8, 0.2, 0.8, 0.0, 0.0, 0.55, 0.3, 0.0, 0.65, 0.35, -0.2, 0.4]
+  },
+  {
+    "chapter": 4,
+    "name": "Solo Velocity vs. Scale",
+    "year": "2026",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Moving alone maximizes speed, coherence, and creative sovereignty, yet ambitious systems eventually test the limits of a single pair of hands. Figuring out where solo agency ends and leverage through people or agents begins.",
+    "vec": [0.15, 0.85, 0.45, 0.2, 0.35, 0.3, 0.8, 0.0, 0.5, 0.25, 0.5, 0.4]
+  }
+]

@@ -1,0 +1,380 @@
+[
+  {
+    "chapter": 3,
+    "name": "2013 Bitcoin Epiphany",
+    "year": "2013",
+    "kind": "event",
+    "cluster": 0,
+    "story": "First encounter with Bitcoin clicks immediately through the lived lens of Venezuelan hyperinflation. Fixed-supply, permissionless money registers not as a novelty, but as an urgent monetary escape hatch.",
+    "vec": [0.9, 0.9, 0.3, 0.0, 0.1, 0.8, 0.4, 0.95, 0.95, 0.8, 0.1, 0.7]
+  },
+  {
+    "chapter": 3,
+    "name": "Blockchain Centre Melbourne",
+    "year": "2015",
+    "kind": "event",
+    "cluster": 3,
+    "story": "Begins attending meetups at Melbourne's Blockchain Centre in 2015–16, finding a physical enclave of cypherpunks, early builders, and monetary heretics. Weekly conversations turn abstract curiosity into an active worldview.",
+    "vec": [0.5, 0.4, 0.4, 0.0, 0.8, 0.5, 0.5, 0.2, 0.7, 0.9, 0.3, 0.2]
+  },
+  {
+    "chapter": 3,
+    "name": "2017 ICO Mania",
+    "year": "2017",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Watches whitepaper-only token sales raise millions overnight during the 2017 boom. The spectacle teaches an early discipline: separate real protocol engineering from speculative theater.",
+    "vec": [0.7, 0.1, 0.3, 0.1, 0.3, 0.85, 0.2, 0.4, 0.5, 0.4, 0.0, 0.3]
+  },
+  {
+    "chapter": 3,
+    "name": "2018 Crypto Winter",
+    "year": "2018",
+    "kind": "event",
+    "cluster": 1,
+    "story": "Stays plugged into the space through the brutal drawdown after speculative tourists vanish. Remaining when token prices collapse confirms that the pull is the underlying technology, not quick windfalls.",
+    "vec": [0.4, 0.5, 0.4, 0.0, 0.2, 0.75, 0.6, 0.2, 0.6, 0.6, 0.2, 0.9]
+  },
+  {
+    "chapter": 3,
+    "name": "DeFi Summer & Composability",
+    "year": "2020",
+    "kind": "event",
+    "cluster": 2,
+    "story": "Tracks permissionless lending and automated market makers proving that financial primitives can run without banks. High gas fees and brittle interfaces simultaneously expose how far base-layer UX still has to go.",
+    "vec": [0.6, 0.5, 0.75, 0.4, 0.2, 0.5, 0.4, 0.1, 0.9, 0.85, 0.2, 0.1]
+  },
+  {
+    "chapter": 3,
+    "name": "NFT & Memecoin Frenzy",
+    "year": "2021",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Observes profile-picture speculation and dog-coin manias flood crypto timelines during the 2020–21 cycle. Staying anchored in infrastructure sharpens the line between cultural noise and durable utility.",
+    "vec": [0.6, 0.1, 0.2, 0.3, 0.4, 0.85, 0.2, 0.3, 0.4, 0.3, 0.0, 0.4]
+  },
+  {
+    "chapter": 3,
+    "name": "Discovering Early NEAR",
+    "year": "2020",
+    "kind": "event",
+    "cluster": 2,
+    "story": "Encounters NEAR Protocol in its early days and is immediately drawn to its sharded architecture—framed as Ethereum 2.0 delivered—paired with a rare, genuine obsession with human-readable UX.",
+    "vec": [0.2, 0.3, 0.8, 0.9, 0.4, 0.6, 0.7, 0.1, 0.6, 0.95, 0.3, 0.1]
+  },
+  {
+    "chapter": 3,
+    "name": "NEAR Community Stewardship",
+    "year": "2021",
+    "kind": "event",
+    "cluster": 3,
+    "story": "Steps into active community leadership across the NEAR ecosystem, turning scattered early adopters into a coherent network of contributors. Consistency and candor build trust faster than any formal title.",
+    "vec": [0.2, 0.3, 0.3, 0.3, 0.95, 0.3, 0.6, 0.1, 0.4, 0.5, 0.7, 0.4]
+  },
+  {
+    "chapter": 3,
+    "name": "NEAR Governance Arena",
+    "year": "2022",
+    "kind": "event",
+    "cluster": 0,
+    "story": "Takes hands-on roles in DAO and protocol governance inside NEAR, navigating treasury allocation, incentive design, and contentious stakeholder politics. Theory meets the messy reality of decentralized coordination.",
+    "vec": [0.85, 0.2, 0.4, 0.1, 0.75, 0.5, 0.5, 0.4, 0.6, 0.4, 0.5, 0.6]
+  },
+  {
+    "chapter": 3,
+    "name": "Ecosystem BD & Partnerships",
+    "year": "2022",
+    "kind": "event",
+    "cluster": 3,
+    "story": "Operates across business development and ecosystem growth, onboarding founders, connecting teams, and representing NEAR across partner channels. Becomes a reliable human router inside a fast-moving L1.",
+    "vec": [0.1, 0.4, 0.4, 0.2, 0.9, 0.2, 0.75, 0.2, 0.3, 0.5, 0.8, 0.3]
+  },
+  {
+    "chapter": 3,
+    "name": "Recognized NEAR Voice",
+    "year": "2023",
+    "kind": "event",
+    "cluster": 3,
+    "story": "Establishes a widely known reputation across the NEAR ecosystem through relentless content, governance participation, and community presence. Proves high-leverage ecosystem influence is possible without an engineering title.",
+    "vec": [0.3, 0.5, 0.4, 0.4, 0.95, 0.5, 0.8, 0.1, 0.4, 0.4, 0.6, 0.5]
+  },
+  {
+    "chapter": 3,
+    "name": "Sound Money as Survival",
+    "year": "2013",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "Monetary sovereignty is not a libertarian thought experiment. When a state debases its currency and locks capital controls, unconfiscatable hard money is practical survival infrastructure.",
+    "vec": [0.95, 1.0, 0.2, 0.0, 0.1, 0.7, 0.3, 0.95, 0.9, 0.2, 0.1, 0.85]
+  },
+  {
+    "chapter": 3,
+    "name": "Code Over Failed Courts",
+    "year": "2015",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Immutable code matters most where legal systems are broken or captured. Smart contracts let strangers transact with credible guarantees even when no court or regulator can be trusted.",
+    "vec": [1.0, 0.8, 0.6, 0.0, 0.2, 0.75, 0.2, 0.85, 1.0, 0.3, 0.1, 0.5]
+  },
+  {
+    "chapter": 3,
+    "name": "Eliminate the Middleman",
+    "year": "2016",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Every discretionary intermediary is a point of rent extraction, censorship, and failure. Credible neutrality requires replacing gatekeepers with verifiable, open protocols.",
+    "vec": [0.9, 0.85, 0.5, 0.0, 0.2, 0.8, 0.3, 0.5, 1.0, 0.4, 0.1, 0.2]
+  },
+  {
+    "chapter": 3,
+    "name": "Cypherpunk Signal Over Hype",
+    "year": "2017",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Speculative waves always burn out, leaving only cryptography, open networks, and censorship resistance behind. Staying aligned with first-principles utility filters out ninety percent of industry noise.",
+    "vec": [0.75, 0.6, 0.6, 0.1, 0.2, 0.95, 0.4, 0.3, 0.9, 0.5, 0.1, 0.4]
+  },
+  {
+    "chapter": 3,
+    "name": "Infrastructure Fails Without UX",
+    "year": "2020",
+    "kind": "prior",
+    "cluster": 2,
+    "story": "Brilliant consensus and sharding mean nothing if onboarding requires seed phrases, hex strings, and gas math. Mainstream adoption is a design problem as much as a cryptography problem.",
+    "vec": [0.1, 0.2, 0.6, 1.0, 0.5, 0.7, 0.5, 0.0, 0.3, 0.5, 0.4, 0.2]
+  },
+  {
+    "chapter": 3,
+    "name": "Community as Protocol Moat",
+    "year": "2021",
+    "kind": "prior",
+    "cluster": 3,
+    "story": "Open-source code can be forked in an afternoon. An aligned, high-trust network of builders, contributors, and advocates is the only durable moat a protocol can build.",
+    "vec": [0.2, 0.2, 0.3, 0.2, 1.0, 0.5, 0.6, 0.1, 0.4, 0.3, 0.4, 0.3]
+  },
+  {
+    "chapter": 3,
+    "name": "Incentives Beat Good Intentions",
+    "year": "2022",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Token systems and DAOs always converge on what their mechanisms reward, never on what their manifestos preach. Sloppy incentive design inevitably invites mercenaries and drains treasuries.",
+    "vec": [0.9, 0.3, 0.5, 0.0, 0.3, 0.9, 0.3, 0.5, 0.6, 0.3, 0.2, 0.4]
+  },
+  {
+    "chapter": 3,
+    "name": "Non-Technical Leverage Is Real",
+    "year": "2021",
+    "kind": "prior",
+    "cluster": 3,
+    "story": "Protocols do not win on GitHub commits alone. Narrative clarity, ecosystem coordination, and partner distribution decide whether great engineering ever finds real users.",
+    "vec": [0.1, 0.4, 0.2, 0.4, 0.95, 0.6, 0.7, 0.0, 0.1, 0.3, 0.6, 0.3]
+  },
+  {
+    "chapter": 3,
+    "name": "Human-Readable Crypto Rails",
+    "year": "2020",
+    "kind": "prior",
+    "cluster": 2,
+    "story": "Named accounts, progressive onboarding, and abstracted key management are the missing bridge between cypherpunk ideals and everyday software. Sovereignty should not require a systems-engineering degree.",
+    "vec": [0.2, 0.5, 0.65, 0.95, 0.5, 0.6, 0.4, 0.0, 0.65, 0.6, 0.3, 0.1]
+  },
+  {
+    "chapter": 3,
+    "name": "Bear Markets Build Conviction",
+    "year": "2018",
+    "kind": "prior",
+    "cluster": 1,
+    "story": "True alignment only reveals itself when prices are down eighty percent and the tourists are gone. The quiet rooms during drawdowns are where real relationships and real conviction form.",
+    "vec": [0.3, 0.5, 0.3, 0.0, 0.3, 0.85, 0.6, 0.2, 0.5, 0.5, 0.3, 0.95]
+  },
+  {
+    "chapter": 3,
+    "name": "Decentralization Is a Spectrum",
+    "year": "2022",
+    "kind": "prior",
+    "cluster": 0,
+    "story": "Purity theater paralyzes shipping, while fake decentralization recreates banks with worse interfaces. Durable systems balance pragmatic usability with credible, permissionless exit.",
+    "vec": [0.75, 0.6, 0.65, 0.4, 0.3, 0.85, 0.4, 0.3, 0.75, 0.4, 0.5, 0.2]
+  },
+  {
+    "chapter": 3,
+    "name": "Ecosystem Business Development",
+    "year": "2022",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Sourcing, qualifying, and closing partnerships across founders, wallets, and tooling teams in an open ecosystem. Built on credibility, rapid context-switching, and genuine alignment rather than corporate scripts.",
+    "vec": [0.1, 0.4, 0.3, 0.2, 0.9, 0.2, 0.75, 0.1, 0.2, 0.4, 0.85, 0.3]
+  },
+  {
+    "chapter": 3,
+    "name": "Technical Content Creation",
+    "year": "2021",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Writing threads, deep dives, and ecosystem explainers that distill sharding, account models, and governance into sharp, readable narratives. Turns dense protocol specs into shareable mental models.",
+    "vec": [0.1, 0.2, 0.65, 0.6, 1.0, 0.4, 0.5, 0.1, 0.2, 0.6, 0.75, 0.1]
+  },
+  {
+    "chapter": 3,
+    "name": "DAO & Protocol Governance",
+    "year": "2022",
+    "kind": "skill",
+    "cluster": 0,
+    "story": "Drafting proposals, scrutinizing treasury flows, and navigating decentralized politics where persuasion replaces managerial authority. Demands institutional skepticism paired with diplomatic stamina.",
+    "vec": [0.85, 0.2, 0.4, 0.1, 0.8, 0.5, 0.5, 0.4, 0.65, 0.3, 0.55, 0.5]
+  },
+  {
+    "chapter": 3,
+    "name": "High-Signal Community Building",
+    "year": "2021",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Cultivating contributor channels and regional hubs that retain serious builders while filtering out airdrop farmers and mercenary noise. Sets cultural norms through tone, taste, and consistent presence.",
+    "vec": [0.3, 0.2, 0.2, 0.4, 0.95, 0.4, 0.6, 0.1, 0.3, 0.4, 0.7, 0.4]
+  },
+  {
+    "chapter": 3,
+    "name": "Absorbing Protocol Architecture",
+    "year": "2020",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Internalizing Nightshade sharding, consensus trade-offs, account abstraction, and gas mechanics through constant proximity to core engineers. Builds deep architectural intuition without writing the Rust.",
+    "vec": [0.1, 0.2, 0.9, 0.3, 0.3, 0.5, 0.6, 0.0, 0.5, 0.95, 0.2, 0.2]
+  },
+  {
+    "chapter": 3,
+    "name": "Translating Deep Tech",
+    "year": "2021",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Operating as the bilingual bridge between protocol researchers speaking in state transitions and founders or users who need to know what actually works. Strips away jargon without losing technical truth.",
+    "vec": [0.1, 0.1, 0.75, 0.65, 1.0, 0.4, 0.5, 0.0, 0.2, 0.6, 0.6, 0.1]
+  },
+  {
+    "chapter": 3,
+    "name": "Crypto UX Critique",
+    "year": "2020",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Spotting onboarding cliffs, wallet friction, and broken mental models in dApps long before engineering teams see users drop off. Pairs user empathy with an understanding of underlying protocol constraints.",
+    "vec": [0.1, 0.2, 0.6, 1.0, 0.5, 0.6, 0.5, 0.0, 0.3, 0.5, 0.4, 0.1]
+  },
+  {
+    "chapter": 3,
+    "name": "Token & Narrative Framing",
+    "year": "2021",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Positioning complex infrastructure around clear, sticky mental models so builders and capital immediately grasp the differentiation. Understands how stories move ecosystems without crossing into hollow hype.",
+    "vec": [0.2, 0.2, 0.4, 0.6, 0.95, 0.55, 0.65, 0.2, 0.2, 0.4, 0.65, 0.1]
+  },
+  {
+    "chapter": 3,
+    "name": "Stakeholder Alignment",
+    "year": "2022",
+    "kind": "skill",
+    "cluster": 3,
+    "story": "Mediating between foundation teams, validators, DAO councils, and app founders with competing incentives and timelines. Keeps coalitions moving when no single party has unilateral control.",
+    "vec": [0.5, 0.2, 0.3, 0.1, 0.9, 0.3, 0.5, 0.3, 0.3, 0.2, 0.7, 0.4]
+  },
+  {
+    "chapter": 3,
+    "name": "Cycle Pattern Recognition",
+    "year": "2021",
+    "kind": "skill",
+    "cluster": 0,
+    "story": "Reading market reflexivity across ICOs, DeFi, NFTs, and memecoins fast enough to separate structural breakthroughs from short-lived liquidity games. Grounded in lived memory of multiple booms and busts.",
+    "vec": [0.7, 0.3, 0.4, 0.1, 0.3, 0.9, 0.4, 0.7, 0.4, 0.5, 0.2, 0.5]
+  },
+  {
+    "chapter": 3,
+    "name": "Product Ideation & Scoping",
+    "year": "2022",
+    "kind": "skill",
+    "cluster": 2,
+    "story": "Continuously spotting gaps in wallets, governance tools, and consumer crypto flows and shaping them into crisp product concepts. Combines sharp UX taste with real ecosystem demand.",
+    "vec": [0.1, 0.4, 0.6, 0.9, 0.4, 0.6, 0.85, 0.0, 0.3, 0.8, 0.35, 0.2]
+  },
+  {
+    "chapter": 3,
+    "name": "Surrounded Yet Unable to Ship",
+    "year": "2022",
+    "kind": "tension",
+    "cluster": 2,
+    "story": "Spending years immersed among world-class protocol engineers, absorbing how systems work, yet lacking the coding fluency to build and ship personal product ideas solo.",
+    "vec": [0.0, 0.5, 0.6, 0.6, 0.1, 0.3, 0.95, 0.0, 0.2, 0.6, -0.3, 0.9]
+  },
+  {
+    "chapter": 3,
+    "name": "Bottled Ideas, Zero Dev Bandwidth",
+    "year": "2022",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Accumulating a notebook full of clear, timely crypto product ideas that stay unbuilt because every capable engineer is already stretched thin on core protocol roadmaps.",
+    "vec": [0.1, 0.6, 0.4, 0.7, 0.2, 0.4, 0.95, 0.0, 0.1, 0.7, -0.25, 0.85]
+  },
+  {
+    "chapter": 3,
+    "name": "Mercenaries in Cypherpunk Spaces",
+    "year": "2021",
+    "kind": "tension",
+    "cluster": 0,
+    "story": "Watching short-term speculators, grifters, and engagement farmers repeatedly hijack movements built for monetary sovereignty and trustless coordination. Deeply alienating for anyone in it for the real technology.",
+    "vec": [0.9, 0.4, 0.2, 0.1, 0.2, 0.85, 0.3, 0.5, 0.95, 0.1, 0.0, 0.8]
+  },
+  {
+    "chapter": 3,
+    "name": "Chronic Crypto UX Friction",
+    "year": "2020",
+    "kind": "tension",
+    "cluster": 2,
+    "story": "Enduring the constant frustration of trying to onboard normal people into tools burdened by seed phrases, clunky wallets, and hostile interfaces that undermine the promise of open rails.",
+    "vec": [0.1, 0.3, 0.5, 0.95, 0.4, 0.6, 0.6, 0.0, 0.4, 0.3, -0.1, 0.65]
+  },
+  {
+    "chapter": 3,
+    "name": "Governance Theater vs Execution",
+    "year": "2022",
+    "kind": "tension",
+    "cluster": 0,
+    "story": "Seeing DAO forums bog down in endless proposals, faction politics, and committee bikeshedding while urgent ecosystem and product decisions stall. Exposes the painful cost of poorly structured decentralization.",
+    "vec": [0.9, 0.2, 0.3, 0.1, 0.4, 0.75, 0.7, 0.3, 0.4, 0.1, -0.25, 0.75]
+  },
+  {
+    "chapter": 3,
+    "name": "Influence Without Code Equity",
+    "year": "2023",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Earning real respect and visibility across NEAR through BD, content, and community work while hitting the structural ceiling of not being able to own and ship the software layer directly.",
+    "vec": [0.2, 0.7, 0.3, 0.3, 0.7, 0.4, 0.9, 0.0, 0.2, 0.3, -0.15, 0.8]
+  },
+  {
+    "chapter": 3,
+    "name": "Technology vs Casino Optics",
+    "year": "2021",
+    "kind": "tension",
+    "cluster": 3,
+    "story": "Constantly defending serious cryptographic infrastructure to outsiders who only see memecoins, rug pulls, and speculative manias in the headlines. Exhausting to bridge a signal that the market keeps drowning out.",
+    "vec": [0.6, 0.2, 0.5, 0.2, 0.8, 0.7, 0.3, 0.4, 0.7, 0.2, 0.0, 0.7]
+  },
+  {
+    "chapter": 3,
+    "name": "Non-Technical Imposter Friction",
+    "year": "2021",
+    "kind": "tension",
+    "cluster": 2,
+    "story": "Understanding system architecture and UX trade-offs deeply enough to debate protocol engineers, yet feeling permanently one layer removed from the repository and the compiler.",
+    "vec": [0.0, 0.3, 0.7, 0.5, 0.2, 0.3, 0.85, 0.0, 0.1, 0.6, -0.2, 0.85]
+  },
+  {
+    "chapter": 3,
+    "name": "Always One Step From Solo",
+    "year": "2023",
+    "kind": "tension",
+    "cluster": 1,
+    "story": "Emerging from a decade in crypto with sharp product taste, deep network reach, and architectural fluency—standing right at the threshold of building independently, waiting for the lever that closes the last gap.",
+    "vec": [0.1, 0.85, 0.55, 0.65, 0.4, 0.5, 1.0, 0.1, 0.3, 0.75, -0.1, 0.9]
+  }
+]

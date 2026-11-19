@@ -15,6 +15,7 @@
   const lensPane = document.querySelector("[data-pane-lens]");
   const chapterBtns = [...document.querySelectorAll("[data-chapter-btn]")];
   const lensBtns = [...document.querySelectorAll("[data-lens-btn]")];
+  const kindBtns = [...document.querySelectorAll("[data-kind-btn]")];
   const timeSlider = document.querySelector("[data-time-slider]");
   const timeValEl = document.querySelector("[data-time-val]");
   const playBtn = document.querySelector("[data-play-btn]");
@@ -27,6 +28,7 @@
   const activeListEl = document.querySelector("[data-active-list]");
   const clusterBars = [...document.querySelectorAll("[data-cluster-bar]")];
   const clusterVals = [...document.querySelectorAll("[data-cluster-val]")];
+  const statsSubEl = document.querySelector("[data-stats-sub]");
 
   // Floating camera controls
   const zoomInBtn = document.querySelector("[data-zoom-in]");
@@ -51,15 +53,26 @@
   const CLUSTER_HEX_DARK = ["#58bdff", "#fab248", "#3de0ae", "#db75f5"];
   const CLUSTER_HEX_LIGHT = ["#1466c2", "#bd5c0a", "#0d8561", "#8a29a8"];
 
+  const defaultSel = (() => {
+    const idx = NODES.findIndex((n) => /last middleman/i.test(n.name));
+    return idx >= 0 ? idx : N_NODES - 1;
+  })();
+
+  if (statsSubEl) {
+    const bridgeCount = EDGES.filter((e) => e[3]).length;
+    statsSubEl.textContent = `5 Chapters · ${N_NODES} Enriched Nodes · ${bridgeCount} Emergent Cross-Era Bridges · 12-D → 3-D PCA`;
+  }
+
   const state = {
-    mode: "timeline", // "timeline" | "lens"
-    timeDepth: 4.95,  // Start near Today so the full living galaxy & retroactive echoes shine on first load!
+    mode: "timeline",   // "timeline" | "lens"
+    kindFilter: "all",  // "all" | "event" | "prior" | "skill" | "tension"
+    timeDepth: 4.98,
     lensIdx: 0,
     playing: false,
     showLabels: true,
-    selectedNode: 34, // "Removing the last middleman" — showcases cross-era synthesis immediately
+    selectedNode: defaultSel,
     hoveredNode: -1,
-    muted: {},        // nodeId -> true ("What if?" counterfactual mute)
+    muted: {},
     autoSpin: false,
     az: 0.68,
     el: 0.42,
@@ -99,7 +112,7 @@
   }
 
   // =========================================================================
-  // 2. NATIVE WEBGL1 GALAXY RENDERER (LINES + ANALYTIC SDF POINTS)
+  // 2. NATIVE WEBGL1 GALAXY RENDERER
   // =========================================================================
   const gl = canvas.getContext("webgl", {
     alpha: true,
@@ -214,22 +227,18 @@
         float alpha = 0.0;
 
         if (mode < 0.5) {
-          // Mode 0: Crisp pinpoint lived-experience background star
           float core = smoothstep(0.76, 0.14, r);
           alpha = core * vCol.a * (0.45 + 0.55 * vDepth);
         } else if (mode < 1.5) {
-          // Mode 1: Named Experience / Mental-Model Node
           float coreR = mix(0.24, 0.34, clamp(ringInt, 0.0, 1.0));
           float core = smoothstep(coreR + 0.14, coreR - 0.06, r);
           float hot = exp(-r * r * 24.0);
           float ring = exp(-pow((r - 0.78) * 14.0, 2.0)) * ringInt;
-          // Muted ("What if?") node: hollow dim ring
           if (extra < -0.5) {
             core *= 0.14;
             hot = 0.0;
             ring = exp(-pow((r - 0.68) * 13.0, 2.0)) * 0.85;
           }
-          // Retroactive Echo or Selected node: crisp double ring
           if (extra > 0.5) {
             ring = max(ring, exp(-pow((r - 0.84) * 16.0, 2.0)) * 0.95);
             ring = max(ring, exp(-pow((r - 0.56) * 16.0, 2.0)) * 0.65);
@@ -238,13 +247,11 @@
           else col = mix(col, col * 0.45, hot * 0.3);
           alpha = clamp(core * 0.95 + ring * 0.85, 0.0, 1.0) * vCol.a * (0.48 + 0.52 * vDepth);
         } else if (mode < 2.5) {
-          // Mode 2: Traveling bridge light packet / chapter waypoint
           float core = smoothstep(0.48, 0.12, r);
           float rim = exp(-pow((r - 0.78) * 14.0, 2.0)) * ringInt;
           if (uLight < 0.5) col = mix(col, vec3(1.0), exp(-r * r * 18.0) * 0.6);
           alpha = clamp(core + rim * 0.8, 0.0, 1.0) * vCol.a * (0.55 + 0.45 * vDepth);
         } else {
-          // Mode 3: Selected node / active timeline optical reticle
           float core = smoothstep(0.22, 0.05, r);
           float ring1 = exp(-pow((r - 0.60) * 18.0, 2.0)) * 0.95;
           float ring2 = exp(-pow((r - 0.88) * 20.0, 2.0)) * 0.48;
@@ -265,9 +272,9 @@
     pointBuf = gl.createBuffer();
   }
 
-  const MAX_LINE_VERTS = 5400;
+  const MAX_LINE_VERTS = 6400;
   const lineData = new Float32Array(MAX_LINE_VERTS * 7);
-  const MAX_POINTS = 2200;
+  const MAX_POINTS = 2400;
   const pointData = new Float32Array(MAX_POINTS * 11);
   let lineVerts = 0;
   let pointCount = 0;
@@ -330,7 +337,7 @@
   window.addEventListener("resize", resizeViewport);
 
   // =========================================================================
-  // 3. SVG OPTICAL CUBE FRAME + DE-OVERLAPPED HUMAN LABELS
+  // 3. SVG OPTICAL CUBE FRAME + DE-OVERLAPPED LABELS
   // =========================================================================
   function renderSvgFrameAndLabels(basis, evalRes) {
     const { cw, ch, zoom } = state;
@@ -408,19 +415,27 @@
       return false;
     };
 
-    // Rank nodes by priority: selected > hovered > retroactive echoes > active anchors > active features
-    const maxLabels = Math.min(20, Math.round(9 + Math.max(0, zoom - 0.9) * 6.0));
+    // Highlight direct emergent neighbors of the selected node!
+    const selNeighbors = new Set();
+    if (state.selectedNode >= 0) {
+      const adj = NODE_EDGES[state.selectedNode];
+      for (const e of adj.incoming.slice(0, 3)) selNeighbors.add(e.id);
+      for (const e of adj.outgoing.slice(0, 3)) selNeighbors.add(e.id);
+    }
+
+    const maxLabels = Math.min(28, Math.round(11 + Math.max(0, zoom - 0.9) * 8.0));
     const ranked = NODES.map((n, i) => {
       const a = evalRes.acts[i];
       const echo = evalRes.echoes[i];
       const isSel = i === state.selectedNode;
       const isHov = i === state.hoveredNode;
-      const isBorn = state.mode === "lens" || n.bornAt <= state.timeDepth;
-      const score = !isBorn ? -1
-        : (isSel ? 10 : 0) + (isHov ? 8 : 0) + echo * 2.2 + a * (n.kind === "anchor" ? 1.4 : 1.0);
-      return { i, a, echo, isSel, isHov, isBorn, score };
+      const isAdj = selNeighbors.has(i);
+      const isVisible = (state.mode === "lens" || n.bornAt <= state.timeDepth) && (state.kindFilter === "all" || n.kind === state.kindFilter);
+      const score = !isVisible ? -1
+        : (isSel ? 12 : 0) + (isHov ? 10 : 0) + (isAdj ? 4.5 : 0) + echo * 2.2 + a * (n.kind === "event" ? 1.25 : 1.0);
+      return { i, a, echo, isSel, isHov, isAdj, isVisible, score };
     })
-      .filter((x) => x.isBorn && (x.score > 0.45 || zoom > 1.8))
+      .filter((x) => x.isVisible && (x.score > 0.55 || zoom > 1.7))
       .sort((x, y) => y.score - x.score)
       .slice(0, maxLabels);
 
@@ -431,7 +446,7 @@
       if (sp[0] < 16 || sp[0] > cw - 16 || sp[1] < 18 || sp[1] > ch - 18) continue;
 
       const isMuted = !!state.muted[r.i];
-      const isEcho = r.echo > 0.3;
+      const isEcho = r.echo > 0.3 || r.isAdj;
       const col = isMuted
         ? "#ff6472"
         : r.isSel
@@ -459,7 +474,7 @@
       if (!chosen) chosen = { ox: 10, oy: 3, lx: sp[0] + 10, ly: sp[1] + 3, anchor: "start", rx0: sp[0] + 10 };
       placed.push([chosen.rx0 - 2, chosen.ly - 9, chosen.rx0 + tw + 2, chosen.ly + 4]);
 
-      const opacity = r.isSel || r.isHov || isEcho ? 1.0 : Math.min(0.92, 0.45 + r.a * 0.52);
+      const opacity = r.isSel || r.isHov || isEcho ? 1.0 : Math.min(0.9, 0.44 + r.a * 0.50);
       const leader = Math.abs(chosen.oy) > 6 || r.isSel
         ? `<line x1="${sp[0].toFixed(1)}" y1="${sp[1].toFixed(1)}" x2="${(chosen.lx + (chosen.ox > 0 ? -2 : 2)).toFixed(1)}" y2="${(chosen.ly - 3).toFixed(1)}" stroke="${col}" stroke-width="0.65" opacity="0.5"/>`
         : "";
@@ -480,7 +495,7 @@
   function renderNodeCard() {
     const id = state.selectedNode;
     if (id < 0 || id >= N_NODES) {
-      nodeCardEl.innerHTML = `<div class="node-card-empty">Click any glowing star in the cube to inspect its story and hidden cross-era connections.</div>`;
+      nodeCardEl.innerHTML = `<div class="node-card-empty">Click any of the ${N_NODES} stars in the cube to inspect its story and emergent 12-D bridges.</div>`;
       return;
     }
     const n = NODES[id];
@@ -489,60 +504,68 @@
     const hexPal = isLight() ? CLUSTER_HEX_LIGHT : CLUSTER_HEX_DARK;
     const col = hexPal[n.cluster];
     const isMuted = !!state.muted[id];
-
-    const informedBy = EDGES.filter(([, to]) => to === id).map(([from, , , isBridge, note]) => ({
-      id: from, node: NODES[from], isBridge, note,
-    }));
-    const echoedIn = EDGES.filter(([from]) => from === id).map(([, to, , isBridge, note]) => ({
-      id: to, node: NODES[to], isBridge, note,
-    }));
+    const adj = NODE_EDGES[id];
 
     const linksHtml = (list, label, arrow) => {
       if (!list.length) return "";
       return (
         `<div class="nc-links-block"><div class="nc-links-hdr">${label}</div><div class="nc-links-row">` +
-        list.map((item) =>
-          `<button class="nc-chip${item.isBridge ? " is-bridge" : ""}" data-jump-node="${item.id}" title="${item.note}">` +
-          `${arrow} ${item.node.name} <span class="nc-chip-yr">Ch.${item.node.chapter + 1}</span></button>`,
-        ).join("") +
+        list.slice(0, 4).map((item) => {
+          const target = NODES[item.id];
+          const pct = Math.round(item.sim * 100);
+          return (
+            `<button class="nc-chip${item.isBridge ? " is-bridge" : ""}" data-jump-node="${item.id}" title="Emergent ${pct}% cosine match · Shared: ${item.shared}">` +
+            `${arrow} ${target.name} <span class="nc-chip-yr">Ch.${target.chapter + 1} · ${pct}%</span></button>`
+          );
+        }).join("") +
         `</div></div>`
       );
     };
+
+    const topDims = n.vec
+      .map((v, d) => ({ d, v }))
+      .filter((x) => x.v >= 0.55)
+      .sort((a, b) => b.v - a.v)
+      .slice(0, 3)
+      .map((x) => DIM_NAMES[x.d]);
 
     nodeCardEl.innerHTML = `
       <div class="nc-head">
         <div>
           <div class="nc-meta">
             <span class="nc-dot" style="background:${col}"></span>
+            <span>${n.kind.toUpperCase()}</span>
+            <span>·</span>
             <span>${cl.name}</span>
             <span>·</span>
             <span>Ch.${ch.num} (${n.year})</span>
           </div>
           <div class="nc-title">${n.name}</div>
         </div>
-        <button class="nc-mute-btn${isMuted ? " is-muted" : ""}" data-toggle-mute="${id}" title="Counterfactual: see what disconnects if this experience is muted">
+        <button class="nc-mute-btn${isMuted ? " is-muted" : ""}" data-toggle-mute="${id}" title="Counterfactual: mute this node to see what disconnects">
           ${isMuted ? "Restore" : "What if?"}
         </button>
       </div>
       <div class="nc-story">${n.story}</div>
-      ${linksHtml(informedBy, "Informed by", "←")}
-      ${linksHtml(echoedIn, "Echoed later in", "→")}
+      ${topDims.length ? `<div class="nc-dims">${topDims.map((d) => `<span>${d}</span>`).join("")}</div>` : ""}
+      ${linksHtml(adj.incoming, "Emergent Earlier Echoes (12-D Match)", "←")}
+      ${linksHtml(adj.outgoing, "Echoed Later In (12-D Match)", "→")}
     `;
   }
 
   function updateHud(evalRes, force = false) {
     const curChap = Math.min(4, Math.floor(state.timeDepth));
-    const key = `${state.mode}|${state.timeDepth.toFixed(2)}|${state.lensIdx}|${state.selectedNode}|${Object.keys(state.muted).join(",")}|${isLight()}`;
+    const key = `${state.mode}|${state.kindFilter}|${state.timeDepth.toFixed(2)}|${state.lensIdx}|${state.selectedNode}|${Object.keys(state.muted).join(",")}|${isLight()}`;
     if (!force && key === lastHudKey) return;
     lastHudKey = key;
 
     const hexPal = isLight() ? CLUSTER_HEX_LIGHT : CLUSTER_HEX_DARK;
 
-    // Mode panes
     tabTimelineBtn.classList.toggle("active", state.mode === "timeline");
     tabLensBtn.classList.toggle("active", state.mode === "lens");
     timelinePane.style.display = state.mode === "timeline" ? "block" : "none";
     lensPane.style.display = state.mode === "lens" ? "block" : "none";
+    kindBtns.forEach((b) => b.classList.toggle("active", b.dataset.kindBtn === state.kindFilter));
 
     if (state.mode === "timeline") {
       const ch = CHAPTERS[curChap];
@@ -560,7 +583,6 @@
       echoNoteEl.textContent = lens.subtitle;
     }
 
-    // Cluster resonance meters
     for (let c = 0; c < 4; c++) {
       const pct = Math.round(evalRes.clusterLevels[c] * 100);
       clusterBars[c].style.width = `${pct}%`;
@@ -568,15 +590,12 @@
       clusterVals[c].textContent = `${pct}%`;
     }
 
-    // Active resonating nodes list (top 6 clickable)
-    const topNodes = NODES.map((n, i) => ({
-      n, i, a: evalRes.acts[i], echo: evalRes.echoes[i],
-    }))
-      .filter((x) => x.a > 0.25)
-      .sort((x, y) => (y.echo * 0.6 + y.a) - (x.echo * 0.6 + x.a))
+    const topNodes = NODES.map((n, i) => ({ n, i, a: evalRes.acts[i], echo: evalRes.echoes[i] }))
+      .filter((x) => x.a > 0.28)
+      .sort((x, y) => (y.echo * 0.7 + y.a) - (x.echo * 0.7 + x.a))
       .slice(0, 6);
 
-    activeListEl.innerHTML = topNodes.map(({ n, i, a, echo }) => {
+    activeListEl.innerHTML = topNodes.map(({ n, i, echo }) => {
       const isEcho = echo > 0.3;
       const isSel = i === state.selectedNode;
       const col = isEcho ? (isLight() ? "#b83a14" : "#ffe08a") : hexPal[n.cluster];
@@ -584,7 +603,7 @@
         `<button class="act-row${isSel ? " is-sel" : ""}" data-select-node="${i}">` +
         `<span class="hud-dot" style="background:${col}"></span>` +
         `<span class="act-name">${n.name}</span>` +
-        `<span class="act-tag">${isEcho ? `ECHO Ch.${n.chapter + 1}` : n.year}</span></button>`
+        `<span class="act-tag">${isEcho ? `ECHO Ch.${n.chapter + 1}` : n.kind.toUpperCase()}</span></button>`
       );
     }).join("");
 
@@ -604,12 +623,10 @@
     resizeViewport();
 
     if (state.playing && state.mode === "timeline") {
-      state.timeDepth += dt * 0.38;
-      if (state.timeDepth > 5.2) state.timeDepth = 0.08;
+      state.timeDepth += dt * 0.36;
+      if (state.timeDepth > 5.2) state.timeDepth = 0.06;
     }
-    if (state.autoSpin) {
-      state.targetAz += dt * 0.14;
-    }
+    if (state.autoSpin) state.targetAz += dt * 0.14;
 
     const damp = 1 - Math.exp(-12 * dt);
     state.az += (state.targetAz - state.az) * damp;
@@ -617,7 +634,7 @@
     state.zoom += (state.targetZoom - state.zoom) * damp;
 
     const effTime = Math.min(5.0, state.timeDepth);
-    const evalRes = evaluateState(state.mode, effTime, state.lensIdx, state.muted);
+    const evalRes = evaluateState(state.mode, effTime, state.lensIdx, state.kindFilter, state.muted);
     const basis = camBasis(state.az, state.el);
     const light = isLight();
     const pal = light ? CLUSTER_RGB_LIGHT : CLUSTER_RGB_DARK;
@@ -636,8 +653,8 @@
       const zoomBoost = Math.pow(state.zoom, 0.35);
 
       // --- A. LINES ---
-      // 1. Growing background lived-experience manifold web
-      const webAlpha = light ? 0.12 : 0.14;
+      // 1. Background lived-experience manifold web
+      const webAlpha = light ? 0.09 : 0.11;
       for (let i = 0; i < BG_EDGES.length; i++) {
         const [aIdx, bIdx, w, born] = BG_EDGES[i];
         if (state.mode === "timeline" && born > effTime) continue;
@@ -645,85 +662,80 @@
         pushLine(BG_POS3[aIdx], BG_POS3[bIdx], c[0], c[1], c[2], webAlpha * (0.45 + 0.55 * w));
       }
 
-      // 2. Meaningful Experience Edges & Retroactive Cross-Era Bridges
+      // 2. Emergent Semantic Edges & Golden Retroactive Bridges
+      let pulseCount = 0;
       for (let i = 0; i < evalRes.activeEdges.length; i++) {
         const e = evalRes.activeEdges[i];
         const isSelEdge = e.a === state.selectedNode || e.b === state.selectedNode;
         const pA = NODE_POS3[e.a], pB = NODE_POS3[e.b];
 
-        if (e.isRetro || isSelEdge) {
-          // Luminous golden bridge connecting eras!
-          const alpha = isSelEdge ? 0.85 : 0.28 + e.flow * 0.56;
-          pushLine(pA, pB, goldCol[0], goldCol[1], goldCol[2], alpha);
-          // Crisp traveling light pulse from earlier chapter -> later chapter
-          const phase = (tSec * (0.34 + 0.25 * e.flow) + i * 0.17) % 1.0;
+        if (isSelEdge) {
+          pushLine(pA, pB, goldCol[0], goldCol[1], goldCol[2], 0.88);
+          const phase = (tSec * 0.45 + i * 0.17) % 1.0;
           const pkt = lerp3(pA, pB, phase);
-          pushPoint(pkt, light ? goldCol[0] : 1.0, light ? goldCol[1] : 0.95, light ? goldCol[2] : 0.78, 0.92, 3.4 * zoomBoost, 2, 0.0, 0);
+          pushPoint(pkt, light ? goldCol[0] : 1.0, light ? goldCol[1] : 0.96, light ? goldCol[2] : 0.78, 0.95, 3.6 * zoomBoost, 2, 0.0, 0);
+        } else if (e.isRetro) {
+          pushLine(pA, pB, goldCol[0], goldCol[1], goldCol[2], 0.14 + e.flow * 0.34);
+          if (pulseCount < 40 && e.sim > 0.945) {
+            pulseCount++;
+            const phase = (tSec * (0.28 + 0.22 * e.flow) + i * 0.13) % 1.0;
+            const pkt = lerp3(pA, pB, phase);
+            pushPoint(pkt, light ? goldCol[0] : 1.0, light ? goldCol[1] : 0.95, light ? goldCol[2] : 0.78, 0.78, 2.8 * zoomBoost, 2, 0.0, 0);
+          }
         } else {
           const c = pal[NODES[e.a].cluster];
-          pushLine(pA, pB, c[0], c[1], c[2], 0.08 + e.flow * 0.38);
+          pushLine(pA, pB, c[0], c[1], c[2], 0.05 + e.flow * 0.22);
         }
       }
 
-      // 3. Smooth Life Trajectory / Lens Synthesis Path
+      // 3. Smooth Trajectory Path (Chapter centroids in Timeline mode, top matching nodes in Lens mode)
       const pathPts = state.mode === "timeline"
         ? CHAPTER_POS3
-        : LENSES[state.lensIdx].path.map((id) => NODE_POS3[id]);
-      const nSegs = pathPts.length - 1;
-      const subSteps = 6;
-      const progress = state.mode === "timeline" ? Math.max(0, effTime - 0.5) : nSegs;
-
-      for (let seg = 0; seg < nSegs; seg++) {
-        const p0 = pathPts[Math.max(0, seg - 1)];
-        const p1 = pathPts[seg];
-        const p2 = pathPts[seg + 1];
-        const p3 = pathPts[Math.min(nSegs, seg + 2)];
-        let prev = p1;
-        for (let k = 1; k <= subSteps; k++) {
-          const t = k / subSteps;
-          const t2 = t * t, t3 = t2 * t;
-          const cur = [0, 1, 2].map((d) =>
-            0.5 * (
-              2 * p1[d] +
-              (-p0[d] + p2[d]) * t +
-              (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * t2 +
-              (-p0[d] + 3 * p1[d] - 3 * p2[d] + p3[d]) * t3
-            ),
-          );
-          if (seg + t <= progress) {
-            pushLine(prev, cur, goldCol[0], goldCol[1], goldCol[2], 0.58);
+        : evalRes.lensPath.map((id) => NODE_POS3[id]);
+      if (pathPts.length >= 2) {
+        const nSegs = pathPts.length - 1;
+        const subSteps = 6;
+        const progress = state.mode === "timeline" ? Math.max(0, effTime - 0.5) : nSegs;
+        for (let seg = 0; seg < nSegs; seg++) {
+          const p0 = pathPts[Math.max(0, seg - 1)];
+          const p1 = pathPts[seg];
+          const p2 = pathPts[seg + 1];
+          const p3 = pathPts[Math.min(nSegs, seg + 2)];
+          let prev = p1;
+          for (let k = 1; k <= subSteps; k++) {
+            const t = k / subSteps;
+            const t2 = t * t, t3 = t2 * t;
+            const cur = [0, 1, 2].map((d) =>
+              0.5 * (
+                2 * p1[d] +
+                (-p0[d] + p2[d]) * t +
+                (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * t2 +
+                (-p0[d] + 3 * p1[d] - 3 * p2[d] + p3[d]) * t3
+              ),
+            );
+            if (seg + t <= progress) pushLine(prev, cur, goldCol[0], goldCol[1], goldCol[2], 0.55);
+            prev = cur;
           }
-          prev = cur;
         }
       }
 
       // --- B. POINTS ---
-      // 1. 1,600 Growing Background Lived-Experience Stars
-      const activeIdx = [];
-      for (let i = 0; i < N_NODES; i++) if (evalRes.acts[i] > 0.55) activeIdx.push(i);
-
+      // 1. 1,500 Background Lived-Experience Stars
       for (let i = 0; i < N_BG; i++) {
         if (state.mode === "timeline" && BG_BORN[i] > effTime) continue;
         const bp = BG_POS3[i];
         const c = pal[BG_CLUSTER[i]];
         const w = BG_WEIGHT[i];
-        let symp = 0;
-        for (let k = 0; k < activeIdx.length; k++) {
-          const fp = NODE_POS3[activeIdx[k]];
-          const dx = bp[0] - fp[0], dy = bp[1] - fp[1], dz = bp[2] - fp[2];
-          const d2 = dx * dx + dy * dy + dz * dz;
-          if (d2 < 0.075) symp = Math.max(symp, (1.0 - d2 / 0.075) * evalRes.acts[activeIdx[k]]);
-        }
-        const baseA = light ? 0.28 + 0.28 * w : 0.30 + 0.34 * w;
-        const alpha = Math.min(0.9, baseA + symp * 0.36);
-        const sz = (2.1 + 1.9 * w + symp * 1.5) * zoomBoost;
-        pushPoint(bp, c[0], c[1], c[2], alpha, sz, 0, 0, 0);
+        const baseA = light ? 0.22 + 0.24 * w : 0.24 + 0.28 * w;
+        const sz = (1.9 + 1.6 * w) * zoomBoost;
+        pushPoint(bp, c[0], c[1], c[2], baseA, sz, 0, 0, 0);
       }
 
-      // 2. 42 Named Experience & Mental-Model Nodes
+      // 2. All 186 Enriched Real Atomic Nodes!
       for (let i = 0; i < N_NODES; i++) {
         const n = NODES[i];
         if (state.mode === "timeline" && n.bornAt > effTime) continue;
+        if (state.kindFilter !== "all" && n.kind !== state.kindFilter) continue;
 
         const a = evalRes.acts[i];
         const echo = evalRes.echoes[i];
@@ -732,38 +744,36 @@
         const isMuted = !!state.muted[i];
 
         let c = pal[n.cluster];
-        let ring = a > 0.55 ? 0.85 : n.kind === "anchor" ? 0.3 : 0.0;
+        let ring = a > 0.62 ? 0.78 : n.kind === "event" ? 0.28 : 0.0;
         let extra = 0;
-        let sz = (n.kind === "anchor" ? 5.2 : 3.8) + a * 5.2;
-        let alpha = 0.45 + a * 0.55;
+        let sz = (n.kind === "event" ? 4.4 : 3.4) + a * 4.2;
+        let alpha = 0.42 + a * 0.58;
 
         if (isMuted) {
           c = light ? [0.76, 0.14, 0.22] : [1.0, 0.38, 0.44];
           extra = -1.0;
           ring = 1.0;
-          sz = 9.0;
+          sz = 8.5;
           alpha = 0.85;
-        } else if (echo > 0.3) {
-          // Retroactive echo from an earlier chapter!
+        } else if (echo > 0.35) {
           c = goldCol;
           extra = 1.0;
           ring = 1.0;
-          sz = 11.2;
-          alpha = 1.0;
+          sz = 9.5;
+          alpha = 0.98;
         } else if (isHov) {
           ring = 1.0;
-          sz = Math.max(sz, 11.5);
+          sz = Math.max(sz, 10.8);
           alpha = 1.0;
         }
         pushPoint(NODE_POS3[i], c[0], c[1], c[2], alpha, sz * zoomBoost, 1, ring, extra);
 
         if (isSel) {
           const selCol = light ? [0.06, 0.20, 0.48] : [1.0, 0.94, 0.72];
-          pushPoint(NODE_POS3[i], selCol[0], selCol[1], selCol[2], 1.0, 17.5 * zoomBoost, 3, 1.0, 0);
+          pushPoint(NODE_POS3[i], selCol[0], selCol[1], selCol[2], 1.0, 17.0 * zoomBoost, 3, 1.0, 0);
         }
       }
 
-      // Upload & Draw
       const camScale = Math.min(state.cw, state.ch) * 0.34 * state.zoom;
       const setCamUniforms = (prog) => {
         gl.uniform3fv(gl.getUniformLocation(prog, "uRight"), basis.right);
@@ -810,19 +820,21 @@
   }
 
   // =========================================================================
-  // 6. INTERACTION: 3D ORBIT, ZOOM, CLICK NODE TO INSPECT STORY
+  // 6. INTERACTION
   // =========================================================================
   function stageLocal(e) {
     const r = stage.getBoundingClientRect();
     return [e.clientX - r.left, e.clientY - r.top];
   }
 
-  function findNearestNode(mx, my, maxPx = 16) {
+  function findNearestNode(mx, my, maxPx = 15) {
     const basis = camBasis(state.az, state.el);
     let best = -1;
     let bestD = maxPx;
     for (let i = 0; i < N_NODES; i++) {
-      if (state.mode === "timeline" && NODES[i].bornAt > state.timeDepth) continue;
+      const n = NODES[i];
+      if (state.mode === "timeline" && n.bornAt > state.timeDepth) continue;
+      if (state.kindFilter !== "all" && n.kind !== state.kindFilter) continue;
       const sp = proj3(NODE_POS3[i], basis, state.cw, state.ch, state.zoom);
       const d = Math.hypot(sp[0] - mx, sp[1] - my);
       if (d < bestD) { bestD = d; best = i; }
@@ -849,7 +861,7 @@
   stage.addEventListener("pointermove", (e) => {
     const pt = stageLocal(e);
     if (!dragging) {
-      state.hoveredNode = findNearestNode(pt[0], pt[1], 16);
+      state.hoveredNode = findNearestNode(pt[0], pt[1], 15);
       stage.style.cursor = state.hoveredNode >= 0 ? "pointer" : "grab";
       return;
     }
@@ -864,10 +876,10 @@
   stage.addEventListener("pointerup", (e) => {
     if (dragging && dragMoved < 5) {
       const pt = stageLocal(e);
-      const hit = findNearestNode(pt[0], pt[1], 18);
+      const hit = findNearestNode(pt[0], pt[1], 17);
       if (hit >= 0) {
         state.selectedNode = hit;
-        updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+        updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
       }
     }
     dragging = false;
@@ -887,10 +899,11 @@
     state.targetAz = 0.68;
     state.targetEl = 0.42;
     state.targetZoom = 0.94;
+    state.kindFilter = "all";
     state.muted = {};
     state.autoSpin = false;
     if (spinBtn) spinBtn.classList.remove("active");
-    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
   }
   stage.addEventListener("dblclick", resetAll);
 
@@ -899,13 +912,20 @@
   // =========================================================================
   tabTimelineBtn.addEventListener("click", () => {
     state.mode = "timeline";
-    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
   });
   tabLensBtn.addEventListener("click", () => {
     state.mode = "lens";
     state.playing = false;
     playBtn.textContent = "Play Arc";
-    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
+  });
+
+  kindBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.kindFilter = btn.dataset.kindBtn;
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
+    });
   });
 
   chapterBtns.forEach((btn) => {
@@ -914,9 +934,10 @@
       state.mode = "timeline";
       state.playing = false;
       playBtn.textContent = "Play Arc";
-      state.timeDepth = idx + 0.95;
-      state.selectedNode = CHAPTERS[idx].anchorIds[CHAPTERS[idx].anchorIds.length - 1];
-      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      state.timeDepth = idx + 0.98;
+      const chapNodes = NODES.filter((n) => n.chapter === idx);
+      if (chapNodes.length) state.selectedNode = chapNodes[chapNodes.length - 1].id;
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
     });
   });
 
@@ -924,9 +945,9 @@
     btn.addEventListener("click", () => {
       state.mode = "lens";
       state.lensIdx = Number(btn.dataset.lensBtn);
-      const path = LENSES[state.lensIdx].path;
-      state.selectedNode = path[path.length - 1];
-      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      const ev = evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted);
+      if (ev.lensPath.length) state.selectedNode = ev.lensPath[ev.lensPath.length - 1];
+      updateHud(ev, true);
     });
   });
 
@@ -935,12 +956,12 @@
     state.playing = false;
     playBtn.textContent = "Play Arc";
     state.timeDepth = Number(timeSlider.value);
-    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
   });
 
   playBtn.addEventListener("click", () => {
     state.mode = "timeline";
-    if (!state.playing && state.timeDepth >= 4.85) state.timeDepth = 0.08;
+    if (!state.playing && state.timeDepth >= 4.85) state.timeDepth = 0.06;
     state.playing = !state.playing;
     playBtn.textContent = state.playing ? "Pause" : "Play Arc";
   });
@@ -954,7 +975,7 @@
     const next = isLight() ? "dark" : "light";
     document.body.setAttribute("data-theme", next);
     themeBtn.textContent = next === "light" ? "Dark" : "Light";
-    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+    updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
   });
 
   panelToggleBtn.addEventListener("click", () => {
@@ -967,7 +988,7 @@
     const btn = e.target.closest("[data-select-node]");
     if (btn) {
       state.selectedNode = Number(btn.dataset.selectNode);
-      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
     }
   });
 
@@ -977,9 +998,9 @@
       const id = Number(jump.dataset.jumpNode);
       state.selectedNode = id;
       if (state.mode === "timeline" && NODES[id].bornAt > state.timeDepth) {
-        state.timeDepth = NODES[id].chapter + 0.95;
+        state.timeDepth = NODES[id].chapter + 0.98;
       }
-      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
       return;
     }
     const muteBtn = e.target.closest("[data-toggle-mute]");
@@ -987,7 +1008,7 @@
       const id = Number(muteBtn.dataset.toggleMute);
       if (state.muted[id]) delete state.muted[id];
       else state.muted[id] = true;
-      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+      updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
     }
   });
 
@@ -1022,6 +1043,6 @@
   });
 
   resizeViewport();
-  updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.muted), true);
+  updateHud(evaluateState(state.mode, state.timeDepth, state.lensIdx, state.kindFilter, state.muted), true);
   requestAnimationFrame(renderFrame);
 })();
