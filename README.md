@@ -1,6 +1,6 @@
 # avb-latentspace
 
-> **⚠️ V1 — DEPRECATED.** Everything on `main` at tag `v1` is the first attempt. It has been set aside and is
+> **⚠️ V1 — DEPRECATED.** Everything on `main` (branch `v1`) is the first attempt. It has been set aside and is
 > kept only for reference. V2 starts from a clean slate in a new session. Do not build on V1 code.
 
 ## What V1 was
